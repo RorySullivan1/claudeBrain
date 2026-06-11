@@ -1,0 +1,57 @@
+<!--
+  CLAUDE.md.template — a portable starter for the .claude/ infrastructure pattern.
+
+  HOW TO USE
+  1. Copy this file to your project root as CLAUDE.md and delete these comments.
+  2. Create a .claude/ directory with the layers you need (see "The layers" below).
+  3. Fill the sections. Keep CLAUDE.md short — it loads on EVERY session, so it
+     should hold only what's true every time. Push detail into .claude/context/
+     and let CLAUDE.md point at it.
+
+  THE LAYERS (.claude/<layer>/) — least to most flexible, with hooks underneath:
+    hooks/      Deterministic shell scripts the harness runs on lifecycle events.
+                The model cannot skip them — the enforcement floor. Always-run
+                things: formatting, branch guards, write protection, cache warming.
+                Wired in .claude/settings.json.
+    workflows/  Multi-step autonomous orchestrations (loop, branch, spawn agents).
+    commands/   Single-shot prompt templates, invoked as /<name>. Stateless.
+    agents/     Isolated subagents with clean context; return only summaries.
+    skills/     Domain-expertise bundles (skills/<name>/SKILL.md) — how to think
+                and behave for a task type.
+    context/    Reference docs (schemas, API notes, stack briefs). CLAUDE.md points
+                here; Claude deep-reads only what the task needs.
+
+  COMPOSABILITY:  hooks underneath →  workflows ▸ commands ▸ agents ▸ skills
+  Delete any layer you don't use. Don't fabricate content to fill the structure.
+-->
+
+# <project-name>
+
+<One or two sentences: what this project is and who it's for.>
+
+## Architecture
+- <Component>: <how it works, where it lives>
+- <Component>: <...>
+
+## Constraints
+<!-- Environment limits that should stop Claude suggesting unworkable solutions. -->
+- <e.g. no admin rights; package manager X only>
+- <e.g. corporate proxy; specific runtime/OS>
+
+## Reference Docs
+See `.claude/context/README.md` for:
+- <topic — file>
+- <topic — file>
+
+## Decisions
+See `.claude/DECISIONS.md` for the pivot/decision history.
+
+## Conventions
+- <Branching / commit style>
+- <Formatting / lint commands — note if a PostToolUse hook enforces them>
+- <Naming / structure rules>
+
+## Compact Instructions
+<!-- What Claude must preserve when context is compacted in long sessions. -->
+On compaction, preserve: <the few facts that must survive — auth pattern, schema,
+key constraints, module conventions>.

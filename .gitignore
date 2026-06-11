@@ -1,0 +1,9 @@
+# Personal, machine-local Claude memory — never committed.
+CLAUDE.local.md
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

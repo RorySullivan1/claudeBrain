@@ -1,0 +1,18 @@
+<!--
+  CLAUDE.local.md.template — personal, machine-local memory.
+
+  Copy to your project root as CLAUDE.local.md (NOT committed — it should be listed
+  in .gitignore). Use it for shortcuts, paths, and preferences that are yours alone
+  and shouldn't be imposed on teammates. Loads alongside CLAUDE.md.
+-->
+
+# Personal notes — <project-name>
+
+## Shortcuts
+- <alias / personal command notes>
+
+## Local paths & environment
+- <local data dir, venv path, machine-specific config>
+
+## Reminders to self
+- <anything you keep re-deriving>
