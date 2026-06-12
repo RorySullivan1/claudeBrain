@@ -2,6 +2,22 @@
 
 A running log of structural decisions for this repo. Newest first.
 
+## 2026-06-12 — First factory meta-skill: `agent-authoring`
+
+**Context.** The factory `.claude/skills/` layer was a stub — meta-skills were
+described but none existed. We needed the first one.
+
+**Decision.** Shipped `.claude/skills/agent-authoring/SKILL.md`, a meta-skill that
+teaches how to author Claude Code subagents (`.claude/agents/<name>.md`): writing a
+triggering `description`, scoping the `tools` allowlist, choosing the default
+permission posture (`permissionMode`), picking the `model`, and writing the
+system-prompt mandate. It is grounded in the durable agent fields
+(`name`/`description`/`tools`/`permissionMode`/`model`) and defers the volatile long
+tail to `/agents` and the official sub-agents docs rather than hard-coding it.
+
+**Scope.** Meta-skill only — no companion `draft-agent` authoring agent yet, and
+no `skill-authoring` meta-skill yet (the new skill defers to it as future work).
+
 ## 2026-06-11 — Split into a factory (`.claude/`) and a mock consumer (`example-project/`)
 
 **Context.** After adopting the `.claude/` layout (below), the domain skills and
