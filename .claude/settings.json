@@ -1,13 +1,27 @@
 {
   "permissions": {
+    "defaultMode": "acceptEdits",
     "allow": [
-      "Edit(.claude/**)",
-      "Write(.claude/**)",
-      "MultiEdit(.claude/**)",
-      "Edit(example-project/.claude/**)",
-      "Write(example-project/.claude/**)",
-      "MultiEdit(example-project/.claude/**)",
-      "Bash"
+      "Edit(/.claude/**)",
+      "Edit(/example-project/.claude/**)",
+      "Bash(python *)",
+      "Bash(python3 *)",
+      "Bash(git *)",
+      "Bash(gh *)",
+      "Bash(cd *)",
+      "Bash(set *)",
+      "Bash(export *)",
+      "Bash(pwd *)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(wc *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(echo *)",
+      "Bash(printf *)",
+      "Bash(mkdir *)",
+      "Bash(cp *)"
     ],
     "deny": []
   },

@@ -9,6 +9,7 @@
 - **Hooks** are authored as per-hook `*.json` fragments in `.claude/hooks/` and compiled into `settings.json` by `build-hooks.py`; self-maintaining via a PostToolUse auto-rebuild + a SessionStart staleness warning.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-06-17] Permissions: `defaultMode: acceptEdits` (no edit prompts) + leading-slash `Edit(/.claude/**)`; Bash **scoped** to session-used families (supersedes the broad-Bash grant) — sessions/2026-06-17-permission-tuning.md
 - [2026-06-17] Added `agent-finder` operational skill (subagent selection) + `agents.py`; granted broad `Bash` permission in committed settings.json per user request — sessions/2026-06-17-agent-finder.md
 - [2026-06-17] Hook drift guard — PostToolUse auto-rebuilds settings.json on fragment edit + SessionStart warns if stale; `is_fragment` uses `os.path.samefile` for path-format robustness — sessions/2026-06-17-hook-guard-and-csharp.md
 - [2026-06-17] example-project `coding-standards` skill uses Python + C# (its real VSTO/.NET stack); dropped TypeScript — sessions/2026-06-17-hook-guard-and-csharp.md
@@ -29,6 +30,7 @@
 - `/add-skill` references `skill-authoring` (planned); it falls back to README + `agent-authoring` until that lands.
 
 ## Log              (append-only pointers)
+- 2026-06-17 | Permission tuning: acceptEdits + scoped Bash | sessions/2026-06-17-permission-tuning.md
 - 2026-06-17 | Add agent-finder skill + grant Bash permission | sessions/2026-06-17-agent-finder.md
 - 2026-06-17 | Hook drift guard + coding-standards → Python/C# | sessions/2026-06-17-hook-guard-and-csharp.md
 - 2026-06-17 | Hooks as fragments + build-hooks.py generator | sessions/2026-06-17-hook-fragments.md
