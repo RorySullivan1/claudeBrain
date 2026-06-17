@@ -44,8 +44,8 @@ workflows  ▸  commands  ▸  agents  ▸  skills
 
 ## Status in this project
 
-`skills/` (11 domain bundles + the `session-memory` skill) and `context/` (5 stack
-briefs) are populated, and `memory/` is active with the lifecycle hooks wired in
+`skills/` (11 domain bundles plus the operational `session-memory` and `agent-finder`
+skills) and `context/` (5 stack briefs) are populated, and `memory/` is active with the lifecycle hooks wired in
 `settings.json`. `commands/`, `agents/`, and `workflows/` remain intentional
 **scaffolds** — each has a README describing what it's for, ready to fill when a
 concrete need appears.

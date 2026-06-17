@@ -30,13 +30,20 @@ Skills that guide the construction of other assets, e.g.:
 - A `context-vs-skill` skill — deciding when knowledge belongs in a skill, a
   context brief, a command, or a hook.
 
-## One operational skill (an exception)
+## Operational skills (exceptions)
 
-- `session-memory` — **not** a meta-skill. It runs the *factory's own* persistent
-  memory (`.claude/memory/`: an auto-loaded `INDEX.md` + append-only `sessions/*.md`),
-  and replaced the old `DECISIONS.md` workflow. It lives here because it's a `SKILL.md`
-  bundle (with a `scripts/memory.py` engine), and it's driven by the lifecycle hooks in
-  `settings.json`. **(built)**
+These are **not** meta-skills — they run *during work* rather than teaching how to
+author assets. They live here because each is a `SKILL.md` bundle (often with a script
+engine):
+
+- `session-memory` — the *factory's own* persistent memory (`.claude/memory/`: an
+  auto-loaded `INDEX.md` + append-only `sessions/*.md`), replacing the old `DECISIONS.md`
+  workflow. Engine: `scripts/memory.py`, driven by the lifecycle hooks in `settings.json`.
+  **(built)**
+- `agent-finder` — sharpens subagent selection/delegation: inventory → match → choose
+  topology → delegate, keeping verbose work out of the main context. Engine:
+  `scripts/agents.py` (`list`/`search`/`show` over `.claude/agents/` + the built-ins).
+  **(built)**
 
 ## Format
 
@@ -46,7 +53,7 @@ the `name:` frontmatter value.
 ## Status
 
 **Four meta-skills built:** `agent-authoring/`, `developer-agent-authoring/`,
-`product-manager-agent-authoring/`, and `knowledge-agent-authoring/`, plus the
-operational `session-memory/` skill. The others above (`skill-authoring`,
-`context-vs-skill`, …) are not written yet — add them as we codify each authoring
-playbook.
+`product-manager-agent-authoring/`, and `knowledge-agent-authoring/`, plus two
+operational skills (`session-memory/`, `agent-finder/`). The others above
+(`skill-authoring`, `context-vs-skill`, …) are not written yet — add them as we codify
+each authoring playbook.

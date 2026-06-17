@@ -3,11 +3,13 @@
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain is a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` showcases a produced `.claude/`.
 - Meta-skills built: `agent-authoring` + the three specialized siblings `developer-`, `product-manager-`, `knowledge-agent-authoring`.
+- Operational skills built: `session-memory` and `agent-finder` (subagent selection/delegation, engine `scripts/agents.py`).
 - Authoring commands built: the `add-*` family (`add-skill/agent/command/hook/workflow`).
 - **Memory:** `session-memory` skill + `.claude/memory/` now replace the old `DECISIONS.md` workflow; four lifecycle hooks (SessionStart/PreCompact/Stop/UserPromptSubmit).
 - **Hooks** are authored as per-hook `*.json` fragments in `.claude/hooks/` and compiled into `settings.json` by `build-hooks.py`; self-maintaining via a PostToolUse auto-rebuild + a SessionStart staleness warning.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-06-17] Added `agent-finder` operational skill (subagent selection) + `agents.py`; granted broad `Bash` permission in committed settings.json per user request — sessions/2026-06-17-agent-finder.md
 - [2026-06-17] Hook drift guard — PostToolUse auto-rebuilds settings.json on fragment edit + SessionStart warns if stale; `is_fragment` uses `os.path.samefile` for path-format robustness — sessions/2026-06-17-hook-guard-and-csharp.md
 - [2026-06-17] example-project `coding-standards` skill uses Python + C# (its real VSTO/.NET stack); dropped TypeScript — sessions/2026-06-17-hook-guard-and-csharp.md
 - [2026-06-17] Hooks stored as per-hook `*.json` fragments compiled into settings.json by `build-hooks.py` — Claude Code has no native external-hook loading; plugins (the only alternative) add install friction — sessions/2026-06-17-hook-fragments.md
@@ -27,6 +29,7 @@
 - `/add-skill` references `skill-authoring` (planned); it falls back to README + `agent-authoring` until that lands.
 
 ## Log              (append-only pointers)
+- 2026-06-17 | Add agent-finder skill + grant Bash permission | sessions/2026-06-17-agent-finder.md
 - 2026-06-17 | Hook drift guard + coding-standards → Python/C# | sessions/2026-06-17-hook-guard-and-csharp.md
 - 2026-06-17 | Hooks as fragments + build-hooks.py generator | sessions/2026-06-17-hook-fragments.md
 - 2026-06-17 | Adopt session-memory; migrate DECISIONS.md | sessions/2026-06-17-adopt-session-memory.md
