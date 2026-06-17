@@ -1,4 +1,4 @@
-# claude-skills-library
+# claudeBrain
 
 A **factory for Claude Code tooling.** This repo is where reusable `.claude/`
 assets — skills, context briefs, hooks, commands, agents, workflows — are
@@ -25,48 +25,66 @@ concrete need appears. See `.claude/README.md`.
 
 ### `example-project/` — the produced layout
 
-A mock downstream repo that shows what the factory ships. It's laid out exactly
-like a real project a developer would copy:
+A mock downstream repo that shows what the factory ships — the canonical **worked
+examples** for every element type below. It's laid out exactly like a real project
+a developer would copy:
 
 ```
 example-project/
 ├── CLAUDE.md            ← the project's session contract
 ├── CLAUDE.local.md      ← sample personal notes (gitignored in a real repo)
 └── .claude/
-    ├── skills/          ← 10 domain skill bundles (the worked examples)
-    ├── context/         ← 5 stack-brief docs + manifest
+    ├── skills/          ← domain skill bundles (worked examples)
+    ├── context/         ← stack-brief docs + manifest
+    ├── memory/          ← session-memory: auto-loaded INDEX.md + sessions/ logs
     ├── hooks/ commands/ agents/ workflows/   ← scaffolds, ready to fill
-    ├── settings.json · README.md · DECISIONS.md
+    ├── settings.json · README.md
 ```
 
-The skills and context docs that used to live at the repo root now live here, as
-the canonical worked examples. To bootstrap a new project, copy `example-project/`
-(or just the `.claude/<asset>` folders you want) into the target repo.
+When you need to see a *finished* asset of any type, read its example here. See
+`example-project/.claude/README.md` for what each layer means in a consumer.
 
-## The skills (in `example-project/.claude/skills/`)
+## The asset taxonomy — pick the layer first
 
-Each skill is a self-contained bundle at `skills/<name>/SKILL.md`. The folder name
-always equals the skill's `name:` frontmatter value.
+Before building anything, choose the right kind of asset. The layers compose:
 
-| Skill | Purpose |
-|---|---|
-| `VSTO-development` | Write/architect/debug VSTO Office add-ins (C#/VB.NET) |
-| `VSTO-distribution` | Package & deploy VSTO add-ins (ClickOnce, MSI/WiX, GPO) |
-| `VSTO-maintenance` | Troubleshoot & maintain deployed VSTO add-ins |
-| `VSTO-review` | Review VSTO code (COM lifecycle, event hygiene, threading) |
-| `python-development` | Write new Python code |
-| `python-review` | Review Python code for bugs/security/design |
-| `python-maintenance` | Debug, refactor, modernize existing Python |
-| `python-deployment` | Package, containerize, ship Python to production |
-| `technical-documentation-drafter` | Developer-facing docs (`docs/` folder) |
-| `user-guide-drafter` | End-user, non-technical documentation |
+```
+hooks      ← enforcement floor, run by the harness (the model cannot skip them)
+─────────────────────────────────────────────────────────────────────────
+workflows  ▸  commands  ▸  agents  ▸  skills
+(orchestrate)  (one-shot)  (isolated)  (expertise)
+```
 
-## The context docs (in `example-project/.claude/context/`)
+- **skill** — reach for it to teach Claude *how to think and behave* for a recurring
+  task type (a domain or an authoring discipline). Loaded by trigger, in-session.
+- **agent** — an isolated subagent with clean context that does focused work and
+  returns only a summary. Use it for noisy or narrowly-scoped jobs.
+- **command** — a saved single-shot prompt you'd otherwise retype, invoked `/<name>`.
+- **workflow** — a multi-step orchestration that loops, branches, and spawns agents.
+- **hook** — a deterministic script the harness runs on a lifecycle event; the
+  enforcement layer *underneath* the prompt stack. Use it for what must *always* run.
+- **context** — reference docs Claude deep-reads on demand (briefs, schemas, notes);
+  `CLAUDE.md` points here so sessions stay lean.
 
-Five longer-form, CLAUDE.md-style system prompts — one per language/stack — that
-predate the skill split. They're reference material: drop one into a project's
-`CLAUDE.md` (or `.claude/context/`) to give Claude a full operating brief for that
-stack. See `example-project/.claude/context/README.md`.
+## Building an asset — the core brain
+
+Every element follows a fixed where/named/formatted shape. Author the *meta-tooling*
+under this repo's `.claude/<layer>/`; the matching path in a downstream project is
+the same minus the meta- scoping.
+
+| Element | Lives in | File / naming | Format shape | Author with |
+|---|---|---|---|---|
+| Skill | `.claude/skills/<name>/` | `SKILL.md`; folder == `name:` | YAML frontmatter (`name`, `description`) + markdown body | `skill-authoring` *(planned)* |
+| Agent | `.claude/agents/` | `<name>.md` | YAML frontmatter (`name`, `description`, opt. `tools`, `model`) + system-prompt body | `agent-authoring` skill |
+| Command | `.claude/commands/` | `<name>.md` (filename == command) | Prose prompt body; `$ARGUMENTS` / `$1…` params | `commands/README.md` |
+| Workflow | `.claude/workflows/` | `<name>.md` | Prose: ordered steps, agents/commands invoked, inputs/outputs, stop conditions | `workflows/README.md` |
+| Hook | `.claude/hooks/` | one script per event | Executable script; wired in `settings.json` by event | `hooks/README.md` |
+| Context | `.claude/context/` | kebab-case `<name>.md` | Plain markdown, no frontmatter; listed in the `context/` manifest | `context/README.md` |
+
+For the full format rules, open the matching `.claude/<layer>/README.md`; for skills
+and agents the meta-skills teach the how-to in depth (the `agent-authoring` skill is
+built; `skill-authoring` and `context-vs-skill` are planned). For a finished example
+of any element, read its counterpart in `example-project/.claude/`.
 
 ## Conventions
 

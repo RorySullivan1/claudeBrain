@@ -1,5 +1,5 @@
 <!--
-  This is the example-project showcase from the claude-skills-library factory.
+  This is the example-project showcase from the claudeBrain factory.
   It plays the part of a real downstream repo so you can see a populated .claude/
   in context. Copy this file (and the .claude/ next to it) into your own project
   and replace the contents with your real specifics. Keep CLAUDE.md short — it
@@ -12,7 +12,7 @@
 A demonstration project that ships an Office productivity tool: a **VSTO Excel
 add-in** (C#) backed by a set of **Python** data and packaging scripts, with
 end-user and developer **documentation**. It exists to show what a real consumer
-of the `claude-skills-library` looks like once the assets are in place.
+of the `claudeBrain` factory looks like once the assets are in place.
 
 ## Architecture
 - **Add-in** (`src/AddIn/`): VSTO Excel add-in, C# — Ribbon UI + task panes.
@@ -38,8 +38,9 @@ See `.claude/context/README.md` for whole-stack operating briefs:
 - C/C# brief — `c-csharp-project-instructions.md`
 - (also: C++ and VBA briefs)
 
-## Decisions
-See `.claude/DECISIONS.md` for the decision history.
+## Memory & decisions
+State and decisions carry across sessions via the `session-memory` skill:
+`.claude/memory/INDEX.md` (auto-loaded) plus append-only `sessions/*.md` logs.
 
 ## Conventions
 - Branch per change; conventional-commit-style messages.

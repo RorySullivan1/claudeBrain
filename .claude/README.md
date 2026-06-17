@@ -35,13 +35,18 @@ workflows  ▸  commands  ▸  agents  ▸  skills
 - **context/** — Authoring standards and conventions the factory itself follows
   (the rules a meta-skill would cite). See `context/README.md`.
 - **settings.json** — Permissions, model, and hook configuration for this repo.
-- **DECISIONS.md** — Log of structural decisions and their rationale.
+- **memory/** — The factory's evolving state, via the `session-memory` skill: a
+  small auto-loaded `INDEX.md` plus append-only `sessions/*.md` logs (which include
+  the migrated former `DECISIONS.md` as a frozen archive). Replaces the old
+  rewrite-in-place decision log. Loaded/persisted by the lifecycle hooks in
+  `settings.json`.
 
 ## Status
 
-Every layer here is an **intentional stub** — one README describing what the layer
-will hold once we write the first meta-tool. No authoring tooling is fabricated
-yet. The taxonomy is in place so each piece has an obvious home when a concrete
-need appears. For the *consumer-facing* explanation of these same layers (what
-they mean in a project that runs them), see
-`../example-project/.claude/README.md`.
+Some layers are now built, others remain **intentional stubs** (a README describing
+what the layer will hold). Built: `skills/` (the `*-agent-authoring` meta-skills plus
+the operational `session-memory` skill), `commands/` (the `add-*` scaffolders), and
+`hooks/` (the memory lifecycle hooks). Still stubs: `context/`, `agents/`,
+`workflows/`. The taxonomy is in place so each new piece has an obvious home. For the
+*consumer-facing* explanation of these same layers (what they mean in a project that
+runs them), see `../example-project/.claude/README.md`.
