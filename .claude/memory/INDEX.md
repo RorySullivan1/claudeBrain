@@ -26,6 +26,7 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
+- PR #6 open (`claude/finance-quant-developer-agent-34jo8v` → main): finance-quantitative-developer agent + 4 quant skills — awaiting review/merge.
 - Planned meta-skills not yet written: `skill-authoring`, `context-vs-skill`.
 - Planned commands: `/validate-asset`, `/add-context`.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
