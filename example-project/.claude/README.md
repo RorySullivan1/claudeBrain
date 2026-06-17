@@ -4,7 +4,7 @@ This directory holds the typed building blocks Claude Code uses for a project.
 Each subdirectory is a distinct *layer* with a distinct job. The layers compose.
 
 > This is the **consumer-facing** view of the layers — what they mean in a project
-> that *runs* them. (`example-project/` is the `claude-skills-library` factory's
+> that *runs* them. (`example-project/` is the `claudeBrain` factory's
 > showcase of a produced `.claude/`.) For the factory's *authoring* view of the
 > same layers, see the repo-root `../../.claude/README.md`.
 
@@ -38,11 +38,14 @@ workflows  ▸  commands  ▸  agents  ▸  skills
   `CLAUDE.md` points here; Claude deep-reads only what's relevant to the task. See
   `context/README.md` for the manifest.
 - **settings.json** — Permissions, model, and hook configuration.
-- **DECISIONS.md** — Log of structural/architecture decisions and their rationale.
+- **memory/** — Cross-session state via the `session-memory` skill: an auto-loaded
+  `INDEX.md` plus append-only `sessions/*.md` logs (loaded/persisted by the lifecycle
+  hooks in `settings.json`). Replaces a static `DECISIONS.md` log.
 
 ## Status in this project
 
-`skills/` (10 bundles) and `context/` (5 stack briefs) are populated. `hooks/`,
-`commands/`, `agents/`, and `workflows/` are intentional **scaffolds** — each has a
-README describing what it's for, ready to fill when a concrete need appears. No
-example content is fabricated.
+`skills/` (11 domain bundles + the `session-memory` skill) and `context/` (5 stack
+briefs) are populated, and `memory/` is active with the lifecycle hooks wired in
+`settings.json`. `commands/`, `agents/`, and `workflows/` remain intentional
+**scaffolds** — each has a README describing what it's for, ready to fill when a
+concrete need appears.
