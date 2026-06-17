@@ -2,6 +2,7 @@
 
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain is a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` showcases a produced `.claude/`.
+- **example-project** now carries its first real agent (`finance-quantitative-developer`, Python quant) + a Quant skill set (`quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`) — `agents/` is no longer an empty scaffold.
 - Meta-skills built: `agent-authoring` + the three specialized siblings `developer-`, `product-manager-`, `knowledge-agent-authoring`.
 - Operational skills built: `session-memory` and `agent-finder` (subagent selection/delegation, engine `scripts/agents.py`).
 - Authoring commands built: the `add-*` family (`add-skill/agent/command/hook/workflow`).
@@ -9,6 +10,7 @@
 - **Hooks** are authored as per-hook `*.json` fragments in `.claude/hooks/` and compiled into `settings.json` by `build-hooks.py`; self-maintaining via a PostToolUse auto-rebuild + a SessionStart staleness warning.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-06-17] First consumer agent + quant skill layer: `finance-quantitative-developer` (Python/numpy/scipy/pandas, verification-gated) + 4 skills in example-project; stack=Python (not C#/VSTO), built on `developer-agent-authoring` — sessions/2026-06-17-1753-finance-quant-dev-agent.md
 - [2026-06-17] Permissions: `defaultMode: acceptEdits` (no edit prompts) + leading-slash `Edit(/.claude/**)`; Bash **scoped** to session-used families (supersedes the broad-Bash grant) — sessions/2026-06-17-permission-tuning.md
 - [2026-06-17] Added `agent-finder` operational skill (subagent selection) + `agents.py`; granted broad `Bash` permission in committed settings.json per user request — sessions/2026-06-17-agent-finder.md
 - [2026-06-17] Hook drift guard — PostToolUse auto-rebuilds settings.json on fragment edit + SessionStart warns if stale; `is_fragment` uses `os.path.samefile` for path-format robustness — sessions/2026-06-17-hook-guard-and-csharp.md
@@ -30,6 +32,7 @@
 - `/add-skill` references `skill-authoring` (planned); it falls back to README + `agent-authoring` until that lands.
 
 ## Log              (append-only pointers)
+- 2026-06-17 | finance-quantitative-developer agent + 4 quant skills (consumer) | sessions/2026-06-17-1753-finance-quant-dev-agent.md
 - 2026-06-17 | Permission tuning: acceptEdits + scoped Bash | sessions/2026-06-17-permission-tuning.md
 - 2026-06-17 | Add agent-finder skill + grant Bash permission | sessions/2026-06-17-agent-finder.md
 - 2026-06-17 | Hook drift guard + coding-standards → Python/C# | sessions/2026-06-17-hook-guard-and-csharp.md
