@@ -1,6 +1,13 @@
 {
   "permissions": {
-    "allow": [],
+    "allow": [
+      "Edit(.claude/**)",
+      "Write(.claude/**)",
+      "MultiEdit(.claude/**)",
+      "Edit(example-project/.claude/**)",
+      "Write(example-project/.claude/**)",
+      "MultiEdit(example-project/.claude/**)"
+    ],
     "deny": []
   },
   "hooks": {
