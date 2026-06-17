@@ -19,5 +19,6 @@ session. Good for noisy, error-prone, or narrowly-scoped jobs.
 
 ## Status
 
-**Empty scaffold.** No agents defined yet. Add a `<name>.md` with frontmatter to
-define one.
+**Defined:** `finance-quantitative-developer` — a senior Python quant engineer
+for the `tools/` analytics layer (pricing, risk, signals, time-series) that
+writes and verifies quantitative code. Add more with a `<name>.md` + frontmatter.
