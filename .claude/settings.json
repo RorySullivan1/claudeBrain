@@ -6,7 +6,8 @@
       "MultiEdit(.claude/**)",
       "Edit(example-project/.claude/**)",
       "Write(example-project/.claude/**)",
-      "MultiEdit(example-project/.claude/**)"
+      "MultiEdit(example-project/.claude/**)",
+      "Bash"
     ],
     "deny": []
   },
