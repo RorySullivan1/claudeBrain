@@ -24,9 +24,9 @@ instance, so the bar is high and **drop is the default outcome.**
 Identify what *kind* of knowledge it is and send it to the matching home:
 
 - **A procedure that will recur** (a repeatable how-to, a workflow, a fix pattern) →
-  author a **skill**: run the `author-asset` workflow (or `/add-skill`), which applies the
-  significance + redundancy gate and scaffolds the bundle. Don't write skills inline from
-  here.
+  hand to **skill-distiller**: it runs the significance + redundancy gate, then either
+  folds the material into an existing skill or authors a new one (via `/add-skill` /
+  `author-asset`). Don't write skills inline from here.
 - **Evolving project state or a decision** (where the project is, what was chosen and
   why, an open thread) → **session-memory**. Update its `INDEX.md` / write a session log.
   This is trajectory, and it belongs in one place.
