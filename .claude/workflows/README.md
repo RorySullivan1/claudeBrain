@@ -5,6 +5,9 @@ assets** end to end — where a command is one shot, a workflow runs the whole b
 
 ## What goes here
 
+- `author-asset` — **(built)** the default build path for any "make me a skill /
+  agent / set of assets" request: scope → load conventions once (no re-exploration)
+  → scaffold via the `add-*` commands → batch the wiring → verify structurally.
 - `author-skill` — scaffold → draft `SKILL.md` → audit against conventions → place
   the finished bundle into `example-project/.claude/skills/` (or a downstream repo).
 - `harvest-context` — turn a stack brief into a context doc, validate, file it.
@@ -17,4 +20,4 @@ stop conditions.
 
 ## Status
 
-**Empty stub.** No authoring workflows defined yet.
+**`author-asset` built.** `author-skill` and `harvest-context` remain planned.

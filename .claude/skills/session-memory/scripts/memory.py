@@ -18,6 +18,7 @@ import argparse
 import json
 import os
 import re
+import tempfile
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -169,13 +170,30 @@ def cmd_precompact_hook(_args) -> int:
     )
     return 0
 
+def stop_nudge_marker(session_id: str) -> Path:
+    """Per-session marker so the Stop nudge fires at most once per session."""
+    safe = re.sub(r"[^A-Za-z0-9_.-]", "_", session_id)
+    return Path(tempfile.gettempdir()) / f"claude-session-memory-nudged-{safe}.flag"
+
 def cmd_stop_hook(_args) -> int:
-    """Stop: nudge once to capture the session. Guarded against loops."""
+    """Stop: nudge once per session to capture it. Guarded against loops."""
     payload = read_stdin_json()
     if payload.get("stop_hook_active") is True:
-        return 0  # already blocked once; let the session stop
+        return 0  # already blocked once this turn; let the session stop
     if not memory_dir().is_dir():
         return 0
+    # Block at most once per session: a marker keyed by session_id means we've
+    # already nudged, so subsequent Stops (e.g. on "continue") pass silently.
+    # Missing session_id → no dedup possible, fall back to nudging this once.
+    session_id = str(payload.get("session_id") or "")
+    if session_id:
+        marker = stop_nudge_marker(session_id)
+        if marker.exists():
+            return 0
+        try:
+            marker.touch()
+        except OSError:
+            pass  # best-effort; a failed marker just means we may nudge again
     out = {
         "decision": "block",
         "reason": (

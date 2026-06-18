@@ -35,5 +35,7 @@
   and pushed. No follow-up commits pending for the deliverable.
 
 ## Open threads
-- None for this task. Possible future siblings if demand appears: a C#/VSTO quant
-  variant, or a `quant-data-sourcing` skill (market-data ingestion/PIT storage).
+- PR #6 opened (`claude/finance-quant-developer-agent-34jo8v` → main) — awaiting
+  review/merge. Not subscribed to PR activity.
+- Possible future siblings if demand appears: a C#/VSTO quant variant, or a
+  `quant-data-sourcing` skill (market-data ingestion/PIT storage).
