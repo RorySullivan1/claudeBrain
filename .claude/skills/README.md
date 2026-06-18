@@ -47,6 +47,12 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
   topology → delegate, keeping verbose work out of the main context. Engine:
   `scripts/agents.py` (`list`/`search`/`show` over `.claude/agents/` + the built-ins).
   **(built)**
+- `knowledge-router` — the front door for capturing durable knowledge: classifies an item
+  and routes it to the right home (skill / `session-memory` / `CLAUDE.md` / a reference
+  note), defaulting to *drop*. Owns the `.claude/context/` reference-notes tier (an
+  always-loaded `INDEX.md` + on-demand `notes/*.md`). Engine: `scripts/context.py`
+  (`new`/`list`/`search`/`reindex`/`index`), with `index` driven by a SessionStart hook.
+  **(built)**
 
 ## Format
 

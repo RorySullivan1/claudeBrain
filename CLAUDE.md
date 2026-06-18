@@ -64,7 +64,9 @@ workflows  ▸  commands  ▸  agents  ▸  skills
 - **hook** — a deterministic script the harness runs on a lifecycle event; the
   enforcement layer *underneath* the prompt stack. Use it for what must *always* run.
 - **context** — reference docs Claude deep-reads on demand (briefs, schemas, notes);
-  `CLAUDE.md` points here so sessions stay lean.
+  `CLAUDE.md` points here so sessions stay lean. The `knowledge-router` skill curates a
+  `context/notes/` reference-notes tier (an always-loaded `INDEX.md` catalog + on-demand
+  notes, via `context.py`) on top of the flat briefs.
 
 ## Building an asset — the core brain
 
