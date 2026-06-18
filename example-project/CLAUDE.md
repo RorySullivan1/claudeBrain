@@ -31,6 +31,7 @@ right one from its `description:`; you don't invoke them by hand.
 - **Python:** `python-development`, `python-review`, `python-maintenance`, `python-deployment`
 - **Quant:** `quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`
 - **Docs:** `technical-documentation-drafter`, `user-guide-drafter`
+- **Knowledge:** `knowledge-router` — routes durable knowledge to the right home and owns the `.claude/context/` reference-notes tier.
 
 ## Agents available
 `.claude/agents/` holds isolated subagents Claude delegates to (auto via their
@@ -40,11 +41,14 @@ right one from its `description:`; you don't invoke them by hand.
   verifies quantitative code; draws on the Quant skills above.
 
 ## Reference Docs
-See `.claude/context/README.md` for whole-stack operating briefs:
+See `.claude/context/README.md` for two tiers of reference: whole-stack operating briefs
+and on-demand reference notes.
 - VSTO specialist brief — `vsto-project-instructions.md`
 - Python full-lifecycle brief — `python-project-instructions.md`
 - C/C# brief — `c-csharp-project-instructions.md`
 - (also: C++ and VBA briefs)
+- **Reference notes** — small declarative cards in `context/notes/`, catalogued in the
+  always-loaded `context/INDEX.md` (managed by `knowledge-router`).
 
 ## Memory & decisions
 State and decisions carry across sessions via the `session-memory` skill:
