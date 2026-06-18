@@ -94,6 +94,12 @@ of any element, read its counterpart in `example-project/.claude/`.
   in place; don't fork copies.
 - **Factory vs. product.** Author the *how-to* (meta-tooling) under `.claude/`;
   the produced assets and their showcase live under `example-project/`.
+- **Operational assets are single-sourced.** The assets the factory itself *runs*
+  while dogfooding — the `session-memory` and `agent-finder` skills, `build-hooks.py`,
+  and the shared hook fragments — are produced assets, so their canonical copy lives in
+  `example-project/.claude/` and the factory's `.claude/` holds **symlinks** into it.
+  Edit them in `example-project/`; never replace a symlink with a copy. (Role-divergent
+  files — `settings.json`, the per-layer `README.md`s — stay independent per tree.)
 
 ## Using an asset elsewhere
 

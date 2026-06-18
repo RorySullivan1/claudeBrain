@@ -1,15 +1,1 @@
-{
-  "SessionStart": [
-    {
-      "matcher": "startup|resume|clear|compact",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "python",
-          "args": ["${CLAUDE_PROJECT_DIR}/.claude/skills/session-memory/scripts/memory.py", "index"],
-          "timeout": 10
-        }
-      ]
-    }
-  ]
-}
+../../example-project/.claude/hooks/session-start.json

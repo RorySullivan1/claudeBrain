@@ -36,6 +36,12 @@ Every `*.json` in this folder is treated as a fragment (the README and `build-ho
 are ignored). Fragments merge in filename order; multiple fragments targeting the same
 event concatenate.
 
+> **`build-hooks.py` and the shared fragments are symlinks** to the canonical copies in
+> `example-project/.claude/hooks/` — single source of truth, no drift. Edit them in
+> `example-project/`. A factory-only hook can still be added as a new *real* `*.json`
+> here alongside the symlinks; `build-hooks.py` globs every `*.json` regardless.
+> `README.md` and `settings.json` stay independent per tree (they differ by role).
+
 ### Rebuild after editing a fragment
 
 ```bash
