@@ -8,8 +8,10 @@
 - Authoring commands built: the `add-*` family (`add-skill/agent/command/hook/workflow`).
 - **Memory:** `session-memory` skill + `.claude/memory/` now replace the old `DECISIONS.md` workflow; four lifecycle hooks (SessionStart/PreCompact/Stop/UserPromptSubmit).
 - **Hooks** are authored as per-hook `*.json` fragments in `.claude/hooks/` and compiled into `settings.json` by `build-hooks.py`; self-maintaining via a PostToolUse auto-rebuild + a SessionStart staleness warning.
+- **Factory efficiency:** Stop hook nudges at most once per session (per-`session_id` temp marker); `author-asset` workflow + `add-*` guardrails forbid re-deriving formats via Explore agents.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-06-18] Factory-efficiency pass: Stop hook deduped to once/session (temp marker keyed by session_id, supersedes block-every-Stop); new `author-asset` workflow + `add-agent`/`add-skill` guardrails ban re-deriving formats via Explore agents — sessions/2026-06-18-2059-optimize-factory-model.md
 - [2026-06-17] First consumer agent + quant skill layer: `finance-quantitative-developer` (Python/numpy/scipy/pandas, verification-gated) + 4 skills in example-project; stack=Python (not C#/VSTO), built on `developer-agent-authoring` — sessions/2026-06-17-1753-finance-quant-dev-agent.md
 - [2026-06-17] Permissions: `defaultMode: acceptEdits` (no edit prompts) + leading-slash `Edit(/.claude/**)`; Bash **scoped** to session-used families (supersedes the broad-Bash grant) — sessions/2026-06-17-permission-tuning.md
 - [2026-06-17] Added `agent-finder` operational skill (subagent selection) + `agents.py`; granted broad `Bash` permission in committed settings.json per user request — sessions/2026-06-17-agent-finder.md
@@ -27,12 +29,14 @@
 
 ## Threads          (open items; remove when closed)
 - PR #6 open (`claude/finance-quant-developer-agent-34jo8v` → main): finance-quantitative-developer agent + 4 quant skills — awaiting review/merge.
+- `claude/optimize-factory-model` pushed (factory-efficiency pass), no PR opened yet — open one if wanted.
 - Planned meta-skills not yet written: `skill-authoring`, `context-vs-skill`.
 - Planned commands: `/validate-asset`, `/add-context`.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 - `/add-skill` references `skill-authoring` (planned); it falls back to README + `agent-authoring` until that lands.
 
 ## Log              (append-only pointers)
+- 2026-06-18 | Factory efficiency: Stop-hook dedupe + author-asset workflow | sessions/2026-06-18-2059-optimize-factory-model.md
 - 2026-06-17 | finance-quantitative-developer agent + 4 quant skills (consumer) | sessions/2026-06-17-1753-finance-quant-dev-agent.md
 - 2026-06-17 | Permission tuning: acceptEdits + scoped Bash | sessions/2026-06-17-permission-tuning.md
 - 2026-06-17 | Add agent-finder skill + grant Bash permission | sessions/2026-06-17-agent-finder.md
