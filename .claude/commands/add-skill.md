@@ -11,6 +11,10 @@ If a **skill-authoring** meta-skill exists, use it. Until then, follow the conve
 in `.claude/skills/README.md` and model the structure on a built skill such as
 `.claude/skills/agent-authoring/SKILL.md` (YAML frontmatter + a sectioned markdown body).
 
+That README plus a built skill is the format spec — do **not** spawn
+Explore/research agents to re-derive conventions or re-read example bundles. For a
+request that needs several assets, follow the `author-asset` workflow and batch them.
+
 ## 2. Confirm placement
 
 Determine the target `.claude/skills/` directory from `$ARGUMENTS`. If it isn't given,

@@ -16,6 +16,11 @@ meta-skill:
 - a project-scope / system-design assessor → **product-manager-agent-authoring**
 - a knowledge-base curator / retriever → **knowledge-agent-authoring**
 
+The meta-skill (plus any built agent as a model) is the format spec — do **not**
+spawn Explore/research agents to re-derive conventions or re-read example bundles.
+For a request that needs several assets, follow the `author-asset` workflow and
+batch them.
+
 ## 2. Confirm placement
 
 Determine the target `.claude/agents/` directory from `$ARGUMENTS`. If it isn't given,
