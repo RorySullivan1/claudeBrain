@@ -124,9 +124,8 @@ def read_stdin_json() -> dict:
 # --- modes -----------------------------------------------------------------
 
 def mode_build() -> int:
-    rendered = render(merge_fragments())
-    settings_path().write_text(rendered, encoding="utf-8")
     merged = merge_fragments()
+    settings_path().write_text(render(merged), encoding="utf-8")
     print(f"wrote {settings_path().name} from {len(fragment_files())} fragment(s): "
           f"{', '.join(merged) or '(none)'}")
     return 0

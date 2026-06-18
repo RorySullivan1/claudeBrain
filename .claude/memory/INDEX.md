@@ -3,7 +3,7 @@
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain is a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` showcases a produced `.claude/`.
 - **example-project** now carries its first real agent (`finance-quantitative-developer`, Python quant) + a Quant skill set (`quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`) — `agents/` is no longer an empty scaffold.
-- Meta-skills built: `agent-authoring` + the three specialized siblings `developer-`, `product-manager-`, `knowledge-agent-authoring`.
+- Meta-skills built: `agent-authoring` (the single source of truth for layer-choice + the authoring checklist) + three specialized siblings `developer-`/`product-manager-`/`knowledge-agent-authoring`, now trimmed to a clean **delta** that points back to the base instead of restating it.
 - Operational skills built: `session-memory` and `agent-finder` (subagent selection/delegation, engine `scripts/agents.py`).
 - Authoring commands built: the `add-*` family (`add-skill/agent/command/hook/workflow`).
 - **Memory:** `session-memory` skill + `.claude/memory/` now replace the old `DECISIONS.md` workflow; four lifecycle hooks (SessionStart/PreCompact/Stop/UserPromptSubmit).
@@ -11,6 +11,7 @@
 - **Factory efficiency:** Stop hook nudges at most once per session (per-`session_id` temp marker); `author-asset` workflow + `add-*` guardrails forbid re-deriving formats via Explore agents.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-06-18] Second efficiency pass: de-duped the agent-authoring family to base+delta (siblings now point to the base's *Is an agent the right tool?* + checklist instead of restating; "Start with agent-authoring" intro compressed) and trimmed all 4 eager descriptions (kept every trigger list). Deliberately left example-project script dup (intentional showcase), hook micro-perf, and command placement boilerplate alone. −37 lines, settings.json unchanged — sessions/2026-06-18-2140-optimize-agent-authoring-family.md
 - [2026-06-18] Factory-efficiency pass: Stop hook deduped to once/session (temp marker keyed by session_id, supersedes block-every-Stop); new `author-asset` workflow + `add-agent`/`add-skill` guardrails ban re-deriving formats via Explore agents — sessions/2026-06-18-2059-optimize-factory-model.md
 - [2026-06-17] First consumer agent + quant skill layer: `finance-quantitative-developer` (Python/numpy/scipy/pandas, verification-gated) + 4 skills in example-project; stack=Python (not C#/VSTO), built on `developer-agent-authoring` — sessions/2026-06-17-1753-finance-quant-dev-agent.md
 - [2026-06-17] Permissions: `defaultMode: acceptEdits` (no edit prompts) + leading-slash `Edit(/.claude/**)`; Bash **scoped** to session-used families (supersedes the broad-Bash grant) — sessions/2026-06-17-permission-tuning.md
@@ -28,14 +29,14 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
-- PR #6 open (`claude/finance-quant-developer-agent-34jo8v` → main): finance-quantitative-developer agent + 4 quant skills — awaiting review/merge.
-- `claude/optimize-factory-model` pushed (factory-efficiency pass), no PR opened yet — open one if wanted.
+- PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Planned meta-skills not yet written: `skill-authoring`, `context-vs-skill`.
 - Planned commands: `/validate-asset`, `/add-context`.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 - `/add-skill` references `skill-authoring` (planned); it falls back to README + `agent-authoring` until that lands.
 
 ## Log              (append-only pointers)
+- 2026-06-18 | Dedupe agent-authoring family to base+delta + trim eager descriptions | sessions/2026-06-18-2140-optimize-agent-authoring-family.md
 - 2026-06-18 | Factory efficiency: Stop-hook dedupe + author-asset workflow | sessions/2026-06-18-2059-optimize-factory-model.md
 - 2026-06-17 | finance-quantitative-developer agent + 4 quant skills (consumer) | sessions/2026-06-17-1753-finance-quant-dev-agent.md
 - 2026-06-17 | Permission tuning: acceptEdits + scoped Bash | sessions/2026-06-17-permission-tuning.md
