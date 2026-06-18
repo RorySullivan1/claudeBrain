@@ -33,6 +33,7 @@ right one from its `description:`; you don't invoke them by hand.
 - **Docs:** `technical-documentation-drafter`, `user-guide-drafter`
 - **Knowledge:** `knowledge-router` — routes durable knowledge to the right home and owns the `.claude/context/` reference-notes tier.
 - **Efficiency:** `token-optimizer` — decides where high-volume work runs to keep the main context lean (pairs with the output-guard hooks and the `token-manager` agent).
+- **Authoring:** `skill-distiller` — decides whether freshly-derived know-how should become a skill (significance + redundancy gate), then hands authoring to `/add-skill`.
 
 ## Agents available
 `.claude/agents/` holds isolated subagents Claude delegates to (auto via their

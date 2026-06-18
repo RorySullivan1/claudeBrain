@@ -58,6 +58,12 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
   slice a large read, or flush state to memory). Pairs with the `post_bash_filter` /
   `pre_read_guard` hooks (which trim output automatically) and the `token-manager` agent
   (which absorbs the bulk). Engine: `scripts/tokens.py` (`estimate`). **(built)**
+- `skill-distiller` — decides *whether* freshly-derived know-how should become a skill:
+  runs a significance gate + a redundancy check and prefers folding into an existing skill
+  over spawning a new one, then hands authoring to `/add-skill`. The "should it be a skill?"
+  front-half of the authoring path; `knowledge-router` routes procedures here. Engine:
+  `scripts/skills.py` (`list`/`similar`/`candidates`/`add-candidate`) + a plan-approval nudge
+  hook (`scripts/plan_nudge.py` on `ExitPlanMode`). **(built)**
 
 ## Format
 
