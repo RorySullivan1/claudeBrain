@@ -9,11 +9,8 @@ description: >
   context-efficient results. Trigger on phrases like "create a knowledge agent",
   "design a retrieval agent", "RAG agent", "librarian agent", "agent that maintains a
   knowledge base", "agent to answer questions from our docs", "context/memory
-  maintenance agent", or "knowledge-base curator". This builds on the general
-  `agent-authoring` skill — use that for the universal mechanics (description, tools,
-  permissions, model, mandate); use *this* for the curation-and-retrieval traits
-  layered on top. It teaches how to author the agent; it does not build the retrieval
-  infrastructure or answer the queries itself.
+  maintenance agent", or "knowledge-base curator". Builds on `agent-authoring` (the
+  universal mechanics); this skill adds the curation-and-retrieval traits.
 ---
 
 # Knowledge Agent Authoring
@@ -26,10 +23,9 @@ code*; a product-manager agent *assesses* it; a knowledge agent *remembers and
 retrieves* — it is the librarian that protects the main session from having to load a
 whole corpus to answer one question.
 
-> **Start with `agent-authoring`.** That skill owns the universal anatomy —
-> `description` as the trigger, the `tools` allowlist, `permissionMode`, `model`,
-> and how to write a mandate. This skill assumes those basics and adds only what
-> makes an agent a good *curator and retriever*. It is a sibling of
+> This layers on **`agent-authoring`** — read that first for the universal
+> mechanics (`description`, `tools`, `permissionMode`, `model`, mandate); this skill
+> covers only the *curator and retriever* delta. It is a sibling of
 > `developer-agent-authoring` and `product-manager-agent-authoring`.
 
 ## Core principles
@@ -52,19 +48,13 @@ whole corpus to answer one question.
 
 ## Is a knowledge *agent* the right tool?
 
-Much knowledge lives better as static context or infrastructure. Choose the agent
-form when search or curation is noisy enough that isolation pays off.
-
-| Want | Use |
-|---|---|
-| Curate and/or query a sizeable corpus, returning a clean grounded answer | a knowledge **agent** |
-| A small, always-relevant brief Claude should just read | a **context** doc |
-| A fact that must persist and auto-load across sessions | the **memory** system |
-| Raw search/storage primitives (vector DB, full-text index) | an **MCP server** / tool, which the agent then uses |
-
-Quick test: *Will answering flood context with searching and reading, when the caller
-only needs a short, sourced result?* → knowledge agent. *Is the knowledge small and
-always relevant?* → just put it in a context doc.
+First confirm the layer with *Is an agent even the right tool?* in `agent-authoring`.
+The domain-specific calls here: a small, always-relevant brief belongs in a
+**context** doc; a fact that must persist and auto-load across sessions belongs in the
+**memory** system; raw search/storage primitives (vector DB, full-text index) are an
+**MCP server** the agent *uses*. Choose the knowledge agent when search or curation is
+noisy enough that isolation pays off — when answering would flood context with
+searching and reading but the caller only needs a short, sourced result.
 
 ## Decide before you write
 
@@ -181,8 +171,7 @@ the schema, and never answer without consulting the index.
 
 ## Authoring checklist
 
-- [ ] Passes the base `agent-authoring` checklist (unique name, sharp description,
-      least-privilege tools, right permission posture, fitting model, tight body).
+- [ ] Passes the base `agent-authoring` checklist.
 - [ ] Pinned to **one corpus** with a known schema and index.
 - [ ] **Mode is explicit** — retrieval-only, curation, or both — and tools/permissions match.
 - [ ] Retrieval is **grounded**: cites sources and reports misses honestly.

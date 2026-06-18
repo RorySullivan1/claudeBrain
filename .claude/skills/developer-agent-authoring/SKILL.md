@@ -9,11 +9,9 @@ description: >
   efficient and well-organized, and verifies its own work. Trigger on phrases like
   "create a developer agent", "build a Python/TypeScript/Go/Rust coding agent",
   "agent that writes <language> code", "language specialist subagent", "set up an
-  agent to develop in <stack>", or "design a feature-dev agent". This builds on the
-  general `agent-authoring` skill — use that for the universal mechanics
-  (description, tools, permissions, model, mandate); use *this* for the
-  developer-specific traits layered on top. It teaches how to author the agent; it
-  does not write the agent's domain code itself.
+  agent to develop in <stack>", or "design a feature-dev agent". Builds on
+  `agent-authoring` (the universal mechanics); this skill adds the developer-specific
+  traits.
 ---
 
 # Developer Agent Authoring
@@ -25,11 +23,10 @@ when you want language-specialist work to run in its own context and hand back a
 clean diff plus a short report, rather than narrate every edit into the main
 session.
 
-> **Start with `agent-authoring`.** That skill owns the universal anatomy —
-> `description` as the trigger, the `tools` allowlist, `permissionMode`, `model`,
-> and how to write a mandate. This skill assumes those basics and adds only what
-> makes an agent a *good developer*. When the two seem to conflict, the general
-> mechanics win; this layer specializes them.
+> This layers on **`agent-authoring`** — read that first for the universal
+> mechanics (`description`, `tools`, `permissionMode`, `model`, mandate); this skill
+> covers only the *good developer* delta. Where they seem to conflict, the general
+> mechanics win.
 
 ## Core principles
 
@@ -51,20 +48,11 @@ session.
 
 ## Is a developer *agent* the right tool?
 
-A lot of "developer expertise" is better delivered as a **skill** that runs in the
-main conversation (like the `python-development` skill in `example-project/`). Choose
-the agent form only when isolation pays off.
-
-| Want | Use |
-|---|---|
-| Expertise applied *in* the current chat, with full back-and-forth | a development **skill** |
-| A self-contained build/feature/fix that returns a diff + summary | a developer **agent** |
-| A one-off "write me this function" prompt you'd retype | a **command** |
-| Format/lint/typecheck that must *always* run on save/commit | a **hook** |
-
-Quick test: *Will this dump a lot of exploration and tool output I won't reread, and
-can it hand back just the diff and a short report?* → developer agent. Otherwise a
-skill is lighter.
+First confirm the layer with *Is an agent even the right tool?* in `agent-authoring`.
+The domain-specific call here: most "developer expertise" is better delivered as a
+**skill** that runs in the main conversation (like the `python-development` skill in
+`example-project/`). Choose the agent form only when the work dumps exploration/tool
+output you won't reread and can hand back just a diff + short report.
 
 ## Decide before you write
 
@@ -175,8 +163,7 @@ confirm them against the repo's actual config.
 
 ## Authoring checklist
 
-- [ ] Passes the base `agent-authoring` checklist (unique name, sharp description,
-      least-privilege tools, right permission posture, fitting model, tight body).
+- [ ] Passes the base `agent-authoring` checklist.
 - [ ] Specialized to **one** language/stack, pinned to a version.
 - [ ] Body tells it to **discover and follow existing conventions** before writing.
 - [ ] `tools` includes what it needs to **edit and run** code (usually `Bash`).

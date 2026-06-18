@@ -10,8 +10,8 @@ description: >
   Trigger on phrases like "write an agent", "create a subagent", "draft a
   .claude/agents file", "agent frontmatter", "what tools/permissions/model should
   this agent have", "why isn't my agent being used", or "should this be an agent or
-  a skill". This teaches how to author agents; it is not for authoring skills (that
-  is skill-authoring) and not for doing the agent's own domain task.
+  a skill". For authoring skills use skill-authoring; this skill is only about agent
+  definitions.
 ---
 
 # Agent Authoring

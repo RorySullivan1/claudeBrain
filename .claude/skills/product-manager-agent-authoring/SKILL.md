@@ -10,10 +10,8 @@ description: >
   agent", "design a PM agent", "agent that assesses code against project scope",
   "architecture/scope review agent", "system-design reviewer agent", "agent to check
   whether changes fit the project", or "evaluate organization and design at the
-  project level". This builds on the general `agent-authoring` skill — use that for
-  the universal mechanics (description, tools, permissions, model, mandate); use
-  *this* for the project-altitude assessment traits layered on top. It teaches how
-  to author the agent; it does not perform the assessment itself.
+  project level". Builds on `agent-authoring` (the universal mechanics); this skill
+  adds the project-altitude assessment traits.
 ---
 
 # Product-Manager Agent Authoring
@@ -26,10 +24,9 @@ Where a developer agent *changes* code and a line-level reviewer hunts *correctn
 bugs*, a product-manager agent zooms out — it judges fit, coherence, and design at
 the altitude of the product, and hands back a prioritized assessment, not a patch.
 
-> **Start with `agent-authoring`.** That skill owns the universal anatomy —
-> `description` as the trigger, the `tools` allowlist, `permissionMode`, `model`,
-> and how to write a mandate. This skill assumes those basics and adds only what
-> makes an agent a good *project-level assessor*. It is the sibling of
+> This layers on **`agent-authoring`** — read that first for the universal
+> mechanics (`description`, `tools`, `permissionMode`, `model`, mandate); this skill
+> covers only the *project-level assessor* delta. It is the sibling of
 > `developer-agent-authoring`: same family, opposite stance — that one builds, this
 > one evaluates.
 
@@ -53,20 +50,13 @@ the altitude of the product, and hands back a prioritized assessment, not a patc
 
 ## Is a product-manager *agent* the right tool?
 
-Much of this judgment can run as a **review skill** in the main conversation. Choose
-the agent form when you want an isolated, project-wide pass that returns a digest.
-
-| Want | Use |
-|---|---|
-| Project-scope / design assessment that returns a prioritized report | a product-manager **agent** |
-| The same judgment applied interactively, in the current chat | a **review skill** |
-| Line-level correctness, security, and regression review of a diff | a **code-reviewer** agent/skill |
-| To actually implement the change being assessed | a **developer agent** |
-
-Quick test: *Does the question need whole-project context and a ranked
-fit/organization/design verdict handed back as a summary?* → product-manager agent.
-*Is it "are there bugs in this diff?"* → that's a correctness reviewer, a different
-job.
+First confirm the layer with *Is an agent even the right tool?* in `agent-authoring`.
+The domain-specific call here: distinguish this from a **line-level code-reviewer** —
+if the question is "are there bugs in this diff?", that's a correctness reviewer, a
+different job. Choose the PM agent form when the question needs whole-project context
+and a ranked fit/organization/design verdict handed back as a summary. (Much of this
+judgment can also run as a **review skill** in the chat; pick the agent for an
+isolated, project-wide pass that returns a digest.)
 
 ## Decide before you write
 
@@ -175,8 +165,7 @@ change seems to contradict a logged decision.
 
 ## Authoring checklist
 
-- [ ] Passes the base `agent-authoring` checklist (unique name, sharp description,
-      least-privilege tools, right permission posture, fitting model, tight body).
+- [ ] Passes the base `agent-authoring` checklist.
 - [ ] Read-only: `permissionMode: plan`, no edit/write tools.
 - [ ] Body **orients on project intent** (CLAUDE.md/README/DECISIONS/roadmap) before judging.
 - [ ] Assessment is **project-altitude** — every finding ties to scope, design, or organization.
