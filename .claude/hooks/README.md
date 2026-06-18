@@ -14,8 +14,13 @@ Checks that must always run when editing assets here, e.g.:
 
 It also holds **memory lifecycle hooks** — the deterministic moments that drive the
 `session-memory` system (load on start, persist before context is lost, recall on
-"continue"). These are not authoring guardrails, but they live here because they are
-the other thing the harness must run *for us* while we work in this repo.
+"continue") — and **context-economy guard hooks**: `post_bash_filter.py`
+(PostToolUse·Bash — ANSI-strips and head/tail-elides long command output) and
+`pre_read_guard.py` (PreToolUse·Read — caps an unpaged whole-file slurp of a huge file).
+Both fail safe and pair with the `token-optimizer` skill. These are not authoring
+guardrails, but they live here because they are the other thing the harness must run
+*for us* while we work in this repo. (Like the scripts, these hook files are symlinks to
+the canonical copies in `example-project/.claude/hooks/`.)
 
 ## Storage — one fragment file per hook (this is the source of truth)
 

@@ -32,6 +32,7 @@ right one from its `description:`; you don't invoke them by hand.
 - **Quant:** `quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`
 - **Docs:** `technical-documentation-drafter`, `user-guide-drafter`
 - **Knowledge:** `knowledge-router` — routes durable knowledge to the right home and owns the `.claude/context/` reference-notes tier.
+- **Efficiency:** `token-optimizer` — decides where high-volume work runs to keep the main context lean (pairs with the output-guard hooks and the `token-manager` agent).
 
 ## Agents available
 `.claude/agents/` holds isolated subagents Claude delegates to (auto via their
@@ -39,6 +40,8 @@ right one from its `description:`; you don't invoke them by hand.
 - **`finance-quantitative-developer`** — senior Python quant engineer for the
   `tools/` analytics layer (pricing, risk, signals, time-series). Writes and
   verifies quantitative code; draws on the Quant skills above.
+- **`token-manager`** — context-economy worker: runs verbose/high-volume tasks in
+  isolation and returns only a capped summary (keeps bulk out of the main context).
 
 ## Reference Docs
 See `.claude/context/README.md` for two tiers of reference: whole-stack operating briefs

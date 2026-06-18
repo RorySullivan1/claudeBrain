@@ -1,0 +1,1 @@
+../../example-project/.claude/agents/token-manager.md

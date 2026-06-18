@@ -1,0 +1,1 @@
+../../example-project/.claude/hooks/pre_read_guard.py

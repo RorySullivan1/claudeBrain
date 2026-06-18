@@ -1,0 +1,1 @@
+../../example-project/.claude/hooks/post_bash_filter.py
