@@ -53,6 +53,11 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
   always-loaded `INDEX.md` + on-demand `notes/*.md`). Engine: `scripts/context.py`
   (`new`/`list`/`search`/`reindex`/`index`), with `index` driven by a SessionStart hook.
   **(built)**
+- `token-optimizer` — the judgment layer for keeping a session token-efficient: estimate a
+  high-volume operation, then place it (delegate to `Explore` or the `token-manager` agent,
+  slice a large read, or flush state to memory). Pairs with the `post_bash_filter` /
+  `pre_read_guard` hooks (which trim output automatically) and the `token-manager` agent
+  (which absorbs the bulk). Engine: `scripts/tokens.py` (`estimate`). **(built)**
 
 ## Format
 

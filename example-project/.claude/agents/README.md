@@ -19,6 +19,12 @@ session. Good for noisy, error-prone, or narrowly-scoped jobs.
 
 ## Status
 
-**Defined:** `finance-quantitative-developer` — a senior Python quant engineer
-for the `tools/` analytics layer (pricing, risk, signals, time-series) that
-writes and verifies quantitative code. Add more with a `<name>.md` + frontmatter.
+**Defined:**
+- `finance-quantitative-developer` — a senior Python quant engineer for the `tools/`
+  analytics layer (pricing, risk, signals, time-series) that writes and verifies
+  quantitative code.
+- `token-manager` — a context-economy worker: runs verbose/high-volume tasks (test suites,
+  log processing, large-file analysis, fetches) in isolation and returns only a capped
+  summary. The delegation target of the `token-optimizer` skill.
+
+Add more with a `<name>.md` + frontmatter.
