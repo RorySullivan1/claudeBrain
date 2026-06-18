@@ -34,7 +34,10 @@ Skills that guide the construction of other assets, e.g.:
 
 These are **not** meta-skills — they run *during work* rather than teaching how to
 author assets. They live here because each is a `SKILL.md` bundle (often with a script
-engine):
+engine). Both are **symlinks** to the canonical copies under
+`example-project/.claude/skills/` — the factory dogfoods the same produced asset a
+consumer lifts, so there is one source of truth and no drift. **Edit them in
+`example-project/`; never replace the symlink with a copy.**
 
 - `session-memory` — the *factory's own* persistent memory (`.claude/memory/`: an
   auto-loaded `INDEX.md` + append-only `sessions/*.md`), replacing the old `DECISIONS.md`
