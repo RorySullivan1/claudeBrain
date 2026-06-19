@@ -23,6 +23,12 @@ session. Good for noisy, error-prone, or narrowly-scoped jobs.
 - `finance-quantitative-developer` — a senior Python quant engineer for the `tools/`
   analytics layer (pricing, risk, signals, time-series) that writes and verifies
   quantitative code.
+- `data-analyst` — the **objective** analysis brain (read-only, `plan`): frames the
+  question, plans exploration, specifies purpose-driven visualizations, and reasons to
+  defensible conclusions with their uncertainty — deliberately language/tool-agnostic. It
+  produces the objective spec and defers the subjective *how* (language, library, code) to
+  a developer agent or a language skill. The conceptual counterpart to a hands-on executor
+  like `finance-quantitative-developer`.
 - `token-manager` — a context-economy worker: runs verbose/high-volume tasks (test suites,
   log processing, large-file analysis, fetches) in isolation and returns only a capped
   summary. The delegation target of the `token-optimizer` skill.
