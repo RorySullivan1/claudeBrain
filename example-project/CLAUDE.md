@@ -45,6 +45,10 @@ right one from its `description:`; you don't invoke them by hand.
   exploration, specifies what to visualize and why, and reasons to defensible
   conclusions — language- and tool-agnostic. Hands the subjective *how* (the code, the
   stack) to a developer agent like `finance-quantitative-developer` or a language skill.
+- **`software-architect`** — the *objective* structure brain: designs the project's
+  architecture to fit its objective and sets the conventions (module boundaries, where
+  things live, naming, file organization). Stack-agnostic — produces the blueprint and
+  hands the implementation to a developer agent / language skill.
 - **`token-manager`** — context-economy worker: runs verbose/high-volume tasks in
   isolation and returns only a capped summary (keeps bulk out of the main context).
 
