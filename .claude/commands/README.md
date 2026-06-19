@@ -20,6 +20,14 @@ scaffolds the file(s) with correct frontmatter/structure, and confirms placement
 Future additions could include `/validate-asset` (check one asset against the
 conventions) and `/add-context` (scaffold a context brief).
 
+Besides the authoring family, two **operational** commands the factory dogfoods and
+consumers lift are **symlinked** from `example-project/.claude/commands/` (edit them there):
+
+- `/version-set` — write/update `.meta/version` with a semver label + the goals of this
+  unit of work. **(built, operational/symlinked)**
+- `/version-ship` — name and ship the PR from `.meta/version` (branch, commit, push, open
+  the PR with a title/body derived from the goals). **(built, operational/symlinked)**
+
 ## Format
 
 One markdown file per command: `<name>.md` (the filename is the command name). The

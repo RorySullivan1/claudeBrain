@@ -102,6 +102,10 @@ of any element, read its counterpart in `example-project/.claude/`.
   `example-project/.claude/` and the factory's `.claude/` holds **symlinks** into it.
   Edit them in `example-project/`; never replace a symlink with a copy. (Role-divergent
   files — `settings.json`, the per-layer `README.md`s — stay independent per tree.)
+- **Version labeling.** A project's current unit of work is named in a root `.meta/version`
+  file (semver label + goals/objectives); the `ship-version` workflow (`/version-set` +
+  `/version-ship`) names and ships the PR from those goals. `.meta/version` is per-project
+  runtime state (like `.claude/memory/`), created on demand — not a shipped asset.
 
 ## Using an asset elsewhere
 

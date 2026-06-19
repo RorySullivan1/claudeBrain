@@ -58,6 +58,12 @@ and on-demand reference notes.
 State and decisions carry across sessions via the `session-memory` skill:
 `.claude/memory/INDEX.md` (auto-loaded) plus append-only `sessions/*.md` logs.
 
+## Versioning
+The current unit of work is labeled in `.meta/version` (a semver label + its goals). The
+`ship-version` workflow names and ships the PR from those goals: `/version-set` records the
+label + goals; `/version-ship` derives the branch + PR title/body from them. `.meta/version`
+is prospective ("what this version is for") and complements memory's retrospective log.
+
 ## Conventions
 - Branch per change; conventional-commit-style messages.
 - Python formatted with the project's configured formatter/linter before commit.

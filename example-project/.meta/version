@@ -1,0 +1,14 @@
+# version: v0.3.0
+status: shipped
+started: 2026-06-12
+branch: claude/v0.3.0-quant-analytics
+pr: https://github.com/example-org/example-project/pull/42
+
+## Goals
+- Add the pricing/risk analytics layer to `tools/` (options pricing, VaR, greeks).
+- Give the desk a verified quant surface the add-in can call without Office in the loop.
+
+## Objectives / acceptance
+- New analytics covered by `pytest`; `ruff` + `mypy` clean.
+- Numbers validated against closed-form benchmarks; results reproducible (seeded).
+- No change to the ClickOnce deployment path or the no-admin constraint.

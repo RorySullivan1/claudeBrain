@@ -1,0 +1,1 @@
+../../example-project/.claude/hooks/version_guard.py
