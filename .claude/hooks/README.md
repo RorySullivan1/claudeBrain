@@ -20,7 +20,10 @@ It also holds **memory lifecycle hooks** — the deterministic moments that driv
 Both fail safe and pair with the `token-optimizer` skill. There is also a **plan-approval
 nudge**: the `post-tool-use-plan-nudge` fragment runs the `skill-distiller` skill's
 `scripts/plan_nudge.py` on `PostToolUse·ExitPlanMode` (the nudge script travels inside that
-skill bundle, not here). These are not authoring guardrails, but they live here because
+skill bundle, not here). And a **version-label guard**: `version_guard.py`
+(PreToolUse·Bash) warns at `git push` time if a project's `.meta/version` exists but lacks a
+label or goals — opt-in by presence, so it's silent for projects (the factory included) that
+don't use the version-labeling flow. These are not authoring guardrails, but they live here because
 they are the other thing the harness must run *for us* while we work in this repo. (Like
 the scripts, these hook files are symlinks to the canonical copies in
 `example-project/.claude/hooks/`.)

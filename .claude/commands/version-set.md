@@ -1,0 +1,1 @@
+../../example-project/.claude/commands/version-set.md
