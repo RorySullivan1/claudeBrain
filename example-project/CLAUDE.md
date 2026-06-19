@@ -41,6 +41,10 @@ right one from its `description:`; you don't invoke them by hand.
 - **`finance-quantitative-developer`** — senior Python quant engineer for the
   `tools/` analytics layer (pricing, risk, signals, time-series). Writes and
   verifies quantitative code; draws on the Quant skills above.
+- **`data-analyst`** — the *objective* analysis brain: frames the question, plans the
+  exploration, specifies what to visualize and why, and reasons to defensible
+  conclusions — language- and tool-agnostic. Hands the subjective *how* (the code, the
+  stack) to a developer agent like `finance-quantitative-developer` or a language skill.
 - **`token-manager`** — context-economy worker: runs verbose/high-volume tasks in
   isolation and returns only a capped summary (keeps bulk out of the main context).
 
