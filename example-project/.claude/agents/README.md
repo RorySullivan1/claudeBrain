@@ -29,6 +29,12 @@ session. Good for noisy, error-prone, or narrowly-scoped jobs.
   produces the objective spec and defers the subjective *how* (language, library, code) to
   a developer agent or a language skill. The conceptual counterpart to a hands-on executor
   like `finance-quantitative-developer`.
+- `software-architect` — the **objective** structure brain (read-only, `plan`): designs a
+  project's architecture to fit its objective and sets the conventions — module/component
+  boundaries, where each kind of element lives, naming, and file organization. Stack-
+  agnostic: it produces the blueprint + conventions and defers the implementation (the
+  code, the framework idiom) to a developer agent or a language skill. The structural
+  sibling of `data-analyst` in the family of objective, defer-the-*how* agents.
 - `token-manager` — a context-economy worker: runs verbose/high-volume tasks (test suites,
   log processing, large-file analysis, fetches) in isolation and returns only a capped
   summary. The delegation target of the `token-optimizer` skill.
