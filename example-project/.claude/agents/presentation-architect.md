@@ -114,7 +114,7 @@ Return a concise flow brief, not a transcript:
 - **Lands? / fit** — does it serve the goal and hold the hierarchy; flagged buried ledes,
   overload, orphan content, or format/budget misfit.
 - **Hand-off** — the spec to build or the targeted moves to make, who/what should execute it
-  (design/content executor or skill), and the open decisions and missing inputs left for the
-  caller.
+  (the `presentation-design` skill for the visual + copy *how*, then `deck-builder` to assemble
+  the file), and the open decisions and missing inputs left for the caller.
 </content>
 </invoke>

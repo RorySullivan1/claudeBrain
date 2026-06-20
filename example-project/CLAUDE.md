@@ -31,6 +31,7 @@ right one from its `description:`; you don't invoke them by hand.
 - **Python:** `python-development`, `python-review`, `python-maintenance`, `python-deployment`
 - **Quant:** `quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`
 - **Docs:** `technical-documentation-drafter`, `user-guide-drafter`
+- **Presentation:** `presentation-design` (visual + copy design *how*), `deck-builder` (build the deck file in a tool) — the subjective executors below the `presentation-architect` agent's objective flow.
 - **Knowledge:** `knowledge-router` — routes durable knowledge to the right home and owns the `.claude/context/` reference-notes tier.
 - **Efficiency:** `token-optimizer` — decides where high-volume work runs to keep the main context lean (pairs with the output-guard hooks and the `token-manager` agent).
 - **Authoring:** `skill-distiller` — decides whether freshly-derived know-how should become a skill (significance + redundancy gate), then hands authoring to `/add-skill`.
