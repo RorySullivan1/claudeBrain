@@ -14,15 +14,24 @@
 - Registered in `example-project/.claude/agents/README.md` and `example-project/CLAUDE.md`.
 - User chose name `presentation-architect` (over narrative-architect / communication-designer)
   and the defer-the-how scope (over flow+final-copy) via AskUserQuestion.
+- Opened PR #16. Then (same session) built the two executor skills the agent defers to,
+  completing the pipeline: `presentation-architect` (objective flow) → `presentation-design`
+  (subjective visual + copy design *how*, format-spanning, tool-agnostic; emits a design spec)
+  → `deck-builder` (execution: assemble a real deck file in a tool — pptx/python-pptx, Google
+  Slides, Beamer, Marp/reveal.js — verified). Mirrors data-analyst → viz skill → developer agent.
+- Registered both skills in `example-project/CLAUDE.md`; pointed the agent's hand-off line at
+  them; widened PR #16 title/body to cover the agent + both skills.
 
 ## Gotchas & dead ends
 - Branch `claude/presentation-flow-agent-ml1wuq` already existed; just checked it out.
+- I'd phrased the follow-up as "`presentation-design`/`deck-builder`" (an *or*); user read it
+  as two skills and asked for both. Built both — clean three-tier split with no overlap.
 
 ## State at end
-- Committed + pushed to `claude/presentation-flow-agent-ml1wuq`. No PR opened (not requested).
+- All committed + pushed to `claude/presentation-flow-agent-ml1wuq`; PR #16 open and updated.
 
 ## Open threads
-- No companion executor exists yet for the hand-off target. Natural follow-up: a
-  `presentation-design`/`deck-builder` **skill** that owns the visual/copy *how*.
+- No new executors needed for decks now. Possible future: a non-slide builder (brochure/one-pager
+  to InDesign/PDF) if those formats need a build tier beyond `presentation-design`.
 - Offered to open a PR / watch CI — awaiting user.
 </content>
