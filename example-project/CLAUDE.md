@@ -49,6 +49,12 @@ right one from its `description:`; you don't invoke them by hand.
   architecture to fit its objective and sets the conventions (module boundaries, where
   things live, naming, file organization). Stack-agnostic — produces the blueprint and
   hands the implementation to a developer agent / language skill.
+- **`presentation-architect`** — the *objective* presentation-flow brain: designs how a
+  communication artifact (deck, brochure, one-pager, report) is structured to land its
+  message — audience + goal, narrative arc, message hierarchy, per-unit content spec,
+  reading path, and CTA placement. Format- and tool-agnostic — produces the flow blueprint
+  and hands the subjective *how* (visual design, final copy, authoring tool) to a
+  design/content executor or skill.
 - **`token-manager`** — context-economy worker: runs verbose/high-volume tasks in
   isolation and returns only a capped summary (keeps bulk out of the main context).
 

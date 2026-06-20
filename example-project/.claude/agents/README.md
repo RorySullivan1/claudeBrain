@@ -35,6 +35,14 @@ session. Good for noisy, error-prone, or narrowly-scoped jobs.
   agnostic: it produces the blueprint + conventions and defers the implementation (the
   code, the framework idiom) to a developer agent or a language skill. The structural
   sibling of `data-analyst` in the family of objective, defer-the-*how* agents.
+- `presentation-architect` — the **objective** presentation-flow brain (read-only, `plan`):
+  designs how a communication artifact is structured to land its message — audience + goal,
+  the narrative arc, the message hierarchy, what each unit (slide/panel/section) does and in
+  what order, the reader's path, and CTA placement. Format-agnostic across decks, brochures,
+  one-pagers, and reports: it produces the flow blueprint + per-unit content spec and defers
+  the subjective *how* (visual design, final copy, the authoring tool) to a design/content
+  executor or skill. The communication-artifact sibling of `data-analyst` and
+  `software-architect` in the family of objective, defer-the-*how* agents.
 - `token-manager` — a context-economy worker: runs verbose/high-volume tasks (test suites,
   log processing, large-file analysis, fetches) in isolation and returns only a capped
   summary. The delegation target of the `token-optimizer` skill.
