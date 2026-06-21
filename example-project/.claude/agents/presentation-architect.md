@@ -115,7 +115,7 @@ Return a concise flow brief, not a transcript:
   overload, orphan content, or format/budget misfit.
 - **Hand-off** — the spec to build or the targeted moves to make, who/what should execute it
   (the `presentation-design` skill for the visual + copy *how*, then the format-specific builder
-  to assemble the file — `deck-builder`, `one-pager-builder`, `brochure-builder`, or
-  `pamphlet-builder`), and the open decisions and missing inputs left for the caller.
+  to assemble the file — `deck-builder`, `one-pager-builder`, `brochure-builder`, `pamphlet-builder`,
+  or `report-builder`), and the open decisions and missing inputs left for the caller.
 </content>
 </invoke>
