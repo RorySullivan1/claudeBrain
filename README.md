@@ -15,9 +15,33 @@ application and has no `src/`.
   assets (e.g. `agent-authoring`), the `add-*` scaffolding commands, lifecycle hooks,
   and the `session-memory` system that tracks the repo's own decisions.
 - **`example-project/`** — a mock consumer showing what a finished, populated `.claude/`
-  looks like in a real repo: domain skills, stack briefs, and a layout to copy from.
+  looks like in a real repo: domain skills, an objective *agent family*, stack briefs, and a
+  layout to copy from (see below).
 - **`CLAUDE.md`** — the always-loaded guide to *what each kind of asset is, where it
   lives, and how to build it.*
 
 To reuse an asset, copy the relevant folder from `example-project/.claude/` into your
 target project.
+
+## What the example demonstrates
+
+`example-project/` has grown into a worked example of a layered capability set:
+
+- **An objective agent family** — `data-analyst`, `software-architect`, and
+  `presentation-architect`: read-only "brains" that design the *what* and defer the
+  subjective *how* to an executor.
+- **A branding → presentation pipeline** of skills — `branding` (the durable identity,
+  upstream of everything) → `presentation-design` (visual + copy) → format-specific
+  **builders** (`deck-`, `one-pager-`, `brochure-`, `pamphlet-`, `report-builder`).
+- **Operational infrastructure** — `session-memory`, `knowledge-router`, `token-optimizer`,
+  and lifecycle hooks compiled from fragments by `build-hooks.py`.
+
+## Discovering capabilities (the catalog)
+
+Skills and agents auto-load into every session by their `description:`, so `CLAUDE.md`
+stays lean and describes capabilities **by category**, not by enumerating them. The full,
+always-current inventory lives in a generated **`.claude/CATALOG.md`** — every skill, agent,
+command, and workflow with a one-line purpose. It's produced by `.claude/hooks/catalog.py`
+(a mechanical generator like `build-hooks.py`), kept fresh automatically, and regenerated on
+demand with the `/reindex` command. Read the catalog when you need the map; rely on
+auto-loading to actually use an asset.
