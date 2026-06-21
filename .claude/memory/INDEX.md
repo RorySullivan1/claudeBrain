@@ -40,6 +40,7 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
+- PR #16 (presentation pipeline: architect agent + design + 4 builders) **merged** to main.
 - PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Planned meta-skills not yet written: `skill-authoring`, `context-vs-skill`.
 - Planned commands: `/validate-asset`, `/add-context`.

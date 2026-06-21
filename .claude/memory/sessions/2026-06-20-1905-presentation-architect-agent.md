@@ -37,11 +37,11 @@
 - Subscribed to PR #16 activity (CI + reviews) at user's request.
 
 ## State at end
-- All committed + pushed to `claude/presentation-flow-agent-ml1wuq`; PR #16 open, updated, watched.
+- **PR #16 MERGED** — full presentation pipeline now on `main`. Session auto-unsubscribed.
 - Pipeline complete: presentation-architect → presentation-design → {deck,one-pager,brochure,pamphlet}-builder.
+- Repo has no CI workflows (get_check_runs = 0); no review comments. `send_later` not available this session.
 
 ## Open threads
-- Watching PR #16 (CI/reviews) until merged/closed; self check-in armed if `send_later` available.
 - Possible future: a `report-builder` (long-form/multi-section document) if reports need a build
   tier distinct from pamphlet-builder; `presentation-design` already covers report *design*.
 - Offered to open a PR / watch CI — awaiting user.
