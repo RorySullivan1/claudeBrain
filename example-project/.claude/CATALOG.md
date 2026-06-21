@@ -39,6 +39,7 @@
 - vba-distribution — Expert VBA packaging, signing, and deployment specialist for getting Excel/Word/ Outlook/PowerPoint … -> skills/vba-distribution/SKILL.md
 - vba-maintenance — Expert VBA maintenance, debugging, and modernization specialist for existing … -> skills/vba-maintenance/SKILL.md
 - vba-review — Expert VBA code reviewer for Excel/Word/Outlook/PowerPoint macros and add-ins. Use this skill … -> skills/vba-review/SKILL.md
+- vba-userforms — Expert on building VBA UserForms — the dialog/GUI layer of Excel/Word/Outlook/ PowerPoint macros. … -> skills/vba-userforms/SKILL.md
 
 ## Agents (agents/*.md)
 - data-analyst — Objective data-analysis brain — frames a question against a dataset, plans the exploration, … -> agents/data-analyst.md
