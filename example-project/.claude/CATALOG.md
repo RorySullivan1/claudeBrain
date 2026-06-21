@@ -35,6 +35,10 @@
 - technical-documentation-drafter — Expert technical writer for developer-facing documentation. Use this skill whenever the user wants … -> skills/technical-documentation-drafter/SKILL.md
 - token-optimizer — Keep a Claude Code session token-efficient by deciding where work runs before it floods the main … -> skills/token-optimizer/SKILL.md
 - user-guide-drafter — Expert technical writer for end-user documentation. Use this skill whenever the user wants to … -> skills/user-guide-drafter/SKILL.md
+- vba-development — Expert VBA (Visual Basic for Applications) development assistant for writing, architecting, and … -> skills/vba-development/SKILL.md
+- vba-distribution — Expert VBA packaging, signing, and deployment specialist for getting Excel/Word/ Outlook/PowerPoint … -> skills/vba-distribution/SKILL.md
+- vba-maintenance — Expert VBA maintenance, debugging, and modernization specialist for existing … -> skills/vba-maintenance/SKILL.md
+- vba-review — Expert VBA code reviewer for Excel/Word/Outlook/PowerPoint macros and add-ins. Use this skill … -> skills/vba-review/SKILL.md
 
 ## Agents (agents/*.md)
 - data-analyst — Objective data-analysis brain — frames a question against a dataset, plans the exploration, … -> agents/data-analyst.md
