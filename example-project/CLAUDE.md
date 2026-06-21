@@ -31,6 +31,7 @@ right one from its `description:`; you don't invoke them by hand.
 - **Python:** `python-development`, `python-review`, `python-maintenance`, `python-deployment`
 - **Quant:** `quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`
 - **Docs:** `technical-documentation-drafter`, `user-guide-drafter`
+- **Presentation:** `presentation-design` (visual + copy design *how*) → format-specific build tier: `deck-builder` (slide decks), `one-pager-builder` (flat single page), `brochure-builder` (folded multi-panel), `pamphlet-builder` (multi-page booklet/leaflet) — the subjective executors below the `presentation-architect` agent's objective flow.
 - **Knowledge:** `knowledge-router` — routes durable knowledge to the right home and owns the `.claude/context/` reference-notes tier.
 - **Efficiency:** `token-optimizer` — decides where high-volume work runs to keep the main context lean (pairs with the output-guard hooks and the `token-manager` agent).
 - **Authoring:** `skill-distiller` — decides whether freshly-derived know-how should become a skill (significance + redundancy gate), then hands authoring to `/add-skill`.
@@ -49,6 +50,12 @@ right one from its `description:`; you don't invoke them by hand.
   architecture to fit its objective and sets the conventions (module boundaries, where
   things live, naming, file organization). Stack-agnostic — produces the blueprint and
   hands the implementation to a developer agent / language skill.
+- **`presentation-architect`** — the *objective* presentation-flow brain: designs how a
+  communication artifact (deck, brochure, one-pager, report) is structured to land its
+  message — audience + goal, narrative arc, message hierarchy, per-unit content spec,
+  reading path, and CTA placement. Format- and tool-agnostic — produces the flow blueprint
+  and hands the subjective *how* (visual design, final copy, authoring tool) to a
+  design/content executor or skill.
 - **`token-manager`** — context-economy worker: runs verbose/high-volume tasks in
   isolation and returns only a capped summary (keeps bulk out of the main context).
 
