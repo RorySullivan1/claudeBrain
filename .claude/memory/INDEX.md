@@ -51,6 +51,7 @@
 - `/add-skill` references `skill-authoring` (planned); it falls back to README + `agent-authoring` until that lands.
 
 ## Log              (append-only pointers)
+- 2026-06-21 | README architecture update (root + consumer .claude/README; PR #20) | sessions/2026-06-21-1320-readme-architecture-update.md
 - 2026-06-21 | capability-catalog: slim CLAUDE.md + catalog.py/CATALOG.md/reindex + 2 hooks | sessions/2026-06-21-1313-capability-catalog.md
 - 2026-06-21 | report-builder skill (long-form document build tier; PR #18) | sessions/2026-06-21-1224-report-builder.md
 - 2026-06-21 | branding skill (upstream identity layer; presentation-design inherits it; PR #17) | sessions/2026-06-21-1206-branding-skill.md

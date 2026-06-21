@@ -41,11 +41,28 @@ workflows  ▸  commands  ▸  agents  ▸  skills
 - **memory/** — Cross-session state via the `session-memory` skill: an auto-loaded
   `INDEX.md` plus append-only `sessions/*.md` logs (loaded/persisted by the lifecycle
   hooks in `settings.json`). Replaces a static `DECISIONS.md` log.
+- **CATALOG.md** — A generated, **on-demand** inventory of every skill, agent, command, and
+  workflow with a one-line purpose. `CLAUDE.md` references it by path instead of enumerating
+  assets (skills/agents already auto-load by their `description:`). Produced by
+  `hooks/catalog.py` (a mechanical generator), kept fresh by a `PostToolUse` auto-rebuild +
+  a `SessionStart` staleness warning, and regenerated with the `/reindex` command.
 
 ## Status in this project
 
-`skills/` (11 domain bundles plus the operational `session-memory` and `agent-finder`
-skills) and `context/` (5 stack briefs) are populated, and `memory/` is active with the lifecycle hooks wired in
-`settings.json`. `commands/`, `agents/`, and `workflows/` remain intentional
-**scaffolds** — each has a README describing what it's for, ready to fill when a
-concrete need appears.
+All seven layers are populated:
+
+- **skills/** — domain bundles across VSTO, Python, quant, and docs, a **branding →
+  presentation** pipeline (`branding` → `presentation-design` → the `*-builder` family),
+  plus operational skills (`session-memory`, `agent-finder`, `knowledge-router`,
+  `token-optimizer`, `skill-distiller`).
+- **agents/** — an objective agent family (`data-analyst`, `software-architect`,
+  `presentation-architect`) alongside `finance-quantitative-developer` and the
+  context-economy `token-manager`.
+- **commands/** — `/version-set`, `/version-ship`, and `/reindex`.
+- **workflows/** — `ship-version`.
+- **hooks/** — memory + context lifecycle hooks, context-economy guards, and the
+  `build-hooks.py` / `catalog.py` generators, compiled into `settings.json`.
+- **context/** — stack briefs plus the reference-notes tier, and **memory/** is active.
+
+For the full, current list of any layer, read **`CATALOG.md`** (regenerate with `/reindex`)
+— this README describes the layers; the catalog enumerates them.
