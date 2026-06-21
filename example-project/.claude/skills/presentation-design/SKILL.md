@@ -29,10 +29,11 @@ hierarchy, the type and color, the imagery, the chart styling, and the final wor
 ## Where this sits
 
 ```
-presentation-architect   →   presentation-design   →   deck-builder
-(objective flow:               (subjective how:           (tool execution:
- arc, hierarchy, order,         visual design + final      assemble the real
- per-unit content spec)         copy for each unit)        file in a tool)
+presentation-architect   →   presentation-design   →   format-specific builder
+(objective flow:               (subjective how:           (tool execution: assemble
+ arc, hierarchy, order,         visual design + final      the real file — deck- /
+ per-unit content spec)         copy for each unit)        one-pager- / brochure- /
+                                                           pamphlet-builder)
 ```
 
 - **Input (not this skill's call):** the audience, goal, narrative flow, message hierarchy, and the
@@ -40,8 +41,8 @@ presentation-architect   →   presentation-design   →   deck-builder
   — don't silently invent the storyline.
 - **This skill owns:** visual hierarchy, layout/grid, typography, color, imagery/iconography,
   data-viz styling, per-unit composition, and the final copy (headlines + body).
-- **Defer downstream:** producing the actual file in PowerPoint/Keynote/Google Slides/Beamer/Markdown
-  → `deck-builder`.
+- **Defer downstream:** producing the actual file → the format-specific builder: `deck-builder`
+  (slides), `one-pager-builder` (flat page), `brochure-builder` (folded), `pamphlet-builder` (booklet).
 
 ## Core principles
 
@@ -131,8 +132,9 @@ This skill writes the **final wording**, working from the content spec's key mes
    chart. Note what asset is needed (image, icon, data) where it's missing.
 4. **Pass for consistency & honesty.** Check alignment, repeated styles, contrast/legibility, and that
    no chart misleads. Cut anything that isn't earning its place.
-5. **Hand off to build.** Emit the design spec — system + per-unit layout/copy/asset notes — for
-   `deck-builder` (or the user) to assemble in a tool. Flag missing assets and any unresolved choices.
+5. **Hand off to build.** Emit the design spec — system + per-unit layout/copy/asset notes — for the
+   format-specific builder (`deck-builder` / `one-pager-builder` / `brochure-builder` /
+   `pamphlet-builder`) or the user to assemble in a tool. Flag missing assets and unresolved choices.
 
 ## Output
 
@@ -141,13 +143,14 @@ A **design spec**, not a file:
 - **Per-unit design** — for each slide/panel/page: its one message, the chosen layout, the visual
   hierarchy (what's dominant), the final copy, chart styling, and the assets it needs.
 - **Consistency & honesty notes** — what was unified; any chart/encoding fixes made.
-- **Hand-off** — the spec for `deck-builder`, the missing assets to source, and the open choices left
-  for the user.
+- **Hand-off** — the spec for the format-specific builder (`deck-builder` / `one-pager-builder` /
+  `brochure-builder` / `pamphlet-builder`), the missing assets to source, and the open choices for the user.
 
 ## What this skill does *not* do
 
 - **Set the narrative or section order** — that's `presentation-architect`; it's an input here.
-- **Build the actual file** in PowerPoint/Keynote/Slides/Beamer/Markdown — that's `deck-builder`.
+- **Build the actual file** — that's the format-specific builder (`deck-builder`, `one-pager-builder`,
+  `brochure-builder`, `pamphlet-builder`).
 - **Invent the facts, data, or message** — design and word what's given; flag gaps, don't fabricate.
 
 ## Anti-patterns
