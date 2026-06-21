@@ -34,7 +34,7 @@ presentation-architect   →   presentation-design   →   format-specific build
 (objective flow:               (subjective how:           (tool execution: assemble
  arc, hierarchy, order,         visual design + final      the real file — deck- /
  per-unit content spec)         copy for each unit)        one-pager- / brochure- /
-                                                           pamphlet-builder)
+                                                           pamphlet- / report-builder)
 ```
 
 - **Input (not this skill's call):** the audience, goal, narrative flow, message hierarchy, and the
@@ -44,7 +44,8 @@ presentation-architect   →   presentation-design   →   format-specific build
 - **This skill owns:** visual hierarchy, layout/grid, typography, color, imagery/iconography,
   data-viz styling, per-unit composition, and the final copy (headlines + body).
 - **Defer downstream:** producing the actual file → the format-specific builder: `deck-builder`
-  (slides), `one-pager-builder` (flat page), `brochure-builder` (folded), `pamphlet-builder` (booklet).
+  (slides), `one-pager-builder` (flat page), `brochure-builder` (folded), `pamphlet-builder` (booklet),
+  `report-builder` (long-form document).
 
 ## Core principles
 
@@ -141,7 +142,8 @@ This skill writes the **final wording**, working from the content spec's key mes
    no chart misleads. Cut anything that isn't earning its place.
 5. **Hand off to build.** Emit the design spec — system + per-unit layout/copy/asset notes — for the
    format-specific builder (`deck-builder` / `one-pager-builder` / `brochure-builder` /
-   `pamphlet-builder`) or the user to assemble in a tool. Flag missing assets and unresolved choices.
+   `pamphlet-builder` / `report-builder`) or the user to assemble in a tool. Flag missing assets and
+   unresolved choices.
 
 ## Output
 
@@ -151,13 +153,14 @@ A **design spec**, not a file:
   hierarchy (what's dominant), the final copy, chart styling, and the assets it needs.
 - **Consistency & honesty notes** — what was unified; any chart/encoding fixes made.
 - **Hand-off** — the spec for the format-specific builder (`deck-builder` / `one-pager-builder` /
-  `brochure-builder` / `pamphlet-builder`), the missing assets to source, and the open choices for the user.
+  `brochure-builder` / `pamphlet-builder` / `report-builder`), the missing assets to source, and the
+  open choices for the user.
 
 ## What this skill does *not* do
 
 - **Set the narrative or section order** — that's `presentation-architect`; it's an input here.
 - **Build the actual file** — that's the format-specific builder (`deck-builder`, `one-pager-builder`,
-  `brochure-builder`, `pamphlet-builder`).
+  `brochure-builder`, `pamphlet-builder`, `report-builder`).
 - **Invent the facts, data, or message** — design and word what's given; flag gaps, don't fabricate.
 
 ## Anti-patterns
