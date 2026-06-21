@@ -1,0 +1,1 @@
+../../example-project/.claude/hooks/catalog.py

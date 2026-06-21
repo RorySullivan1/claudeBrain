@@ -18,4 +18,8 @@ stateless, instant, one invocation. Invoked as `/<name>`.
 
 ## Status
 
-**Empty scaffold.** No commands defined yet. Drop a `<name>.md` here to add one.
+**Defined:**
+- `/reindex` — regenerate `.claude/CATALOG.md` (runs `.claude/hooks/catalog.py`).
+- `/version-set`, `/version-ship` — the version-labeling flow (see `.meta/version`).
+
+Drop a `<name>.md` here to add another.

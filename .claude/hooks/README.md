@@ -90,6 +90,22 @@ edit a fragment and never think about the rebuild:
 
 `--check` (exit 1 when stale) remains for CI or a pre-commit guard.
 
+## The capability catalog generator (also symlinked)
+
+`catalog.py` is a second mechanical generator living here (like `build-hooks.py`, it is a plain
+script, not a hook). It regenerates `../CATALOG.md` — the on-demand inventory of this tree's
+skills, agents, commands, and workflows — and is kept fresh the same way `settings.json` is:
+
+| Fragment | Event | Calls | Effect |
+|---|---|---|---|
+| `post-tool-use-catalog.json` | `PostToolUse` (Edit/Write/MultiEdit) | `catalog.py --on-edit` | Rebuilds `CATALOG.md` when an asset file is edited (scans across the symlink boundary via `os.path.samefile`). |
+| `session-start-catalog-check.json` | `SessionStart` | `catalog.py --warn-if-stale` | Warns at session start if `CATALOG.md` is stale. Warn-only — the catalog is on-demand (referenced from `CLAUDE.md`), never printed into every session. |
+
+`catalog.py` and these two fragments are symlinks to the canonical copies in `example-project/`.
+`CATALOG.md` itself is **not** symlinked — like `settings.json` it is generated per tree (the
+factory tree lists its meta-skills; `example-project` lists its domain assets). Regenerate with
+`/reindex` or `python .claude/hooks/catalog.py`.
+
 ## Status
 
 **Memory lifecycle hooks are wired** (the four fragments above), compiled into

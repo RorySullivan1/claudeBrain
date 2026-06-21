@@ -48,6 +48,20 @@
             "type": "command",
             "command": "python",
             "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/catalog.py",
+              "--warn-if-stale"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
               "${CLAUDE_PROJECT_DIR}/.claude/hooks/build-hooks.py",
               "--warn-if-stale"
             ],
@@ -92,6 +106,20 @@
             "command": "python",
             "args": [
               "${CLAUDE_PROJECT_DIR}/.claude/hooks/build-hooks.py",
+              "--on-edit"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/catalog.py",
               "--on-edit"
             ],
             "timeout": 10
