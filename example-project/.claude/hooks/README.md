@@ -56,3 +56,17 @@ generator by hand:
 | `session-start-hooks-check.json` | `SessionStart` | `build-hooks.py --warn-if-stale` | Warns in-context at session start if `settings.json` is stale (catches manual/IDE edits). |
 
 `--check` (exit 1 when stale) remains for CI / a pre-commit guard.
+
+## Other generators living here
+
+`catalog.py` is a second mechanical generator (like `build-hooks.py` — a plain script, not a
+hook). It regenerates `../CATALOG.md`, the on-demand inventory of this project's skills, agents,
+commands, and workflows. It is kept fresh by two fragments and the `/reindex` command:
+
+| Fragment | Event | Calls | Effect |
+|---|---|---|---|
+| `post-tool-use-catalog.json` | `PostToolUse` (Edit/Write/MultiEdit) | `catalog.py --on-edit` | Rebuilds `CATALOG.md` when an asset file (`SKILL.md`, an agent/command/workflow `.md`) is edited. |
+| `session-start-catalog-check.json` | `SessionStart` | `catalog.py --warn-if-stale` | Warns at session start if `CATALOG.md` is stale (catches git/IDE changes). It only *warns* — the catalog is on-demand, never printed into every session. |
+
+`CATALOG.md` is per-tree and **not** symlinked (its content differs per tree, like
+`settings.json`); regenerate it in each tree with `python .claude/hooks/catalog.py` or `/reindex`.

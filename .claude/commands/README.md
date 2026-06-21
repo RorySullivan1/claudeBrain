@@ -27,6 +27,8 @@ consumers lift are **symlinked** from `example-project/.claude/commands/` (edit 
   unit of work. **(built, operational/symlinked)**
 - `/version-ship` — name and ship the PR from `.meta/version` (branch, commit, push, open
   the PR with a title/body derived from the goals). **(built, operational/symlinked)**
+- `/reindex` — regenerate `.claude/CATALOG.md`, the on-demand inventory of this tree's
+  skills/agents/commands/workflows (runs `hooks/catalog.py`). **(built, operational/symlinked)**
 
 ## Format
 
