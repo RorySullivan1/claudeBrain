@@ -14,7 +14,8 @@ description: >
   concrete design and copy decisions, not a file. Defer the narrative flow, message hierarchy, and
   section order to `presentation-architect` (that is an input here, not a call this skill makes); and
   defer actually assembling the artifact in a tool (PowerPoint, Google Slides, Beamer, Markdown) to
-  `deck-builder`.
+  `deck-builder`. Inherit the reusable identity (palette, type, logo, voice) from `branding` when a
+  brand exists, rather than re-choosing it per artifact.
 ---
 
 # Presentation Design
@@ -38,7 +39,8 @@ presentation-architect   →   presentation-design   →   format-specific build
 
 - **Input (not this skill's call):** the audience, goal, narrative flow, message hierarchy, and the
   per-unit content spec. If they're missing or vague, get them from `presentation-architect` or ask
-  — don't silently invent the storyline.
+  — don't silently invent the storyline. Also inherit the **brand** (palette, type, logo, voice) from
+  `branding` when one exists — apply it here, don't redefine it.
 - **This skill owns:** visual hierarchy, layout/grid, typography, color, imagery/iconography,
   data-viz styling, per-unit composition, and the final copy (headlines + body).
 - **Defer downstream:** producing the actual file → the format-specific builder: `deck-builder`
@@ -62,23 +64,28 @@ presentation-architect   →   presentation-design   →   format-specific build
 6. **Consistency = professionalism.** A repeated grid, type scale, color set, and spacing rhythm makes
    a set of units feel like one designed object rather than a pile of pages.
 
-## The design system (decide once, apply everywhere)
+## The design system (inherit the brand, then add what's artifact-specific)
 
-Before designing individual units, settle the system the whole artifact obeys:
+Before designing individual units, settle the system the whole artifact obeys. **If a brand exists,
+inherit it** — pull the palette, typography, logo rules, and voice from `branding` rather than
+re-choosing them; only add the artifact-specific pieces (e.g. the slide grid). **If no brand exists,**
+set an ad-hoc system for this one piece — but a recurring need for one is the signal to define a brand
+(via the `branding` skill) instead of re-inventing it each time.
 
 - **Grid & margins.** Pick a layout grid (e.g. 12-column for slides, a columned grid for print) and
   consistent margins/safe-area. Everything aligns to it. Alignment is the cheapest way to look
-  intentional.
-- **Type scale.** Choose at most two typefaces (one display/heading, one body — or a single family
-  with weights). Define a small scale: title / heading / body / caption. Body text large enough for
-  the medium (presented slides need far larger type than a read-alone report).
-- **Color palette.** One primary, one or two accents, a neutral range for text/backgrounds. Reserve a
-  saturated accent for *emphasis only* — if everything is colored, nothing is emphasized. Check
-  contrast for legibility (dark text on light, or vice versa; mind colorblind-safe pairings).
+  intentional. *(Artifact-specific — set here.)*
+- **Type scale.** From the brand's typefaces (or, absent a brand, choose at most two: one display/
+  heading, one body). Define a small scale: title / heading / body / caption. Body text large enough
+  for the medium (presented slides need far larger type than a read-alone report).
+- **Color palette.** Use the brand's color tokens and their roles. Absent a brand: one primary, one or
+  two accents, a neutral range for text/backgrounds. Reserve a saturated accent for *emphasis only* —
+  if everything is colored, nothing is emphasized. Check contrast for legibility (mind colorblind-safe
+  pairings).
 - **Spacing rhythm.** A consistent spacing unit (e.g. multiples of 8px) for gaps and padding so
   rhythm is even across units.
 - **Element styles.** Consistent treatment for bullets, captions, callouts, quotes, and especially
-  charts (see below).
+  charts (see below) — aligned with the brand where one exists.
 
 ## Composition by format
 
