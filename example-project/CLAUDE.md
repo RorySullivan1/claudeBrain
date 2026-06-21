@@ -31,6 +31,7 @@ right one from its `description:`; you don't invoke them by hand.
 - **Python:** `python-development`, `python-review`, `python-maintenance`, `python-deployment`
 - **Quant:** `quantitative-finance`, `financial-timeseries-analysis`, `backtesting-validation`, `quant-code-review`
 - **Docs:** `technical-documentation-drafter`, `user-guide-drafter`
+- **Branding:** `branding` — the durable, reusable identity (positioning, voice, color/type tokens, logo rules, guidelines) that sits *upstream* of every artifact and channel; `presentation-design` and the builders inherit it.
 - **Presentation:** `presentation-design` (visual + copy design *how*) → format-specific build tier: `deck-builder` (slide decks), `one-pager-builder` (flat single page), `brochure-builder` (folded multi-panel), `pamphlet-builder` (multi-page booklet/leaflet), `report-builder` (long-form multi-page documents) — the subjective executors below the `presentation-architect` agent's objective flow.
 - **Knowledge:** `knowledge-router` — routes durable knowledge to the right home and owns the `.claude/context/` reference-notes tier.
 - **Efficiency:** `token-optimizer` — decides where high-volume work runs to keep the main context lean (pairs with the output-guard hooks and the `token-manager` agent).
