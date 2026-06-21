@@ -27,11 +27,22 @@
 - I'd phrased the follow-up as "`presentation-design`/`deck-builder`" (an *or*); user read it
   as two skills and asked for both. Built both — clean three-tier split with no overlap.
 
+- Then added the **format-specific build tier** below `presentation-design`: `one-pager-builder`
+  (flat page; bleed/print-vs-screen), `brochure-builder` (folded sheet; fold imposition — panels
+  print in fold-position order, tuck-in panel narrower), `pamphlet-builder` (booklet; pages ×4,
+  author-in-reader-order + tool imposes, gutter/creep). User chose **three separate skills** via
+  AskUserQuestion (over one consolidated builder or a folded/flat split) — accepted overlap for
+  specificity. Differentiated each by its real format-specific build concern. Generalized
+  `presentation-design` downstream refs + the agent hand-off to the whole builder family.
+- Subscribed to PR #16 activity (CI + reviews) at user's request.
+
 ## State at end
-- All committed + pushed to `claude/presentation-flow-agent-ml1wuq`; PR #16 open and updated.
+- All committed + pushed to `claude/presentation-flow-agent-ml1wuq`; PR #16 open, updated, watched.
+- Pipeline complete: presentation-architect → presentation-design → {deck,one-pager,brochure,pamphlet}-builder.
 
 ## Open threads
-- No new executors needed for decks now. Possible future: a non-slide builder (brochure/one-pager
-  to InDesign/PDF) if those formats need a build tier beyond `presentation-design`.
+- Watching PR #16 (CI/reviews) until merged/closed; self check-in armed if `send_later` available.
+- Possible future: a `report-builder` (long-form/multi-section document) if reports need a build
+  tier distinct from pamphlet-builder; `presentation-design` already covers report *design*.
 - Offered to open a PR / watch CI — awaiting user.
 </content>
