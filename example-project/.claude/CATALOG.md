@@ -47,6 +47,7 @@
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
+- vba-developer — Senior VBA engineer for this repo's Office automation layer — Excel/Word/Outlook/ PowerPoint … -> agents/vba-developer.md
 
 ## Commands (commands/*.md)
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
