@@ -10,7 +10,9 @@ description: >
   is this slow", "review my macro", or any paste of VBA followed by a question.
   Prioritize correctness over style: check Option Explicit, declaration bugs,
   error handling, range/array performance, and application-state hygiene before
-  anything cosmetic. For C#/VB.NET Office add-ins use VSTO-review instead.
+  anything cosmetic. Because VBA has no external CI, a review must also say how to
+  *verify* a fix inside the host Office app. For C#/VB.NET Office add-ins use
+  VSTO-review instead; to author the tests a review asks for, use vba-code-test-writing.
 ---
 
 # VBA Code Review Skill
@@ -164,6 +166,37 @@ Naming, dead code, magic numbers, oversized public surface.
 
 ### Summary
 One paragraph: overall quality and the single most important thing to fix first.
+
+---
+
+## Verifying — There Is No CI
+
+A VBA review is only half-done if it stops at "here's the bug." VBA cannot be linted,
+compiled, or run outside its host Office app on Windows — there is no `pytest`/`ruff`
+to invoke, no headless CI. So **never claim a fix is verified from reading alone**, and
+hand the user a concrete way to confirm it. For each correctness fix you propose:
+
+1. **Trace the failure paths explicitly** — empty range, a single cell (scalar, not a
+   2D array), a missing sheet, an error/blank cell value, an HTTP non-200. These are
+   where VBA actually breaks, and where a "looks fine" review goes wrong.
+2. **Give a runnable check.** Prefer a tiny test `Sub` the user runs from the
+   Immediate window (`?FunctionUnderTest(args)` or a `RunTests` sub), or a
+   `Debug.Assert` they can drop in. State the inputs and the expected result.
+3. **Assess testability while you review.** If the logic is fused to the object model
+   (reads `ActiveSheet`, takes `Range` instead of values), flag it: it *can't* be unit
+   tested as written. Recommend extracting the pure logic — and route the actual test
+   authoring to the `vba-code-test-writing` skill.
+4. **State the environment caveat** when relevant: results can only be fully confirmed
+   in the host app, and on a Mac or a locked-down machine even that may be constrained.
+
+```vba
+' Minimal verification a reviewer can hand back — run NormalizeName_Tests from the Immediate window
+Public Sub NormalizeName_Tests()
+    Debug.Assert NormalizeName("  ab ") = "Ab"        ' trims + title-cases
+    Debug.Assert NormalizeName("") = ""               ' empty stays empty (no error)
+    Debug.Print "NormalizeName: all asserts passed"
+End Sub
+```
 
 ---
 
