@@ -51,12 +51,14 @@ workflows  ▸  commands  ▸  agents  ▸  skills
 
 All seven layers are populated:
 
-- **skills/** — domain bundles across VSTO, Python, quant, and docs, a **branding →
+- **skills/** — domain bundles across VSTO, **VBA** (a full dev/review/maintenance/
+  distribution/userforms/test family), Python, quant, and docs, a **branding →
   presentation** pipeline (`branding` → `presentation-design` → the `*-builder` family),
   plus operational skills (`session-memory`, `agent-finder`, `knowledge-router`,
   `token-optimizer`, `skill-distiller`).
 - **agents/** — an objective agent family (`data-analyst`, `software-architect`,
-  `presentation-architect`) alongside `finance-quantitative-developer` and the
+  `presentation-architect`); **developer agents** (`python-developer`, `vsto-developer`,
+  `finance-quantitative-developer`) that each pair with a skill family; and the
   context-economy `token-manager`.
 - **commands/** — `/version-set`, `/version-ship`, and `/reindex`.
 - **workflows/** — `ship-version`.
