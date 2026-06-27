@@ -25,10 +25,16 @@ Skills that guide the construction of other assets, e.g.:
   grounded, cited, multi-strategy search, plus freshness, dedup, and provenance for
   curation. Spans read-only and curation modes; layers on top of `agent-authoring`.
   **(built)**
-- A `skill-authoring` skill — how to scope a skill, write a triggering
-  `description:`, structure `SKILL.md`, and keep the folder name == `name:`.
-- A `context-vs-skill` skill — deciding when knowledge belongs in a skill, a
-  context brief, a command, or a hook.
+- `skill-authoring` — how to scope a skill, write a triggering `description:`,
+  structure `SKILL.md`, and keep the folder name == `name:`. The skills analogue of
+  `agent-authoring`. **(built)**
+- `context-vs-skill` — deciding when a piece of knowledge belongs in a skill, a
+  context brief, `CLAUDE.md`, or a reference note (the focused skill-vs-context
+  placement call; broader routing defers to `knowledge-router`). **(built)**
+- `workflow-authoring` — how to design a workflow: the right-layer gate vs a
+  command/agent/skill, ordered steps that invoke existing assets, explicit
+  control-flow / STOP conditions, and approval gates on outward-facing actions.
+  **(built)**
 
 ## Operational skills (exceptions)
 
@@ -72,8 +78,11 @@ the `name:` frontmatter value.
 
 ## Status
 
-**Four meta-skills built:** `agent-authoring/`, `developer-agent-authoring/`,
-`product-manager-agent-authoring/`, and `knowledge-agent-authoring/`, plus two
-operational skills (`session-memory/`, `agent-finder/`). The others above
-(`skill-authoring`, `context-vs-skill`, …) are not written yet — add them as we codify
-each authoring playbook.
+**Seven meta-skills built:** the agent-authoring family (`agent-authoring/`,
+`developer-agent-authoring/`, `product-manager-agent-authoring/`,
+`knowledge-agent-authoring/`) plus `skill-authoring/`, `workflow-authoring/`, and the
+`context-vs-skill/` placement skill — covering the skill, agent, workflow, and
+context-vs-skill authoring playbooks. Alongside them are the operational skills
+(`session-memory/`, `agent-finder/`, `knowledge-router/`, `token-optimizer/`,
+`skill-distiller/`). A `command-authoring` skill is the remaining gap — commands are
+still covered by `commands/README.md` until one is codified.

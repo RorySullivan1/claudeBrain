@@ -10,13 +10,16 @@
 ## Skills (skills/*/SKILL.md)
 - agent-authoring — Expert guidance for authoring Claude Code subagents — the agent definitions that live in a … -> skills/agent-authoring/SKILL.md
 - agent-finder — Find and delegate to the optimal Claude Code subagent(s) for a task instead of defaulting to … -> skills/agent-finder/SKILL.md
+- context-vs-skill — Decide WHERE a piece of durable knowledge belongs: a triggered skill, a passive context doc, … -> skills/context-vs-skill/SKILL.md
 - developer-agent-authoring — Expert guidance for designing **developer agents** — Claude Code subagents specialized at writing … -> skills/developer-agent-authoring/SKILL.md
 - knowledge-agent-authoring — Expert guidance for designing **knowledge agents** — Claude Code subagents focused on maintaining … -> skills/knowledge-agent-authoring/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - product-manager-agent-authoring — Expert guidance for designing **product-manager agents** — Claude Code subagents that review and … -> skills/product-manager-agent-authoring/SKILL.md
 - session-memory — Persist and recall project state across Claude Code sessions via a .claude/memory/ directory — a … -> skills/session-memory/SKILL.md
+- skill-authoring — Expert guidance for authoring Claude Code skills — the skill bundles that live in a project's … -> skills/skill-authoring/SKILL.md
 - skill-distiller — Spot reusable know-how produced during a plan or conversation and decide whether to promote it into … -> skills/skill-distiller/SKILL.md
 - token-optimizer — Keep a Claude Code session token-efficient by deciding where work runs before it floods the main … -> skills/token-optimizer/SKILL.md
+- workflow-authoring — Expert guidance for authoring Claude Code workflows — the multi-step orchestration recipes that … -> skills/workflow-authoring/SKILL.md
 
 ## Agents (agents/*.md)
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
@@ -24,6 +27,7 @@
 ## Commands (commands/*.md)
 - add-agent — Scaffold a new subagent (.claude/agents/<name>.md) following the agent-authoring conventions. -> commands/add-agent.md
 - add-command — Scaffold a new slash command (.claude/commands/<name>.md). -> commands/add-command.md
+- add-context — Scaffold a new context doc (.claude/context/<name>.md) — a whole-stack brief or a reference note. -> commands/add-context.md
 - add-hook — Scaffold a new lifecycle hook script and wire it into settings.json. -> commands/add-hook.md
 - add-skill — Scaffold a new skill bundle (.claude/skills/<name>/SKILL.md) with correct frontmatter and structure. -> commands/add-skill.md
 - add-workflow — Scaffold a new multi-step workflow (.claude/workflows/<name>.md). -> commands/add-workflow.md
