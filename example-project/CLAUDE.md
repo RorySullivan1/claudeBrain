@@ -51,11 +51,19 @@ and on-demand reference notes.
 State and decisions carry across sessions via the `session-memory` skill:
 `.claude/memory/INDEX.md` (auto-loaded) plus append-only `sessions/*.md` logs.
 
-## Versioning
-The current unit of work is labeled in `.meta/version` (a semver label + its goals). The
-`ship-version` workflow names and ships the PR from those goals: `/version-set` records the
-label + goals; `/version-ship` derives the branch + PR title/body from them. `.meta/version`
-is prospective ("what this version is for") and complements memory's retrospective log.
+## Roadmap & versioning
+Two altitudes of prospective state under `.meta/`:
+- **Roadmap** (`.meta/roadmap/`) — the whole-project plan: an `INDEX.md` dashboard plus
+  `stages/` of version cards (objective → stages → versions → milestones). Authored with
+  `/roadmap-set` (the `development-mapping` skill supplies the thinking) and surfaced each
+  session by the `roadmap_status` hook. It's the route.
+- **Version** (`.meta/version`) — the single unit of work currently in flight (the cursor):
+  a semver label + its goals. `/version-set` records it; `/version-ship` (the `ship-version`
+  workflow) derives the branch + PR title/body from its goals.
+
+The `advance-roadmap-step` workflow connects them: it graduates the cursor card into
+`.meta/version`, drives implement → review → reiterate → `goal-auditor` assessment, stops
+for approval, then ships. Both files are prospective and complement memory's retrospective log.
 
 ## Conventions
 - Branch per change; conventional-commit-style messages.

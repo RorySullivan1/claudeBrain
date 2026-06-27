@@ -18,6 +18,7 @@
 - brochure-builder — Expert at building a folded brochure — the execution tier that turns a design spec into a finished, … -> skills/brochure-builder/SKILL.md
 - coding-standards — Baseline cross-project coding conventions — descriptive naming, readability, immutability, error … -> skills/coding-standards/SKILL.md
 - deck-builder — Expert at assembling a real slide deck in a concrete tool — the execution tier that turns a design … -> skills/deck-builder/SKILL.md
+- development-mapping — Expert at turning a whole-project objective into a **development map** — an ordered plan of stages … -> skills/development-mapping/SKILL.md
 - financial-timeseries-analysis — Financial time-series hygiene in pandas/numpy — returns vs prices, resampling/alignment, market … -> skills/financial-timeseries-analysis/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - one-pager-builder — Expert at building a single-page document — the execution tier that turns a design spec into a … -> skills/one-pager-builder/SKILL.md
@@ -45,6 +46,7 @@
 ## Agents (agents/*.md)
 - data-analyst — Objective data-analysis brain — frames a question against a dataset, plans the exploration, … -> agents/data-analyst.md
 - finance-quantitative-developer — Senior Python quantitative-finance engineer for this repo's analytics/tooling layer. Use … -> agents/finance-quantitative-developer.md
+- goal-auditor — Acceptance/goal auditor — judges whether an implemented change actually achieves the goals and … -> agents/goal-auditor.md
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
@@ -52,8 +54,11 @@
 
 ## Commands (commands/*.md)
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
+- roadmap-set — Author or update the development map in .meta/roadmap/ — decompose the project objective into … -> commands/roadmap-set.md
+- roadmap-status — Show where the project is on its development map — the cursor version, what's shipped, and what's … -> commands/roadmap-status.md
 - version-set — Define or update the current version in .meta/version — a semver label plus the goals/objectives of … -> commands/version-set.md
 - version-ship — Name and ship the PR from .meta/version — branch, commit, push, and open the PR with a title/body … -> commands/version-ship.md
 
 ## Workflows (workflows/*.md)
+- advance-roadmap-step — advance-roadmap-step -> workflows/advance-roadmap-step.md
 - ship-version — ship-version -> workflows/ship-version.md
