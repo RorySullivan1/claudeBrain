@@ -43,8 +43,8 @@ approval gate; on approval, an open PR (via `ship-version`) and an advanced curs
    PR is outward-facing.)
 
 7. **Ship (on approval).** Run **`/version-ship`** to branch/commit/push and open the PR from
-   `.meta/version`; it writes the PR URL back. (Optionally delegate the PR formatting to
-   `@agent-github-operator`.)
+   `.meta/version`; it writes the PR URL back. (If the project provides a `github-operator`
+   agent, you may delegate the PR formatting to it.)
 
 8. **Step the cursor.** Mark the version's INDEX row `in-progress` (PR open) and move the
    cursor to the next `planned` version. On merge, flip the row to `shipped` and set
@@ -64,8 +64,8 @@ approval gate; on approval, an open PR (via `ship-version`) and an advanced curs
 
 - Skills: `development-mapping` (the map's meaning), `code-review` / `*-review` (step 4),
   `agent-finder` (pick the executor).
-- Agents: a developer agent (step 3), `../agents/goal-auditor.md` (step 5),
-  `../agents/github-operator.md` (optional, step 7).
+- Agents: a developer agent (step 3), `../agents/goal-auditor.md` (step 5); optionally a
+  `github-operator` agent for PR formatting in step 7, if the project provides one.
 - Commands: `../commands/version-set.md` (step 2), `../commands/version-ship.md` (step 7).
 - Workflow: `ship-version` is the shipping spine this reuses.
 - State: `.meta/roadmap/` (the map), `.meta/version` (the cursor).

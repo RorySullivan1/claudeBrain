@@ -10,7 +10,6 @@ It never blocks and never fails the session: on any error it prints nothing and 
 The INDEX is meant to be ~one screen by design, so it's cheap to inject verbatim.
 """
 import os
-import sys
 from pathlib import Path
 
 
@@ -47,7 +46,8 @@ def main() -> int:
         text = index.read_text(encoding="utf-8", errors="replace").strip()
         if not text:
             return 0
-        print("Development map (.meta/roadmap/INDEX.md) — the project's planned trajectory:\n")
+        print("Development map (.meta/roadmap/INDEX.md) — the project's stages, versions, "
+              "and current position:\n")
         print(text)
         cursor = cursor_line()
         if cursor:
