@@ -51,9 +51,11 @@
 - finance-quantitative-developer — Senior Python quantitative-finance engineer for this repo's analytics/tooling layer. Use … -> agents/finance-quantitative-developer.md
 - github-operator — GitHub workflow operator for this repo — opens and formats pull requests, files and triages issues, … -> agents/github-operator.md
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
+- python-developer — Senior Python engineer for this repo's general tooling layer (`tools/`). Use proactively when … -> agents/python-developer.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
 - vba-developer — Senior VBA engineer for this repo's Office automation layer — Excel/Word/Outlook/ PowerPoint … -> agents/vba-developer.md
+- vsto-developer — Senior C#/.NET VSTO engineer for this repo's Excel add-in (`src/AddIn/`). Use proactively when … -> agents/vsto-developer.md
 
 ## Commands (commands/*.md)
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md

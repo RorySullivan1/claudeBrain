@@ -76,17 +76,18 @@ the same minus the meta- scoping.
 
 | Element | Lives in | File / naming | Format shape | Author with |
 |---|---|---|---|---|
-| Skill | `.claude/skills/<name>/` | `SKILL.md`; folder == `name:` | YAML frontmatter (`name`, `description`) + markdown body | `skill-authoring` *(planned)* |
+| Skill | `.claude/skills/<name>/` | `SKILL.md`; folder == `name:` | YAML frontmatter (`name`, `description`) + markdown body | `skill-authoring` skill |
 | Agent | `.claude/agents/` | `<name>.md` | YAML frontmatter (`name`, `description`, opt. `tools`, `model`) + system-prompt body | `agent-authoring` skill |
 | Command | `.claude/commands/` | `<name>.md` (filename == command) | Prose prompt body; `$ARGUMENTS` / `$1…` params | `commands/README.md` |
-| Workflow | `.claude/workflows/` | `<name>.md` | Prose: ordered steps, agents/commands invoked, inputs/outputs, stop conditions | `workflows/README.md` |
+| Workflow | `.claude/workflows/` | `<name>.md` | Prose: ordered steps, agents/commands invoked, inputs/outputs, stop conditions | `workflow-authoring` skill |
 | Hook | `.claude/hooks/` | one script per event | Executable script; wired in `settings.json` by event | `hooks/README.md` |
 | Context | `.claude/context/` | kebab-case `<name>.md` | Plain markdown, no frontmatter; listed in the `context/` manifest | `context/README.md` |
 
-For the full format rules, open the matching `.claude/<layer>/README.md`; for skills
-and agents the meta-skills teach the how-to in depth (the `agent-authoring` skill is
-built; `skill-authoring` and `context-vs-skill` are planned). For a finished example
-of any element, read its counterpart in `example-project/.claude/`.
+For the full format rules, open the matching `.claude/<layer>/README.md`; for skills,
+agents, and workflows the meta-skills teach the how-to in depth (`agent-authoring`,
+`skill-authoring`, `workflow-authoring`, and the `context-vs-skill` placement skill are
+all built). For a finished example of any element, read its counterpart in
+`example-project/.claude/`.
 
 ## Conventions
 
