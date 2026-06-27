@@ -48,7 +48,11 @@ approval gate; on approval, an open PR (via `ship-version`) and an advanced curs
 
 8. **Step the cursor.** Mark the version's INDEX row `in-progress` (PR open) and move the
    cursor to the next `planned` version. On merge, flip the row to `shipped` and set
-   `.meta/version` `status: shipped`. Optionally record the step in `.claude/memory/`.
+   `.meta/version` `status: shipped`. Then **record the step via `session-memory`** (a one-line
+   Log entry + any decision worth keeping) so the retrospective (memory) and prospective
+   (roadmap) layers stay coupled — this is the step's hand-off, not an optional extra. The
+   `roadmap_guard` hook will warn on the next push if the INDEX status and `.meta/version`
+   have drifted out of sync.
 
 ## Control flow / stop conditions
 
@@ -68,4 +72,6 @@ approval gate; on approval, an open PR (via `ship-version`) and an advanced curs
   `github-operator` agent for PR formatting in step 7, if the project provides one.
 - Commands: `../commands/version-set.md` (step 2), `../commands/version-ship.md` (step 7).
 - Workflow: `ship-version` is the shipping spine this reuses.
+- Hooks: `../hooks/roadmap_status.py` (SessionStart "you are here"), `../hooks/roadmap_guard.py`
+  (PreToolUse·Bash; advisory at push time when the cursor drifts from the map).
 - State: `.meta/roadmap/` (the map), `.meta/version` (the cursor).

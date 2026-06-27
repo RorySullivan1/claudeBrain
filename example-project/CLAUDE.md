@@ -63,7 +63,9 @@ Two altitudes of prospective state under `.meta/`:
 
 The `advance-roadmap-step` workflow connects them: it graduates the cursor card into
 `.meta/version`, drives implement → review → reiterate → `goal-auditor` assessment, stops
-for approval, then ships. Both files are prospective and complement memory's retrospective log.
+for approval, then ships. The `roadmap_guard` hook warns at push time when the two drift
+(a version shipped but still `planned`/`in-progress` on the map). Both files are prospective
+and complement memory's retrospective log.
 
 ## Conventions
 - Branch per change; conventional-commit-style messages.

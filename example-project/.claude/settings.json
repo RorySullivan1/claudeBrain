@@ -168,6 +168,19 @@
             "type": "command",
             "command": "python",
             "args": [
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/roadmap_guard.py"
+            ],
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python",
+            "args": [
               "${CLAUDE_PROJECT_DIR}/.claude/hooks/version_guard.py"
             ],
             "timeout": 10
