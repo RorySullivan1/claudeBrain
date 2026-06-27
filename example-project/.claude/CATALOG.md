@@ -19,6 +19,10 @@
 - coding-standards — Baseline cross-project coding conventions — descriptive naming, readability, immutability, error … -> skills/coding-standards/SKILL.md
 - deck-builder — Expert at assembling a real slide deck in a concrete tool — the execution tier that turns a design … -> skills/deck-builder/SKILL.md
 - financial-timeseries-analysis — Financial time-series hygiene in pandas/numpy — returns vs prices, resampling/alignment, market … -> skills/financial-timeseries-analysis/SKILL.md
+- github-comments — Expert at commenting on GitHub well — PR reviews, inline code comments, issue comments, and replies … -> skills/github-comments/SKILL.md
+- github-issues — Expert at handling GitHub issues — writing, triaging, organizing, and closing them well. Use this … -> skills/github-issues/SKILL.md
+- github-pull-requests — Expert at opening and formatting GitHub pull requests well — turning a finished branch into a … -> skills/github-pull-requests/SKILL.md
+- github-releases — Expert at cutting GitHub releases — versioning, tagging, and writing release notes that tell users … -> skills/github-releases/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - one-pager-builder — Expert at building a single-page document — the execution tier that turns a design spec into a … -> skills/one-pager-builder/SKILL.md
 - pamphlet-builder — Expert at building a multi-page pamphlet or booklet — the execution tier that turns a design spec … -> skills/pamphlet-builder/SKILL.md
@@ -45,6 +49,7 @@
 ## Agents (agents/*.md)
 - data-analyst — Objective data-analysis brain — frames a question against a dataset, plans the exploration, … -> agents/data-analyst.md
 - finance-quantitative-developer — Senior Python quantitative-finance engineer for this repo's analytics/tooling layer. Use … -> agents/finance-quantitative-developer.md
+- github-operator — GitHub workflow operator for this repo — opens and formats pull requests, files and triages issues, … -> agents/github-operator.md
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
