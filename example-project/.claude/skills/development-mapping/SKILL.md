@@ -36,6 +36,11 @@ the *slicing* right and the iterative engine downstream just turns the crank.
 A directory of nested markdown. Keep `INDEX.md` small and current (it's auto-surfaced at
 session start); push detail down into the stage/version files.
 
+> **See `EXAMPLE.md`** (beside this skill) for a complete, illustrative map of a hypothetical
+> project — INDEX + a stage + a version card, with the reasoning behind the sequence. The
+> `.meta/roadmap/` in this repo is a trimmed *showcase sample* (see its banner), not a plan
+> this repo executes — your project replaces it with a real one.
+
 ```
 .meta/roadmap/
 ├── INDEX.md                 # objective · ordered stages · per-version status table (the dashboard)
