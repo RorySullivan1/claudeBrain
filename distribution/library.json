@@ -1,0 +1,658 @@
+{
+  "source": "example-project/.claude",
+  "note": "Pull from the canonical tree above via distribution/pull.py — never from the symlinked repo-root .claude/. 'requires' and 'hooks' are pulled transitively.",
+  "assets": {
+    "skills/VSTO-development": {
+      "type": "skill",
+      "path": "skills/VSTO-development",
+      "name": "VSTO-development",
+      "description": "Expert VSTO (Visual Studio Tools for Office) development assistant for writing, architecting, and debugging …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/VSTO-distribution": {
+      "type": "skill",
+      "path": "skills/VSTO-distribution",
+      "name": "VSTO-distribution",
+      "description": "Expert VSTO deployment and distribution specialist for Office add-ins. Use this skill whenever the user asks …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/VSTO-maintenance": {
+      "type": "skill",
+      "path": "skills/VSTO-maintenance",
+      "name": "VSTO-maintenance",
+      "description": "Expert VSTO add-in maintenance, troubleshooting, and lifecycle management specialist. Use this skill whenever …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/VSTO-review": {
+      "type": "skill",
+      "path": "skills/VSTO-review",
+      "name": "VSTO-review",
+      "description": "Expert VSTO code reviewer for Office add-ins written in C# or VB.NET. Use this skill whenever the user pastes …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/agent-finder": {
+      "type": "skill",
+      "path": "skills/agent-finder",
+      "name": "agent-finder",
+      "description": "Find and delegate to the optimal Claude Code subagent(s) for a task instead of defaulting to general-purpose …",
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/backtesting-validation": {
+      "type": "skill",
+      "path": "skills/backtesting-validation",
+      "name": "backtesting-validation",
+      "description": "Backtest correctness and quant-model validation in Python — point-in-time data, train/test/walk-forward …",
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [
+        "skills/quantitative-finance",
+        "skills/financial-timeseries-analysis"
+      ],
+      "hooks": []
+    },
+    "skills/branding": {
+      "type": "skill",
+      "path": "skills/branding",
+      "name": "branding",
+      "description": "Expert at defining and applying a brand identity — the durable, reusable system that every artifact and …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/brochure-builder": {
+      "type": "skill",
+      "path": "skills/brochure-builder",
+      "name": "brochure-builder",
+      "description": "Expert at building a folded brochure — the execution tier that turns a design spec into a finished, …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design"
+      ],
+      "hooks": []
+    },
+    "skills/coding-standards": {
+      "type": "skill",
+      "path": "skills/coding-standards",
+      "name": "coding-standards",
+      "description": "Baseline cross-project coding conventions — descriptive naming, readability, immutability, error handling, …",
+      "category": "coding",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/deck-builder": {
+      "type": "skill",
+      "path": "skills/deck-builder",
+      "name": "deck-builder",
+      "description": "Expert at assembling a real slide deck in a concrete tool — the execution tier that turns a design spec into …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design"
+      ],
+      "hooks": []
+    },
+    "skills/development-mapping": {
+      "type": "skill",
+      "path": "skills/development-mapping",
+      "name": "development-mapping",
+      "description": "Expert at turning a whole-project objective into a **development map** — an ordered plan of stages → versions …",
+      "category": "planning",
+      "portable": true,
+      "requires": [
+        "commands/roadmap-set",
+        "commands/roadmap-status"
+      ],
+      "hooks": [
+        "session-start-roadmap.json",
+        "pre-tool-use-roadmap-guard.json"
+      ]
+    },
+    "skills/financial-timeseries-analysis": {
+      "type": "skill",
+      "path": "skills/financial-timeseries-analysis",
+      "name": "financial-timeseries-analysis",
+      "description": "Financial time-series hygiene in pandas/numpy — returns vs prices, resampling/alignment, market calendars and …",
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [
+        "skills/quantitative-finance"
+      ],
+      "hooks": []
+    },
+    "skills/github-comments": {
+      "type": "skill",
+      "path": "skills/github-comments",
+      "name": "github-comments",
+      "description": "Expert at commenting on GitHub well — PR reviews, inline code comments, issue comments, and replies — with …",
+      "category": "github",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/github-issues": {
+      "type": "skill",
+      "path": "skills/github-issues",
+      "name": "github-issues",
+      "description": "Expert at handling GitHub issues — writing, triaging, organizing, and closing them well. Use this skill …",
+      "category": "github",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/github-pull-requests": {
+      "type": "skill",
+      "path": "skills/github-pull-requests",
+      "name": "github-pull-requests",
+      "description": "Expert at opening and formatting GitHub pull requests well — turning a finished branch into a clean, …",
+      "category": "github",
+      "portable": true,
+      "requires": [
+        "skills/github-issues",
+        "skills/github-comments"
+      ],
+      "hooks": []
+    },
+    "skills/github-releases": {
+      "type": "skill",
+      "path": "skills/github-releases",
+      "name": "github-releases",
+      "description": "Expert at cutting GitHub releases — versioning, tagging, and writing release notes that tell users what …",
+      "category": "github",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/knowledge-router": {
+      "type": "skill",
+      "path": "skills/knowledge-router",
+      "name": "knowledge-router",
+      "description": "When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or system …",
+      "category": "operational",
+      "portable": true,
+      "requires": [
+        "skills/session-memory",
+        "skills/skill-distiller"
+      ],
+      "hooks": [
+        "context-start.json"
+      ]
+    },
+    "skills/one-pager-builder": {
+      "type": "skill",
+      "path": "skills/one-pager-builder",
+      "name": "one-pager-builder",
+      "description": "Expert at building a single-page document — the execution tier that turns a design spec into a finished …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design"
+      ],
+      "hooks": []
+    },
+    "skills/pamphlet-builder": {
+      "type": "skill",
+      "path": "skills/pamphlet-builder",
+      "name": "pamphlet-builder",
+      "description": "Expert at building a multi-page pamphlet or booklet — the execution tier that turns a design spec into a …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design"
+      ],
+      "hooks": []
+    },
+    "skills/presentation-design": {
+      "type": "skill",
+      "path": "skills/presentation-design",
+      "name": "presentation-design",
+      "description": "Expert visual-design and copy craft for communication artifacts — the subjective *how* that turns a flow …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/branding"
+      ],
+      "hooks": []
+    },
+    "skills/python-deployment": {
+      "type": "skill",
+      "path": "skills/python-deployment",
+      "name": "python-deployment",
+      "description": "Expert Python deployment, packaging, and operations — preparing Python code to ship to production, including …",
+      "category": "python",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/python-development": {
+      "type": "skill",
+      "path": "skills/python-development",
+      "name": "python-development",
+      "description": "Expert Python development for new code — writing modules, functions, classes, scripts, APIs, and features …",
+      "category": "python",
+      "portable": true,
+      "requires": [
+        "skills/coding-standards"
+      ],
+      "hooks": []
+    },
+    "skills/python-maintenance": {
+      "type": "skill",
+      "path": "skills/python-maintenance",
+      "name": "python-maintenance",
+      "description": "Expert Python maintenance work — debugging, refactoring, fixing bugs, upgrading dependencies, modernizing …",
+      "category": "python",
+      "portable": true,
+      "requires": [
+        "skills/coding-standards"
+      ],
+      "hooks": []
+    },
+    "skills/python-review": {
+      "type": "skill",
+      "path": "skills/python-review",
+      "name": "python-review",
+      "description": "Expert Python code review — analyze code for bugs, security issues, performance problems, style violations, …",
+      "category": "python",
+      "portable": true,
+      "requires": [
+        "skills/coding-standards"
+      ],
+      "hooks": []
+    },
+    "skills/quant-code-review": {
+      "type": "skill",
+      "path": "skills/quant-code-review",
+      "name": "quant-code-review",
+      "description": "Expert review of quantitative-finance Python for the defects generic review misses — numerical correctness …",
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [
+        "skills/quantitative-finance",
+        "skills/financial-timeseries-analysis",
+        "skills/backtesting-validation",
+        "skills/python-review"
+      ],
+      "hooks": []
+    },
+    "skills/quantitative-finance": {
+      "type": "skill",
+      "path": "skills/quantitative-finance",
+      "name": "quantitative-finance",
+      "description": "Domain floor for quantitative-finance code in Python — financial-math conventions, numerical stability, …",
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/report-builder": {
+      "type": "skill",
+      "path": "skills/report-builder",
+      "name": "report-builder",
+      "description": "Expert at building a long-form report or document — the execution tier that turns a structure + design spec …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design"
+      ],
+      "hooks": []
+    },
+    "skills/session-memory": {
+      "type": "skill",
+      "path": "skills/session-memory",
+      "name": "session-memory",
+      "description": "Persist and recall project state across Claude Code sessions via a .claude/memory/ directory — a small …",
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": [
+        "session-start.json",
+        "user-prompt-submit.json",
+        "pre-compact.json",
+        "stop.json"
+      ]
+    },
+    "skills/skill-distiller": {
+      "type": "skill",
+      "path": "skills/skill-distiller",
+      "name": "skill-distiller",
+      "description": "Spot reusable know-how produced during a plan or conversation and decide whether to promote it into a new …",
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": [
+        "post-tool-use-plan-nudge.json"
+      ]
+    },
+    "skills/technical-documentation-drafter": {
+      "type": "skill",
+      "path": "skills/technical-documentation-drafter",
+      "name": "technical-documentation-drafter",
+      "description": "Expert technical writer for developer-facing documentation. Use this skill whenever the user wants to produce …",
+      "category": "docs",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/token-optimizer": {
+      "type": "skill",
+      "path": "skills/token-optimizer",
+      "name": "token-optimizer",
+      "description": "Keep a Claude Code session token-efficient by deciding where work runs before it floods the main context, and …",
+      "category": "operational",
+      "portable": true,
+      "requires": [
+        "agents/token-manager"
+      ],
+      "hooks": [
+        "post-tool-use-bash-filter.json",
+        "pre-tool-use-read-guard.json"
+      ]
+    },
+    "skills/user-guide-drafter": {
+      "type": "skill",
+      "path": "skills/user-guide-drafter",
+      "name": "user-guide-drafter",
+      "description": "Expert technical writer for end-user documentation. Use this skill whenever the user wants to produce …",
+      "category": "docs",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/vba-code-test-writing": {
+      "type": "skill",
+      "path": "skills/vba-code-test-writing",
+      "name": "vba-code-test-writing",
+      "description": "Expert at writing tests for VBA (Excel/Word/Outlook/PowerPoint macros and add-ins), where the test runner …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/vba-development": {
+      "type": "skill",
+      "path": "skills/vba-development",
+      "name": "vba-development",
+      "description": "Expert VBA (Visual Basic for Applications) development assistant for writing, architecting, and debugging …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/vba-distribution": {
+      "type": "skill",
+      "path": "skills/vba-distribution",
+      "name": "vba-distribution",
+      "description": "Expert VBA packaging, signing, and deployment specialist for getting Excel/Word/ Outlook/PowerPoint macros …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/vba-maintenance": {
+      "type": "skill",
+      "path": "skills/vba-maintenance",
+      "name": "vba-maintenance",
+      "description": "Expert VBA maintenance, debugging, and modernization specialist for existing Excel/Word/Outlook/PowerPoint …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/vba-review": {
+      "type": "skill",
+      "path": "skills/vba-review",
+      "name": "vba-review",
+      "description": "Expert VBA code reviewer for Excel/Word/Outlook/PowerPoint macros and add-ins. Use this skill whenever the …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/vba-userforms": {
+      "type": "skill",
+      "path": "skills/vba-userforms",
+      "name": "vba-userforms",
+      "description": "Expert on building VBA UserForms — the dialog/GUI layer of Excel/Word/Outlook/ PowerPoint macros. Use this …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/data-analyst": {
+      "type": "agent",
+      "path": "agents/data-analyst.md",
+      "name": "data-analyst",
+      "description": "Objective data-analysis brain — frames a question against a dataset, plans the exploration, specifies what to …",
+      "category": "objective-agent",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/finance-quantitative-developer": {
+      "type": "agent",
+      "path": "agents/finance-quantitative-developer.md",
+      "name": "finance-quantitative-developer",
+      "description": "Senior Python quantitative-finance engineer for this repo's analytics/tooling layer. Use proactively when …",
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [
+        "skills/quantitative-finance",
+        "skills/financial-timeseries-analysis",
+        "skills/backtesting-validation",
+        "skills/python-development"
+      ],
+      "hooks": []
+    },
+    "agents/github-operator": {
+      "type": "agent",
+      "path": "agents/github-operator.md",
+      "name": "github-operator",
+      "description": "GitHub workflow operator for this repo — opens and formats pull requests, files and triages issues, cuts …",
+      "category": "github",
+      "portable": true,
+      "requires": [
+        "skills/github-issues",
+        "skills/github-pull-requests",
+        "skills/github-comments",
+        "skills/github-releases"
+      ],
+      "hooks": []
+    },
+    "agents/goal-auditor": {
+      "type": "agent",
+      "path": "agents/goal-auditor.md",
+      "name": "goal-auditor",
+      "description": "Acceptance/goal auditor — judges whether an implemented change actually achieves the goals and meets the …",
+      "category": "planning",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/presentation-architect": {
+      "type": "agent",
+      "path": "agents/presentation-architect.md",
+      "name": "presentation-architect",
+      "description": "Objective presentation-flow brain — designs how a communication artifact is structured to land its message: …",
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design",
+        "skills/deck-builder",
+        "skills/one-pager-builder",
+        "skills/brochure-builder",
+        "skills/pamphlet-builder",
+        "skills/report-builder"
+      ],
+      "hooks": []
+    },
+    "agents/python-developer": {
+      "type": "agent",
+      "path": "agents/python-developer.md",
+      "name": "python-developer",
+      "description": "Senior Python engineer for this repo's general tooling layer (`tools/`). Use proactively when implementing, …",
+      "category": "python",
+      "portable": true,
+      "requires": [
+        "skills/python-development",
+        "skills/python-maintenance",
+        "skills/python-review",
+        "skills/python-deployment"
+      ],
+      "hooks": []
+    },
+    "agents/software-architect": {
+      "type": "agent",
+      "path": "agents/software-architect.md",
+      "name": "software-architect",
+      "description": "Objective software-architecture brain — designs how a project is structured to serve its objective, and …",
+      "category": "objective-agent",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/token-manager": {
+      "type": "agent",
+      "path": "agents/token-manager.md",
+      "name": "token-manager",
+      "description": "Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and only a …",
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/vba-developer": {
+      "type": "agent",
+      "path": "agents/vba-developer.md",
+      "name": "vba-developer",
+      "description": "Senior VBA engineer for this repo's Office automation layer — Excel/Word/Outlook/ PowerPoint macros, `.xlam` …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [
+        "skills/vba-development",
+        "skills/vba-userforms",
+        "skills/vba-review",
+        "skills/vba-maintenance",
+        "skills/vba-distribution",
+        "skills/vba-code-test-writing"
+      ],
+      "hooks": []
+    },
+    "agents/vsto-developer": {
+      "type": "agent",
+      "path": "agents/vsto-developer.md",
+      "name": "vsto-developer",
+      "description": "Senior C#/.NET VSTO engineer for this repo's Excel add-in (`src/AddIn/`). Use proactively when implementing …",
+      "category": "domain-office",
+      "portable": false,
+      "requires": [
+        "skills/VSTO-development",
+        "skills/VSTO-review",
+        "skills/VSTO-maintenance",
+        "skills/VSTO-distribution"
+      ],
+      "hooks": []
+    },
+    "commands/reindex": {
+      "type": "command",
+      "path": "commands/reindex.md",
+      "name": "reindex",
+      "description": "Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, and …",
+      "category": "infra",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "commands/roadmap-set": {
+      "type": "command",
+      "path": "commands/roadmap-set.md",
+      "name": "roadmap-set",
+      "description": "Author or update the development map in .meta/roadmap/ — decompose the project objective into ordered stages, …",
+      "category": "planning",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "commands/roadmap-status": {
+      "type": "command",
+      "path": "commands/roadmap-status.md",
+      "name": "roadmap-status",
+      "description": "Show where the project is on its development map — the cursor version, what's shipped, and what's next.",
+      "category": "planning",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "commands/version-set": {
+      "type": "command",
+      "path": "commands/version-set.md",
+      "name": "version-set",
+      "description": "Define or update the current version in .meta/version — a semver label plus the goals/objectives of this unit …",
+      "category": "planning",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "commands/version-ship": {
+      "type": "command",
+      "path": "commands/version-ship.md",
+      "name": "version-ship",
+      "description": "Name and ship the PR from .meta/version — branch, commit, push, and open the PR with a title/body derived …",
+      "category": "planning",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "workflows/advance-roadmap-step": {
+      "type": "workflow",
+      "path": "workflows/advance-roadmap-step.md",
+      "name": "advance-roadmap-step",
+      "description": "advance-roadmap-step",
+      "category": "planning",
+      "portable": true,
+      "requires": [
+        "skills/development-mapping",
+        "agents/goal-auditor",
+        "workflows/ship-version",
+        "commands/roadmap-set",
+        "commands/roadmap-status"
+      ],
+      "hooks": [
+        "session-start-roadmap.json",
+        "pre-tool-use-roadmap-guard.json"
+      ]
+    },
+    "workflows/ship-version": {
+      "type": "workflow",
+      "path": "workflows/ship-version.md",
+      "name": "ship-version",
+      "description": "ship-version",
+      "category": "planning",
+      "portable": true,
+      "requires": [
+        "commands/version-set",
+        "commands/version-ship"
+      ],
+      "hooks": [
+        "pre-tool-use-version-guard.json"
+      ]
+    }
+  }
+}

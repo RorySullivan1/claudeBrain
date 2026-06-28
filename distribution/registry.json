@@ -1,0 +1,286 @@
+{
+  "_comment": "Curated distribution overlay for the brain's shippable assets. Hand-authored: the parts that cannot be auto-derived from frontmatter — each asset's category, portability, dependency edges (requires), and companion hook fragments. build_library.py reads asset name/description live from frontmatter and merges this overlay to produce LIBRARY.md + library.json. Asset ids are filesystem ids: skills/<folder>, agents/<stem>, commands/<stem>, workflows/<stem>. Companion-hook filenames are *.json fragments under example-project/.claude/hooks/. Assets with no entry default to {category:'other', portable:true, requires:[], hooks:[]} and are flagged by --check.",
+  "source": "example-project/.claude",
+  "assets": {
+    "skills/session-memory": {
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": ["session-start.json", "user-prompt-submit.json", "pre-compact.json", "stop.json"]
+    },
+    "skills/knowledge-router": {
+      "category": "operational",
+      "portable": true,
+      "requires": ["skills/session-memory", "skills/skill-distiller"],
+      "hooks": ["context-start.json"]
+    },
+    "skills/token-optimizer": {
+      "category": "operational",
+      "portable": true,
+      "requires": ["agents/token-manager"],
+      "hooks": ["post-tool-use-bash-filter.json", "pre-tool-use-read-guard.json"]
+    },
+    "skills/skill-distiller": {
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": ["post-tool-use-plan-nudge.json"]
+    },
+    "skills/agent-finder": {
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/token-manager": {
+      "category": "operational",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+
+    "agents/data-analyst": {
+      "category": "objective-agent",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/software-architect": {
+      "category": "objective-agent",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+
+    "skills/branding": {
+      "category": "presentation",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/presentation-design": {
+      "category": "presentation",
+      "portable": true,
+      "requires": ["skills/branding"],
+      "hooks": []
+    },
+    "skills/deck-builder": {
+      "category": "presentation",
+      "portable": true,
+      "requires": ["skills/presentation-design"],
+      "hooks": []
+    },
+    "skills/one-pager-builder": {
+      "category": "presentation",
+      "portable": true,
+      "requires": ["skills/presentation-design"],
+      "hooks": []
+    },
+    "skills/brochure-builder": {
+      "category": "presentation",
+      "portable": true,
+      "requires": ["skills/presentation-design"],
+      "hooks": []
+    },
+    "skills/pamphlet-builder": {
+      "category": "presentation",
+      "portable": true,
+      "requires": ["skills/presentation-design"],
+      "hooks": []
+    },
+    "skills/report-builder": {
+      "category": "presentation",
+      "portable": true,
+      "requires": ["skills/presentation-design"],
+      "hooks": []
+    },
+    "agents/presentation-architect": {
+      "category": "presentation",
+      "portable": true,
+      "requires": [
+        "skills/presentation-design",
+        "skills/deck-builder",
+        "skills/one-pager-builder",
+        "skills/brochure-builder",
+        "skills/pamphlet-builder",
+        "skills/report-builder"
+      ],
+      "hooks": []
+    },
+
+    "skills/python-development": {
+      "category": "python",
+      "portable": true,
+      "requires": ["skills/coding-standards"],
+      "hooks": []
+    },
+    "skills/python-maintenance": {
+      "category": "python",
+      "portable": true,
+      "requires": ["skills/coding-standards"],
+      "hooks": []
+    },
+    "skills/python-review": {
+      "category": "python",
+      "portable": true,
+      "requires": ["skills/coding-standards"],
+      "hooks": []
+    },
+    "skills/python-deployment": {
+      "category": "python",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+    "agents/python-developer": {
+      "category": "python",
+      "portable": true,
+      "requires": [
+        "skills/python-development",
+        "skills/python-maintenance",
+        "skills/python-review",
+        "skills/python-deployment"
+      ],
+      "hooks": []
+    },
+
+    "skills/coding-standards": {
+      "category": "coding",
+      "portable": true,
+      "requires": [],
+      "hooks": []
+    },
+
+    "skills/quantitative-finance": {
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [],
+      "hooks": []
+    },
+    "skills/financial-timeseries-analysis": {
+      "category": "domain-quant",
+      "portable": false,
+      "requires": ["skills/quantitative-finance"],
+      "hooks": []
+    },
+    "skills/backtesting-validation": {
+      "category": "domain-quant",
+      "portable": false,
+      "requires": ["skills/quantitative-finance", "skills/financial-timeseries-analysis"],
+      "hooks": []
+    },
+    "skills/quant-code-review": {
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [
+        "skills/quantitative-finance",
+        "skills/financial-timeseries-analysis",
+        "skills/backtesting-validation",
+        "skills/python-review"
+      ],
+      "hooks": []
+    },
+    "agents/finance-quantitative-developer": {
+      "category": "domain-quant",
+      "portable": false,
+      "requires": [
+        "skills/quantitative-finance",
+        "skills/financial-timeseries-analysis",
+        "skills/backtesting-validation",
+        "skills/python-development"
+      ],
+      "hooks": []
+    },
+
+    "skills/VSTO-development": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/VSTO-review": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/VSTO-maintenance": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/VSTO-distribution": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "agents/vsto-developer": {
+      "category": "domain-office",
+      "portable": false,
+      "requires": [
+        "skills/VSTO-development",
+        "skills/VSTO-review",
+        "skills/VSTO-maintenance",
+        "skills/VSTO-distribution"
+      ],
+      "hooks": []
+    },
+    "skills/vba-development": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/vba-userforms": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/vba-review": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/vba-maintenance": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/vba-distribution": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "skills/vba-code-test-writing": { "category": "domain-office", "portable": false, "requires": [], "hooks": [] },
+    "agents/vba-developer": {
+      "category": "domain-office",
+      "portable": false,
+      "requires": [
+        "skills/vba-development",
+        "skills/vba-userforms",
+        "skills/vba-review",
+        "skills/vba-maintenance",
+        "skills/vba-distribution",
+        "skills/vba-code-test-writing"
+      ],
+      "hooks": []
+    },
+
+    "skills/github-issues": { "category": "github", "portable": true, "requires": [], "hooks": [] },
+    "skills/github-comments": { "category": "github", "portable": true, "requires": [], "hooks": [] },
+    "skills/github-releases": { "category": "github", "portable": true, "requires": [], "hooks": [] },
+    "skills/github-pull-requests": {
+      "category": "github",
+      "portable": true,
+      "requires": ["skills/github-issues", "skills/github-comments"],
+      "hooks": []
+    },
+    "agents/github-operator": {
+      "category": "github",
+      "portable": true,
+      "requires": [
+        "skills/github-issues",
+        "skills/github-pull-requests",
+        "skills/github-comments",
+        "skills/github-releases"
+      ],
+      "hooks": []
+    },
+
+    "skills/technical-documentation-drafter": { "category": "docs", "portable": true, "requires": [], "hooks": [] },
+    "skills/user-guide-drafter": { "category": "docs", "portable": true, "requires": [], "hooks": [] },
+
+    "skills/development-mapping": {
+      "category": "planning",
+      "portable": true,
+      "requires": ["commands/roadmap-set", "commands/roadmap-status"],
+      "hooks": ["session-start-roadmap.json", "pre-tool-use-roadmap-guard.json"]
+    },
+    "agents/goal-auditor": { "category": "planning", "portable": true, "requires": [], "hooks": [] },
+    "commands/version-set": { "category": "planning", "portable": true, "requires": [], "hooks": [] },
+    "commands/version-ship": { "category": "planning", "portable": true, "requires": [], "hooks": [] },
+    "commands/roadmap-set": { "category": "planning", "portable": true, "requires": [], "hooks": [] },
+    "commands/roadmap-status": { "category": "planning", "portable": true, "requires": [], "hooks": [] },
+    "workflows/ship-version": {
+      "category": "planning",
+      "portable": true,
+      "requires": ["commands/version-set", "commands/version-ship"],
+      "hooks": ["pre-tool-use-version-guard.json"]
+    },
+    "workflows/advance-roadmap-step": {
+      "category": "planning",
+      "portable": true,
+      "requires": [
+        "skills/development-mapping",
+        "agents/goal-auditor",
+        "workflows/ship-version",
+        "commands/roadmap-set",
+        "commands/roadmap-status"
+      ],
+      "hooks": ["session-start-roadmap.json", "pre-tool-use-roadmap-guard.json"]
+    },
+
+    "commands/reindex": { "category": "infra", "portable": true, "requires": [], "hooks": [] }
+  }
+}

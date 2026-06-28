@@ -21,7 +21,21 @@ application and has no `src/`.
   lives, and how to build it.*
 
 To reuse an asset, copy the relevant folder from `example-project/.claude/` into your
-target project.
+target project — or, from another project, **pull it** (see below).
+
+## Pulling assets into another project
+
+A Claude instance working in a different repo can pull a capability out of this brain — with its
+dependencies and companion hooks resolved automatically — via the **`distribution/`** layer:
+
+```
+python distribution/pull.py skills/knowledge-router --dest /path/to/target/.claude
+```
+
+Browse **`LIBRARY.md`** (repo root, generated) for every pullable asset and its exact pull
+command, and see `distribution/README.md` for the full procedure. The canonical, pullable files
+live in `example-project/.claude/` — the repo-root `.claude/` is authoring-only and symlinked, so
+never copy from it directly.
 
 ## What the example demonstrates
 

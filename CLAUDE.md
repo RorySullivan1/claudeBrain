@@ -8,6 +8,7 @@ assets — skills, context briefs, hooks, commands, agents, workflows — are
 ```
 .claude/            ← the FACTORY's design environment (how we author assets)
 example-project/    ← a MOCK consumer project (what a produced .claude/ looks like)
+distribution/       ← the EXPORT layer (how another project pulls assets from the brain)
 ```
 
 ## The two halves
@@ -110,10 +111,21 @@ all built). For a finished example of any element, read its counterpart in
 
 ## Using an asset elsewhere
 
-- **A skill:** copy `example-project/.claude/skills/<name>/` into the target
-  project's `.claude/skills/`.
-- **A context doc:** copy the file into the target's `.claude/context/`, or paste
-  its body into that project's `CLAUDE.md`.
-- **The whole pattern:** copy `example-project/` as a starting point — its
-  `CLAUDE.md`, `CLAUDE.local.md`, and `.claude/` scaffold are a ready-to-fill repo
-  skeleton. See `example-project/.claude/README.md` for what each layer is for.
+**Canonical library.** The pullable, shippable assets live in `example-project/.claude/` (real
+files). The repo-root `.claude/` is **authoring-only and symlinked** into it — never copy assets
+from there directly, or you inherit broken symlinks.
+
+- **Pull from another project (preferred).** A Claude instance in a different repo pulls an asset —
+  with its dependencies and companion hooks resolved automatically — via the `distribution/` layer:
+  `python distribution/pull.py <asset-id> --dest <target>/.claude`. Browse the generated
+  `LIBRARY.md` (repo root) for asset ids and pull commands; see `distribution/README.md` for the
+  full procedure. `distribution/` is itself a *factory capability* (not a pullable asset);
+  `LIBRARY.md` / `library.json` are regenerated from the assets by `distribution/build_library.py`
+  (do not hand-edit them).
+- **A skill (manual):** copy `example-project/.claude/skills/<name>/` into the target's
+  `.claude/skills/` (use `cp -rL` to dereference any symlinks).
+- **A context doc:** copy the file into the target's `.claude/context/`, or paste its body into
+  that project's `CLAUDE.md`.
+- **The whole pattern:** copy `example-project/` as a starting point — its `CLAUDE.md`,
+  `CLAUDE.local.md`, and `.claude/` scaffold are a ready-to-fill repo skeleton. See
+  `example-project/.claude/README.md` for what each layer is for.
