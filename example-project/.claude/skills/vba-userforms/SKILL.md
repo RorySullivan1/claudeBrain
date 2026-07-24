@@ -114,6 +114,10 @@ Build controls at runtime when the layout depends on data (e.g. one row per item
 ```vba
 Private Sub UserForm_Initialize()
     Dim items As Variant: items = ThisWorkbook.Worksheets("Cfg").Range("Items").Value
+    ' Range.Value is a (rows, 1) 2-D array — but a *single-cell* range returns a scalar, so
+    ' UBound(items, 1) would raise. Give "Items" a header row so it never collapses to one
+    ' cell, and guard defensively:
+    If Not IsArray(items) Then Exit Sub
     Dim top As Single: top = 6
     Dim r As Long
     For r = 1 To UBound(items, 1)

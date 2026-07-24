@@ -49,12 +49,19 @@ Public Sub MarkOverdue()
     Next r
 End Sub
 
-' TESTABLE: pure function over values; the host boundary is a thin, separate shell
+' TESTABLE: pure function over values; the host boundary is a thin, separate shell.
+' Takes a 1-D array (see the boundary rule below on flattening a Range).
 Public Function OverdueFlags(ByVal dueDates As Variant, ByVal asOf As Date) As Variant
     Dim out() As String, i As Long
     ReDim out(LBound(dueDates) To UBound(dueDates))
     For i = LBound(dueDates) To UBound(dueDates)
-        out(i) = IIf(IsDate(dueDates(i)) And dueDates(i) < asOf, "OVERDUE", "")
+        ' Nest the If — don't write `IsDate(x) And x < asOf`. VBA's And is NOT short-circuit
+        ' (and IIf evaluates both arms), so a non-date would still hit `x < asOf` and raise
+        ' Type mismatch (13). The nested If only compares once IsDate is true.
+        out(i) = ""
+        If IsDate(dueDates(i)) Then
+            If CDate(dueDates(i)) < asOf Then out(i) = "OVERDUE"
+        End If
     Next i
     OverdueFlags = out
 End Function
@@ -62,7 +69,11 @@ End Function
 
 Rules that make VBA testable:
 - **Take values, return values.** Read a `Range` into a `Variant` array at the boundary,
-  compute on the array, write back — don't pass `Range` objects into logic.
+  compute on the array, write back — don't pass `Range` objects into logic. A single-column
+  `Range.Value` is a 2-D `(rows, 1)` array (and a *one-cell* range is a bare scalar); flatten
+  it with `Application.Transpose(rng.Value)` to the 1-D vector `OverdueFlags` expects, or have
+  the helper index `arr(r, 1)`. Keep the helper's array shape and the test's `Array(...)` shape
+  the same, or the tests pass while production crashes.
 - **Inject the host, don't reach for it.** Pass `Worksheet`/`Workbook` as parameters;
   never read `ActiveSheet`/`Selection`/globals inside logic.
 - **Pass `asOf`/config in.** Don't read `Now`/`Date`/`Environ` deep inside a function —
@@ -192,9 +203,15 @@ mode. You *can* automate by driving the host via COM and calling the runner:
 ```powershell
 # Windows, interactive logged-in session, macros pre-trusted
 $xl = New-Object -ComObject Excel.Application
-$wb = $xl.Workbooks.Open("C:\build\Tests.xlsm")
-$xl.Run("RunAllTests")          # your Pillar-3 runner; read results from a cell/file it writes
-$wb.Close($false); $xl.Quit()
+$xl.Visible = $false; $xl.DisplayAlerts = $false   # a modal dialog in a headless run hangs forever
+try {
+    $wb = $xl.Workbooks.Open("C:\build\Tests.xlsm")
+    $xl.Run("RunAllTests")      # your Pillar-3 runner; read results from a cell/file it writes
+    $wb.Close($false)
+} finally {
+    $xl.Quit()                  # release even on failure or EXCEL.EXE orphans (cf. vba-addin-building)
+    [Runtime.InteropServices.Marshal]::ReleaseComObject($xl) | Out-Null
+}
 ```
 
 State these limits plainly rather than promising green CI:

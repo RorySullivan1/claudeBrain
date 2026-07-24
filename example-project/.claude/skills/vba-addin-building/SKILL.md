@@ -79,7 +79,7 @@ ThisWorkbook/ThisDocument ─┘         ▼
                                 [3] inject doc-module code into existing component
                                      │
                                      ▼
-                                [4] SaveAs add-in format (xlAddIn=55 / pptm=25)
+                                [4] SaveAs add-in format (xlOpenXMLAddIn=55 / pptm=25)
                                      │
 customui/<host>_customUI14.xml ─►   ▼
                                 [5] reopen as ZIP: write customUI14.xml,
@@ -170,9 +170,9 @@ first. (`DeleteLines` with a zero count throws, so guard an already-empty module
 
 | Host | Method | Format constant |
 |---|---|---|
-| Excel | `wb.SaveAs(path, 55)` | `55` = `xlAddIn` (`.xlam`) — or `18` for legacy `.xla` |
+| Excel | `wb.SaveAs(path, 55)` | `55` = `xlOpenXMLAddIn` (`.xlam`) — or `18` = `xlAddIn` for legacy `.xla` |
 | PowerPoint | `pres.SaveAs(tmp, 25)` | `25` = `ppSaveAsOpenXMLPresentationMacroEnabled` (`.pptm`) |
-| Word | `doc.SaveAs2(path, 15)` | `15` = `wdFormatXMLDocumentMacroEnabled` (`.dotm` via 14/template) |
+| Word | `doc.SaveAs2(path, 15)` | `15` = `wdFormatXMLTemplateMacroEnabled` (`.dotm`) — `13` = `wdFormatXMLDocumentMacroEnabled` is `.docm` |
 
 PowerPoint has **no direct "save as add-in" format constant** — that's why this build
 saves a macro-enabled `.pptm` and converts it to `.ppam` in step 6.
