@@ -4,8 +4,8 @@
 Opt-in BY PRESENCE: silent unless the project has BOTH a `.meta/roadmap/INDEX.md` (it has
 adopted the development-map flow) and a `.meta/version` with a label. It only speaks up at
 `git push` time, and only when the cursor (`.meta/version`) and the map (`.meta/roadmap/`)
-disagree — e.g. shipping a version the roadmap doesn't list, or one the INDEX still marks
-`planned`, or while the INDEX shows a different version as the in-progress cursor.
+disagree — e.g. shipping a version the roadmap doesn't list, one the INDEX still marks
+`planned` while it's in progress, or one the version marks `shipped` but the INDEX does not.
 
 Like `version_guard.py` it NEVER blocks: it emits `permissionDecision: allow` plus an
 `additionalContext` nudge, so the push proceeds and the model just learns the map needs a
