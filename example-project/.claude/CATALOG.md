@@ -24,9 +24,15 @@
 - github-issues — Expert at handling GitHub issues — writing, triaging, organizing, and closing them well. Use this … -> skills/github-issues/SKILL.md
 - github-pull-requests — Expert at opening and formatting GitHub pull requests well — turning a finished branch into a … -> skills/github-pull-requests/SKILL.md
 - github-releases — Expert at cutting GitHub releases — versioning, tagging, and writing release notes that tell users … -> skills/github-releases/SKILL.md
+- graph-api-integration — Expert at Microsoft Graph API integration for SharePoint and Microsoft 365 — authenticating an app … -> skills/graph-api-integration/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - one-pager-builder — Expert at building a single-page document — the execution tier that turns a design spec into a … -> skills/one-pager-builder/SKILL.md
 - pamphlet-builder — Expert at building a multi-page pamphlet or booklet — the execution tier that turns a design spec … -> skills/pamphlet-builder/SKILL.md
+- power-apps-components — Expert at building reusable Power Apps canvas components and UI elements — the … -> skills/power-apps-components/SKILL.md
+- power-bi-dax — Expert at DAX for Power BI — measures, evaluation context, and model calculations over a … -> skills/power-bi-dax/SKILL.md
+- power-fx-development — Expert Power Fx developer for writing, architecting, and debugging formulas in canvas Power Apps … -> skills/power-fx-development/SKILL.md
+- power-fx-review — Expert Power Fx code reviewer for Power Apps canvas apps — delegation, performance, and … -> skills/power-fx-review/SKILL.md
+- power-query-m — Expert at Power Query and the M language — the ETL layer that shapes, cleans, and combines data … -> skills/power-query-m/SKILL.md
 - presentation-design — Expert visual-design and copy craft for communication artifacts — the subjective *how* that turns a … -> skills/presentation-design/SKILL.md
 - python-deployment — Expert Python deployment, packaging, and operations — preparing Python code to ship to production, … -> skills/python-deployment/SKILL.md
 - python-development — Expert Python development for new code — writing modules, functions, classes, scripts, APIs, and … -> skills/python-development/SKILL.md
@@ -36,10 +42,13 @@
 - quantitative-finance — Domain floor for quantitative-finance code in Python — financial-math conventions, numerical … -> skills/quantitative-finance/SKILL.md
 - report-builder — Expert at building a long-form report or document — the execution tier that turns a structure + … -> skills/report-builder/SKILL.md
 - session-memory — Persist and recall project state across Claude Code sessions via a .claude/memory/ directory — a … -> skills/session-memory/SKILL.md
+- sharepoint-column-formatting — Expert at SharePoint column and view formatting — the declarative JSON that styles list cells and … -> skills/sharepoint-column-formatting/SKILL.md
+- sharepoint-list-architecture — Expert at designing SharePoint lists as an application backend — the schema, column types, … -> skills/sharepoint-list-architecture/SKILL.md
 - skill-distiller — Spot reusable know-how produced during a plan or conversation and decide whether to promote it into … -> skills/skill-distiller/SKILL.md
 - technical-documentation-drafter — Expert technical writer for developer-facing documentation. Use this skill whenever the user wants … -> skills/technical-documentation-drafter/SKILL.md
 - token-optimizer — Keep a Claude Code session token-efficient by deciding where work runs before it floods the main … -> skills/token-optimizer/SKILL.md
 - user-guide-drafter — Expert technical writer for end-user documentation. Use this skill whenever the user wants to … -> skills/user-guide-drafter/SKILL.md
+- vba-addin-building — Expert at building distributable Office VBA add-ins (.xlam / .ppam / .otm / Word .dotm) from … -> skills/vba-addin-building/SKILL.md
 - vba-code-test-writing — Expert at writing tests for VBA (Excel/Word/Outlook/PowerPoint macros and add-ins), where the test … -> skills/vba-code-test-writing/SKILL.md
 - vba-development — Expert VBA (Visual Basic for Applications) development assistant for writing, architecting, and … -> skills/vba-development/SKILL.md
 - vba-distribution — Expert VBA packaging, signing, and deployment specialist for getting Excel/Word/ Outlook/PowerPoint … -> skills/vba-distribution/SKILL.md
