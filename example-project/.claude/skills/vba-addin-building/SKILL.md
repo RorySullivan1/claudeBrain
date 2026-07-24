@@ -174,8 +174,12 @@ first. (`DeleteLines` with a zero count throws, so guard an already-empty module
 | PowerPoint | `pres.SaveAs(tmp, 25)` | `25` = `ppSaveAsOpenXMLPresentationMacroEnabled` (`.pptm`) |
 | Word | `doc.SaveAs2(path, 15)` | `15` = `wdFormatXMLTemplateMacroEnabled` (`.dotm`) — `13` = `wdFormatXMLDocumentMacroEnabled` is `.docm` |
 
-PowerPoint has **no direct "save as add-in" format constant** — that's why this build
-saves a macro-enabled `.pptm` and converts it to `.ppam` in step 6.
+PowerPoint *does* have a direct add-in constant — `ppSaveAsOpenXMLAddin` (`30`) — so
+`pres.SaveAs(path, 30)` can write a `.ppam` in one call. This build nonetheless saves a
+macro-enabled `.pptm` and rewrites the presentation content type to `.ppam` in step 6, so
+the ribbon-injection ZIP surgery (step 5) and the add-in conversion happen in the same
+controllable pass. If you don't need that, saving straight to `30` is the simpler route —
+test that the result loads as an add-in on your target PowerPoint build.
 
 ### [5] Inject the ribbon (customUI) into the ZIP
 

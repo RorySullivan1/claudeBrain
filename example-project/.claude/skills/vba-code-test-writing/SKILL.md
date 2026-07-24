@@ -207,9 +207,10 @@ $xl.Visible = $false; $xl.DisplayAlerts = $false   # a modal dialog in a headles
 try {
     $wb = $xl.Workbooks.Open("C:\build\Tests.xlsm")
     $xl.Run("RunAllTests")      # your Pillar-3 runner; read results from a cell/file it writes
-    $wb.Close($false)
 } finally {
-    $xl.Quit()                  # release even on failure or EXCEL.EXE orphans (cf. vba-addin-building)
+    # Release EVERY RCW — the workbook too, not just the app — or EXCEL.EXE orphans.
+    if ($wb) { $wb.Close($false); [Runtime.InteropServices.Marshal]::ReleaseComObject($wb) | Out-Null }
+    $xl.Quit()                  # cf. vba-addin-building's COM-lifecycle section
     [Runtime.InteropServices.Marshal]::ReleaseComObject($xl) | Out-Null
 }
 ```
