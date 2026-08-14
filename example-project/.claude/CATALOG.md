@@ -16,6 +16,7 @@
 - backtesting-validation — Backtest correctness and quant-model validation in Python — point-in-time data, … -> skills/backtesting-validation/SKILL.md
 - branding — Expert at defining and applying a brand identity — the durable, reusable system that every artifact … -> skills/branding/SKILL.md
 - brochure-builder — Expert at building a folded brochure — the execution tier that turns a design spec into a finished, … -> skills/brochure-builder/SKILL.md
+- claim-grounding — Establish whether a factual claim is actually true, and record the judgment so it isn't … -> skills/claim-grounding/SKILL.md
 - coding-standards — Baseline cross-project coding conventions — descriptive naming, readability, immutability, error … -> skills/coding-standards/SKILL.md
 - deck-builder — Expert at assembling a real slide deck in a concrete tool — the execution tier that turns a design … -> skills/deck-builder/SKILL.md
 - development-mapping — Expert at turning a whole-project objective into a **development map** — an ordered plan of stages … -> skills/development-mapping/SKILL.md
@@ -90,3 +91,4 @@
 - control-grounding — control-grounding -> workflows/control-grounding.md
 - screen-build — screen-build -> workflows/screen-build.md
 - ship-version — ship-version -> workflows/ship-version.md
+- verify-claims — verify-claims -> workflows/verify-claims.md

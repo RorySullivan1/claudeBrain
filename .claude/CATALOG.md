@@ -10,6 +10,7 @@
 ## Skills (skills/*/SKILL.md)
 - agent-authoring — Expert guidance for authoring Claude Code subagents — the agent definitions that live in a … -> skills/agent-authoring/SKILL.md
 - agent-finder — Find and delegate to the optimal Claude Code subagent(s) for a task instead of defaulting to … -> skills/agent-finder/SKILL.md
+- claim-grounding — Establish whether a factual claim is actually true, and record the judgment so it isn't … -> skills/claim-grounding/SKILL.md
 - context-vs-skill — Decide WHERE a piece of durable knowledge belongs: a triggered skill, a passive context doc, … -> skills/context-vs-skill/SKILL.md
 - developer-agent-authoring — Expert guidance for designing **developer agents** — Claude Code subagents specialized at writing … -> skills/developer-agent-authoring/SKILL.md
 - knowledge-agent-authoring — Expert guidance for designing **knowledge agents** — Claude Code subagents focused on maintaining … -> skills/knowledge-agent-authoring/SKILL.md
@@ -38,3 +39,4 @@
 ## Workflows (workflows/*.md)
 - author-asset — author-asset -> workflows/author-asset.md
 - ship-version — ship-version -> workflows/ship-version.md
+- verify-claims — verify-claims -> workflows/verify-claims.md

@@ -41,6 +41,10 @@ Identify what *kind* of knowledge it is and send it to the matching home:
   *note it for review*, don't auto-create an agent. Agents grant tools and run
   autonomously; their creation stays deliberate (use the `add-agent` command when a human
   decides to).
+- **A mistake worth never repeating** (a correction you were given, a trap you fell into)
+  → a **recurrence-prevention rule**, kept separate from everything above. Write the *rule*,
+  not the story: "don't X, because Y" in one line. This home has exactly one job — keep it
+  free of design decisions and specifications, or it degenerates into a diary nobody reads.
 - **None of the above / a one-off / already captured** → **drop it.** Most observations
   land here.
 
@@ -48,6 +52,39 @@ If you're unsure between memory and a note: memory is for things that *change* (
 decisions); a note is for things that are *stable* (facts, concepts). If unsure between a
 note and `CLAUDE.md`: if it's short and consulted every session, it's `CLAUDE.md`; if it's
 larger and consulted occasionally, it's a note.
+
+## Separate the *why* from the *what*
+
+Two kinds of durable knowledge get merged constantly, and the merge is what makes both
+useless. Keep them apart even when they concern the same change:
+
+- **Why it was decided** — the alternatives considered, the trade-off accepted, the
+  constraint that forced it. Valuable to the next person facing the same fork, and it
+  stays true even after the code changes.
+- **What is now true** — the rule, the contract, the validated constraint, the interface.
+  Valuable to anyone working today, and it goes stale the moment the thing changes.
+
+Rationale filed as a spec reads as a rule nobody can safely change; a rule filed as
+rationale gets skimmed as history and ignored. When one item contains both, split it and
+route each half.
+
+## What's worth keeping at all
+
+Keep the bar concrete. Preserve knowledge that:
+
+- explains a decision someone will otherwise re-litigate,
+- names the alternative that was rejected and why,
+- states a permanent rule established by a review, an incident, or a failure,
+- documents a contract, validation requirement, or compatibility guarantee,
+- explains why a specific regression guard exists — the case where forgetting the
+  reason is how the bug comes back.
+
+Discard, without ceremony:
+
+- single-step task notes,
+- hypotheses you abandoned and intermediate reasoning,
+- progress logs that lost their value the moment the work finished,
+- bare procedure lists with no reasoning attached — those are either a skill or noise.
 
 ## The reference-notes tier (`.claude/context/`)
 

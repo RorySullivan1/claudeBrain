@@ -4,6 +4,30 @@
 events — the model cannot skip them. This is the floor underneath the whole prompt
 stack. Use hooks for anything that must *always* execute.
 
+## Design rules
+
+**Keep checks non-mutating.** A hook that fires on a commit or push may read, judge, and
+report — it must not rewrite files. Auto-formatting or "fixing" mid-commit means the diff
+that was reviewed is not the diff that ships, and the working tree moves under the person
+approving it. Run formatters as an explicit, reviewable step instead, and never let two
+formatters that both claim the same files run in parallel. Generated artifacts are checked
+in read-only mode; regenerate them deliberately after changing their source.
+
+**Fail safe and stay quiet.** On an unexpected payload, a missing file, or any error, print
+nothing and let the command proceed. A guard that breaks the session it was meant to protect
+is worse than no guard.
+
+**Opt in by presence.** Detect whether the project has adopted the thing you're guarding
+(a `.meta/version`, a `.claude/skills/`) and stay silent when it hasn't, so a fragment
+copied downstream doesn't nag about a convention that project never took up.
+
+**Prefer advisory to veto.** Emit `permissionDecision: allow` plus `additionalContext` so
+the model learns what's wrong without the action being blocked. Reserve a `deny` (or a
+non-zero exit on `PreToolUse`, which vetoes the call) for things that must be stopped.
+
+**Cap the output.** Hook output lands in context every time it fires. Truncate lists and
+say how many were omitted.
+
 ## Storage — one fragment file per hook (the source of truth)
 
 Claude Code can't load hook definitions from external files; the `hooks` block must be
@@ -44,6 +68,18 @@ These drive the `session-memory` skill (load / persist / recall):
 
 To add a hook: drop a `<event>.json` fragment here and run `build-hooks.py`. A
 `PreToolUse` fragment that exits non-zero **vetoes** the tool call.
+
+## Guards and filters
+
+Advisory, non-mutating, opt-in by presence — each one allows the action and adds context:
+
+| Fragment | Event | Script | Effect |
+|---|---|---|---|
+| `pre-tool-use-asset-integrity.json` | `PreToolUse` (Bash) | `asset_integrity.py` | On `git commit`/`push`, reports `.claude/` asset defects: skill folder ≠ `name:`, missing `name:`/`description:`, a cited `references/` file that's absent, broken symlinks. |
+| `pre-tool-use-version-guard.json` | `PreToolUse` (Bash) | `version_guard.py` | On `git push`, warns when `.meta/version` exists but lacks a label or goals. |
+| `pre-tool-use-roadmap-guard.json` | `PreToolUse` (Bash) | `roadmap_guard.py` | On `git push`, warns when the version cursor has drifted from the roadmap. |
+| `pre-tool-use-read-guard.json` | `PreToolUse` (Read) | `pre_read_guard.py` | Stops an accidental whole-file slurp of a very large file. |
+| `post-tool-use-bash-filter.json` | `PostToolUse` (Bash) | `post_bash_filter.py` | Keeps verbose command output out of the main context. |
 
 ## Self-maintaining (the drift guard)
 

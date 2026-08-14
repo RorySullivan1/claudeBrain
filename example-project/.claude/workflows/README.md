@@ -17,7 +17,13 @@ command is one shot, a workflow is a whole pipeline.
 - A triage pipeline: read items → prioritize → assign → post a digest.
 - A refresh job: fetch source data → recompute → write outputs → flag anomalies.
 
-## Status
+## Defined here
 
-**Empty scaffold.** No workflows defined yet. Add a `<name>.md` describing the
-sequence to create one.
+- `advance-roadmap-step` — graduate the roadmap's cursor card into `.meta/version`, then
+  drive implement → review → reiterate → assess, stop for approval, and ship.
+- `ship-version` — label a unit of work with its goals in `.meta/version`, then name and
+  ship the PR from those goals (`/version-set` + `/version-ship`).
+- `verify-claims` — the **truth gate**: extract an asset's factual claims, tier each by what
+  would settle it, ground them against docs or a probe, and label what stayed unverified.
+  Run before shipping anything that asserts facts about an external system. Independent of
+  `skill-creator`'s eval loop, which is the *performance* gate.
