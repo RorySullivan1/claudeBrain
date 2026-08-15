@@ -239,3 +239,69 @@ ledger schema already applies to findings.
 **Observation, not acted on:** `branding` tells the reader to verify contrast but never says
 what passes. That is a content GAP, and filling it means ADDING claims — out of scope for a
 verification pass. Flagged for a human decision rather than fixed unilaterally.
+
+---
+
+## Addendum 6 — VBA family gap: two new skills, gated at authoring
+
+**The probe, not the intuition.** Asked whether the VBA family had gaps, I grepped all 7
+VBA skills plus the global `vba-developer` for the obvious Excel surfaces. **Zero hits** for
+`ListObject`/Tables, PivotTables, Charts, `.Formula`/R1C1, ADO/DAO/`Recordset`/SQL, and
+Regex. `vba-development`'s whole host coverage was **four bullets** for Excel+Word+Outlook+
+PowerPoint combined, against a description promising "Office object-model automation across
+Excel, Word, Outlook, and PowerPoint" — a promise/delivery mismatch at the coverage level,
+which is a different defect class from a wrong claim and is only visible by measuring the
+description against the body.
+
+**Built (user chose 2 of 4 candidates, and chose to gate them):**
+- **`vba-excel-object-model`** — Tables/`ListObject`, PivotTables, charts, `.Formula` vs
+  `.Formula2` vs R1C1, `.Value2`/`.Value`/`.Text`, `UsedRange`/`End(xlUp)`/`SpecialCells`/
+  `AutoFilter`. Defers the Range⇄array round-trip to `vba-development` rather than restating.
+- **`vba-data-access`** — ADO/DAO, connection strings, cursors/locks, `CopyFromRecordset`,
+  transactions. **Rule zero: never concatenate values into SQL** — the family said nothing
+  about it, and it's the standard VBA data defect.
+
+Both carry explicit `Boundaries:` lines (the VBA family had none — the Power Platform family
+does; this closes that inconsistency). Cross-links added into `vba-development` (two
+pointers) and `vba-review` (data-access safety inserted as priority **3**, above performance,
+because it is a correctness bug and a security bug simultaneously).
+
+### The truth gate found real defects — in my own draft, before shipping
+
+Running `verify-claims` at authoring time (rather than after) caught three things that would
+have shipped:
+
+1. **A feature-detect that cannot detect.** My `Formula2` support probe was both nonsense
+   (`Application.WorksheetFunction.Parent.Range("A1")`) and *early-bound* — naming
+   `.Formula2` anywhere makes the project fail to **compile** on an older Excel, so the
+   fallback path can never run. Fixed with an `Object`-typed late-bound probe **and** a
+   late-bound write. This is the fourth-plus instance of the session's highest-yield class:
+   **verification steps that cannot verify.** It now has a sibling: *a compatibility fallback
+   that the compiler kills before it executes.*
+2. **An incomplete connection string.** `Provider=MSOLEDBSQL;…SSPI` omits
+   `DataTypeCompatibility=80`, which Microsoft states ADO *requires* for the OLE DB Driver.
+   Classic works-in-the-UDL-tester/fails-in-VBA. Added, plus the v19 `Use Encryption for
+   Data=Mandatory` default.
+3. **Missing preconditions on `ListObject.Resize`** — header must stay in the same row, new
+   range must overlap the original, and the result needs a header **and ≥1 data row**, so a
+   table cannot be resized to zero rows. No cells are inserted, so content below is
+   overwritten, not pushed down.
+
+**Contract drift reported, not resolved.** Two Microsoft pages disagree on `RecordCount` for
+an *empty* forward-only recordset (`-1` per the property reference; `0` per "Limits of a
+Recordset"). Per `verify-claims`' stop condition I did not pick the convenient source — I
+recorded the conflict and noted that the skill's actual advice (`rs.EOF And rs.BOF`) is
+correct under either reading, which is the argument for using it.
+
+**Three claims labelled experience-settled rather than deleted or laundered:**
+`SpecialCells` raising 1004 on no match, the PivotTable data-field rename collision, and
+`UsedRange` over-reporting. All three are true in practice and absent from the references.
+
+**Honest gap (recorded as a ledger row, not omitted):** step 4 of `verify-claims` —
+grounding against a *live* authority — could not run. There is no Windows/Office host here.
+Everything in both skills is doc-settled or explicitly labelled; **nothing was confirmed by
+executing VBA.** The three experience-settled rows are precisely what a live probe would
+settle.
+
+Ledger: **69 → 78 rows** (3 corrected, 1 confirmed-before-shipping, 1 contested, 4
+experience-settled incl. the coverage gap).

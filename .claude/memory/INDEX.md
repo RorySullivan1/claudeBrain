@@ -56,6 +56,13 @@
 - PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 - DONE: `agent-authoring` now carries the verifying-agent posture rule (see Decisions).
+- DONE: VBA family gap closed — `vba-excel-object-model` + `vba-data-access` (grep proved zero
+  coverage of Tables/Pivots/Charts/`.Formula`/ADO/SQL across all 7 VBA skills). **Gated through
+  `verify-claims` at authoring, before shipping** — caught 3 defects in my own draft (a
+  late-binding-required `Formula2` probe, a connection string missing
+  `DataTypeCompatibility=80`, missing `ListObject.Resize` preconditions). Ledger 69 → 78.
+  **Open gap:** no live Office host, so step 4 (authority probe) did not run — recorded as a
+  ledger row; 3 claims stand as experience-settled that a probe would settle.
 
 ## Log              (append-only pointers)
 - 2026-08-15 | taskmaster re-review: freeze reversal + Aug-9 corrections + SVG charts + docs-source brief distilled into 14 assets; bulk-Patch & 8-join disputes settled vs MS Learn | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md

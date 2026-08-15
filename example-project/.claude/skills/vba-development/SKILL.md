@@ -252,11 +252,15 @@ Set result = JsonConverter.ParseJson(http.responseText)  ' VBA-JSON → Dictiona
 Always check `.Status` before parsing — a 500 often returns HTML that detonates a JSON parser
 with a confusing error.
 
+HTTP/REST stays here. **A database — ADO, DAO, a connection string, any SQL — is
+`vba-data-access`**, and its rule zero (every value goes through a parameter, never string
+concatenation) is not optional.
+
 ---
 
 ## Host-Specific Notes
 
-- **Excel** — never `.Select`/`.Activate`; address objects directly and qualify with `ThisWorkbook` (`ThisWorkbook.Worksheets("Data")`, not `Sheets("Data")`, which depends on `ActiveWorkbook`). Avoid hardcoded sheet indices (`Worksheets(1)`) — fragile across user reordering.
+- **Excel** — never `.Select`/`.Activate`; address objects directly and qualify with `ThisWorkbook` (`ThisWorkbook.Worksheets("Data")`, not `Sheets("Data")`, which depends on `ActiveWorkbook`). Avoid hardcoded sheet indices (`Worksheets(1)`) — fragile across user reordering. **For Excel's own objects — Tables/`ListObject`s, PivotTables, charts, `.Formula`/`.Formula2`/R1C1, `SpecialCells`, `AutoFilter` — use `vba-excel-object-model`**; it layers on the array round-trip above rather than replacing it.
 - **Outlook** — don't store a `MailItem` beyond the event that handed it to you; copy out the values you need. Guard `Application.ActiveExplorer` / `ActiveInspector` for `Nothing`.
 - **Word** — prefer `ContentControl` over `Bookmark` for structured data (bookmarks break on edit); check `Document.ProtectionType` before writing.
 - **PowerPoint** — collections are 1-indexed; release large `Shape`/`Slide` graphs by setting to `Nothing` when done.
