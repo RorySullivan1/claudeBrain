@@ -90,3 +90,40 @@ assimilation) and distilled everything new/corrected into claudeBrain:
   means unconfirmed, not unsupported").
 - Their Aug-9 pre-paste-review freshness fix CONVERGED with ours independently — kept ours
   (role-based), folded their golden-source nuance.
+
+## Addendum 2 — verify-claims run on Power Platform + VBA (item 1)
+
+First real exercise of the truth gate. 11 parallel verifiers (7 Power Platform, 4 VBA),
+~190 load-bearing claims graded against Microsoft Learn; a citation counted only when the
+fetched text stated the claim. Two verifiers died on a session limit and were relaunched,
+seeded with the specific claims their predecessors were mid-check on.
+
+**8 corrections:** `First` wrongly listed non-delegable (power-fx-review + delegation.md —
+Learn names it delegable; highest impact, it would make a reviewer flag correct code);
+JoinKind enumerated 6 of 8 values; enhanced-component-properties toggle moved to
+Settings>Updates>New (on by default for new apps); setTimeouts "defaults unbounded" false
+(only resolveTimeout is infinite; 60/30/30 for the rest); Graph per-site roles are
+read/write/manage/fullcontrol (not "owner"); delegated Sites.Selected does NOT need admin
+consent; MacroOptions reuses an existing Category rather than throwing; add-in procedures
+are reference-free only for UDFs/Application.Run, not cross-project VBA calls.
+
+**18 experience-settled labels** — kept and labeled, never deleted or laundered, per the
+skill's "omission means unconfirmed, not unsupported" rule. Biggest: the Graph `Prefer:
+HonorNonIndexedQueries...` header asserted as required in 5 places but absent from the
+official reference; HtmlText's strip list (documented for a DIFFERENT control); the
+.frm/.frx export pair (never named on current Learn); DAX "Power Query columns compress
+better" (community lore Learn argues against — rationale replaced).
+
+**1 contested:** SharePoint's ≤20,000-item ceiling for adding/removing an index. The
+current support article says M365 allows indexing a list of ANY size; a live Learn
+troubleshooting page still states the 20,000 limit. Recorded as drift rather than resolved
+— exactly the contract-drift stop the skill prescribes.
+
+Judgments recorded in `skills/claim-grounding/reviews/ledger.jsonl` (27 rows: identity,
+verdict, rationale, grounded_by, date). Ledger schema worked as designed; `count` captured
+multi-site claims (Prefer header = 5).
+
+**Method notes for next time:** the pre-grounded skip rule fired zero times — nothing in
+either family carried dated grounding, which is itself the finding. Verifiers reliably
+self-limited to ~15-23 claims each; that granularity felt right. Rubberduck-specific claims
+in vba-code-test-writing are out of Learn's scope entirely and need a different source.

@@ -61,7 +61,9 @@ Internalize these before proposing any schema. Every trap below flows from ignor
   processes just the first **500 rows (raisable to 2,000)**. Schema choices decide
   which columns can be filtered delegably, so list design and app correctness are
   the same problem. (The formulas themselves live in power-fx-development.)
-- **Names are frozen at creation.** A column's **internal name** is set once, when
+- **Names are frozen at creation** *(universally consistent with the docs — which note a
+  UI rename creates a separate display property while list settings still show the original
+  — but never stated outright; checked 2026-08-15).* A column's **internal name** is set once, when
   the column is created, and never changes — renaming the column only changes its
   display name. Every formula, view, and API call binds to the internal name.
 
@@ -129,10 +131,16 @@ it returns two. An index changes what gets scanned. Work this playbook in order:
    - **Facts to design around:** you can maintain only a **limited number of
      indexes per list (commonly documented as up to 20 in SharePoint Online)**, so
      spend them on real query columns, not "just in case."
-   - You can **add or remove an index only while the list has ≤ 20,000 items** —
-     past that the manual operation is throttled. Modern SharePoint **auto-indexes
-     in the background** for lists that grow beyond ~20,000, but you should not rely
-     on that timing; **create your indexes early, while the list is small.**
+   - **The ≤ 20,000-item ceiling on adding/removing an index is contested in the docs**
+     (checked 2026-08-15): the current support article says that in SharePoint (Microsoft
+     365) *"you can manually add an index to a list of any size"*, while a live Learn
+     troubleshooting page still states *"the list limit to add or remove an indexed column
+     is 20,000 items."* The 20,000 figure is documented for SharePoint Server 2016/2019.
+     Treat it as a real risk on any tenant rather than a settled rule — and note that the
+     often-repeated claim that SharePoint **auto-creates** indexes past ~20,000 rests only
+     on community answers; what the docs describe is automatic index *selection*, not
+     creation. Either way the conclusion is unchanged: **create your indexes early, while
+     the list is small.**
    - Multiple-lines and Calculated columns **cannot** be indexed — factor that into
      which column carries a query key.
 3. **Make the *first* filter clause hit an indexed column.** SharePoint evaluates
@@ -167,8 +175,10 @@ parent — but you own the trade-offs a real database would handle for you:
   only what a view actually shows.
 - **Referential integrity is optional and limited.** A lookup can enforce
   **Restrict Delete** (block deleting a parent that has children) or **Cascade
-  Delete** (delete the children too) — but only on **primary** lookup columns, and
-  the cascade itself is throttled on large lists. Don't assume it's on; choose it
+  Delete** (delete the children too) — the behaviours themselves are doc-stated
+  (`RelationshipDeleteBehaviorType`: None/Cascade/Restrict). The qualifiers that they
+  apply only to **primary** lookup columns and that cascade is throttled on large lists
+  are *observed, not doc-stated* (checked 2026-08-15). Don't assume it's on; choose it
   deliberately.
 - **Denormalize the hot path.** Because every lookup read is a join against the
   threshold, it is often *correct* to copy a stable parent value (e.g. the parent's

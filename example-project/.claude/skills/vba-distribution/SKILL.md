@@ -60,7 +60,7 @@ End Sub
 ```vba
 ' modSetup — register UDF categories once (guarded), resolve paths relatively
 Public Sub RegisterFunctionsOnce()
-    On Error Resume Next   ' MacroOptions throws if the category already exists
+    On Error Resume Next   ' defensive only — an existing Category is REUSED, not an error
     Application.MacroOptions Macro:="Acme_GetTimeSeries", _
         Description:="Fetch a time series", Category:="Acme"
     On Error GoTo 0
@@ -73,7 +73,8 @@ End Function
 ```
 
 Rules: set `IsAddin = True`; public procedures in standard modules become callable from any
-workbook once installed (no manual reference needed). **Never hardcode paths** — resolve
+workbook once installed — as worksheet UDFs and via `Application.Run`, with no manual reference.
+(Calling them from *another project's VBA code* still needs a reference to the add-in project.) **Never hardcode paths** — resolve
 shipped files relative to `ThisWorkbook.Path`, user config via `Environ("AppData")` or the
 registry.
 
@@ -93,11 +94,15 @@ trusted once and then run under "disable all except digitally signed".
    (ships with Office) only for a single dev machine — self-signed is **not** trusted on other
    machines unless you push the cert to their Trusted Publishers.
 2. **Sign the project:** VBA editor → **Tools → Digital Signature → Choose** → select the cert.
-   Signing is per-VBAProject; re-sign after every code change (the signature covers the code).
+   Signing is per-VBAProject; re-sign after every code change. (Learn states modify-invalidates
+   for *workbook* signatures; for VBA project signatures the rule is observed practice — Office
+   may silently re-sign on save when the cert is present, so verify before distributing.)
 3. **Distribute the public cert** to users' **Trusted Publishers** store (manually, or via GPO
    for a fleet). Once present, the add-in loads under stricter macro policies without prompting.
-4. **Watch expiry** — a lapsed cert invalidates the signature silently; users fall back to the
-   machine macro policy. Put a renewal reminder 60 days out and re-sign on renewal.
+4. **Watch expiry** — assume a lapsed cert stops satisfying the trusted-publisher policy, so
+   users fall back to the machine macro policy. (Not doc-stated for VBA projects, and a
+   *timestamped* signature can survive cert expiry in general code-signing — verify for your
+   cert rather than assuming either way.) Put a renewal reminder 60 days out and re-sign.
 
 ---
 
@@ -132,7 +137,7 @@ Expect on managed Windows with no admin rights:
 
 For version control and reproducible packaging:
 
-- Export every module to text: `.bas` (standard), `.cls` (class), `.frm` **+** `.frx` (form — the binary `.frx` must be committed).
+- Export every module to text: `.bas` (standard), `.cls` (class), `.frm` **+** `.frx` (form — the binary `.frx` must be committed; the companion file is observed behaviour, not named in the Export docs).
 - Prefer a **round-tripped build** (text source in Git → a build step rebuilds the `.xlam`/`.xlsm`) over committing the binary container. The binary is an artifact; the text is the source of truth.
 - Tag releases and bump a visible version constant (`Public Const ADDIN_VERSION = "2.3.1"`) so support can confirm what a user is running.
 
