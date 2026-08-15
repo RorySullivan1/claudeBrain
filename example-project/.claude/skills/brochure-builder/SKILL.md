@@ -59,7 +59,7 @@ doubt, build a folding dummy / proof and fold it to confirm sequence before fina
 | **InDesign / Affinity Publisher / Scribus** | Real print brochure; precise panels, bleed, CMYK | Page-layout app; panel guides + fold marks on a sheet |
 | **Canva / Figma** | Brand-kit, quick, non-technical hand-off | Brochure template with preset panels |
 | **HTML/CSS → PDF** (WeasyPrint, Paged.js) | Data-driven or version-controlled | CSS `@page` sized to the full sheet; panel columns |
-| **LaTeX (e.g. `leaflet`/`ticket` classes)** | Typeset, reproducible | Source → PDF |
+| **LaTeX (the `leaflet` class)** | Typeset, reproducible | Source → PDF; `leaflet` does the two-fold single-sheet imposition for you |
 
 Default to a page-layout app for any serious print run; use HTML/CSS→PDF when it must be data-driven.
 

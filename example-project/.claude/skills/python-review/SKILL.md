@@ -39,7 +39,12 @@ Organize every review using these four levels. Skip levels with no items rather 
 
 - **Off-by-one errors** in slicing, range bounds, loop conditions
 - **Mutable default arguments** (`def f(x=[])`)
-- **Late binding** in closures inside loops (`lambda i: i` capturing loop variable)
+- **Late binding** in closures inside loops — the bug is a closure with **no** parameter
+  binding the loop variable, e.g. `funcs.append(lambda: i)` or `lambda x: x * i`; all of them
+  see the loop's *final* value. Careful: `lambda i: i` is **not** this bug — its parameter
+  shadows the loop variable, and binding-by-default-argument (`lambda n=i: n`) is the
+  documented *fix*. Flag the parameterless capture, not the parameterized one.
+  *(Corrected 2026-08-15 — verified empirically.)*
 - **Resource leaks:** files, connections, locks not released; missing `with` statements
 - **Race conditions** in threaded/async code: shared mutable state without locks, check-then-act patterns
 - **Async/sync mixing:** sync blocking calls inside async functions, forgotten `await`, fire-and-forget tasks that swallow exceptions
@@ -150,6 +155,9 @@ For small snippets the user clearly wants quick feedback on, just review.
 > ```python
 > cursor.execute("SELECT * FROM orders WHERE user_id = %s", (user_id,))
 > ```
+> (The placeholder is driver-specific — PEP 249 defines several `paramstyle`s: `%s` for
+> psycopg2/MySQL, `?` for sqlite3. Check `driver.paramstyle`; the parameterization is the
+> point, not the symbol.)
 
 **Example 3 — when not to comment:**
 

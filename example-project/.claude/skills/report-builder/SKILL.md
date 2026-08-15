@@ -107,7 +107,9 @@ section-by-section, and don't echo full document bodies back into the conversati
 5. **Generate the apparatus.** Build/refresh the table of contents, lists of figures/tables, and any
    index; resolve all cross-references and the bibliography.
 6. **Verify.** Open/render the output and check: it compiles/opens without error; ToC and cross-refs
-   resolve (no broken "??"/"Error! Reference not found"); section/figure numbering is correct and
+   resolve — grep the exact strings, they are easy to get subtly wrong: LaTeX emits a bold
+   `??`, Word emits **`Error! Reference source not found.`** (the word *source* is part of it)
+   and **`Error! Bookmark not defined.`** for the sibling bookmark failure; section/figure numbering is correct and
    sequential; headers/footers and page numbers are right; figures/tables render near their references
    with captions; styles are applied consistently; citations/bibliography are complete; page count and
    file size are sane. For scripted builds, re-run to confirm determinism.

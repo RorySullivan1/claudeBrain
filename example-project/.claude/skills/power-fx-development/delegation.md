@@ -42,11 +42,12 @@ delegation in a canvas app*.
 | `Search` | **No** | Substring/"contains" match — never delegates. See rewrite §4. |
 | `IsBlank` inside a predicate | **No** on Text/Complex | `Filter(l, IsBlank(x))` → `Filter(l, x = Blank())` delegates for `=` **on simple columns only** (Text/Number/Date/Bool); a Person/Lookup/Choice root does **not** — flag those with a maintained Boolean. |
 | `EndsWith` | **No** | No SharePoint equivalent. |
-| `in` / `exactin` | **No** | Rewrite to `Or`/`=` chain or `StartsWith`. |
+| `in` / `exactin` | **No** | `exactin` is documented as non-delegable everywhere; `in` is *absent from* SharePoint's delegable-operations table rather than explicitly excluded (omission, checked 2026-08-15) — treat as non-delegable. Rewrite to `Or`/`=` chain or `StartsWith`. |
 | `Sum` `Average` `Min` `Max` `StdevP` `VarP` | **No** | Aggregates don't delegate to SharePoint → wrong totals past the limit. |
 | `CountRows` `CountIf` | **No** | Only counts what was pulled locally (≤ limit). |
 | `Concat` `GroupBy` `Distinct` `Ungroup` | **No** | Operate locally on the pulled page. |
-| `First` `FirstN` `Last` `LastN` | **No** | Pull the local page first. |
+| `FirstN` `Last` `LastN` | **No** | Pull the local page first. |
+| `First` | **Delegable** (per source) | MS Learn lists `First` among the delegable filter functions; SharePoint-specific behaviour is undocumented, so verify before relying on it at scale. |
 | `Skip` | **No** | Silently ignored on SharePoint — breaks pagination. |
 | `AddColumns` `DropColumns` `ShowColumns` `RenameColumns` | pass-through | The inner Filter can delegate, but the **output** is still capped at the limit. |
 | `UpdateIf` / `RemoveIf` | **Simulated** | Work locally but iterate in 500/2000 batches; correct only if the matching set fits. Prefer explicit `Patch`/`Remove` on known records. |
@@ -76,7 +77,7 @@ it — small static lists (< 500) are safe with any formula.
 | "Contains" text search | `Search(Tasks, txt.Text, "Title")` | `Filter(Tasks, StartsWith(Title, txt.Text))` — prefix match delegates. True substring can't delegate; index/redesign or accept prefix. |
 | Match any of N values | `Filter(Orders, Status in tblStatuses)` | `Filter(Orders, Status = "New" \|\| Status = "Open" \|\| Status = "Held")` — explicit `Or` of `=` delegates. |
 | "Not equal to X" on Text | `Filter(l, Category <> "Archived")` | Add a Boolean `IsArchived` column and `Filter(l, IsArchived = false)`. Text `<>` doesn't delegate. |
-| Blank check (simple column) | `Filter(l, IsBlank(DueDate))` | `Filter(l, DueDate = Blank())` — `= Blank()` delegates on Text/Number/Date/Bool. **A Person/Lookup/Choice column does NOT** — maintain a Boolean flag (see the row below). |
+| Blank check (simple column) | `Filter(l, IsBlank(DueDate))` | `Filter(l, DueDate = Blank())` — `= Blank()` delegates on Text/Number/Date/Bool (MS Learn states the rewrite; the simple-vs-complex restriction is *field-observed*, not doc-stated — checked 2026-08-15). **A Person/Lookup/Choice column does NOT** — maintain a Boolean flag (see the row below). |
 | "Is not blank" | `Filter(l, !IsBlank(Owner))` | No delegable form via `<>`; add/maintain a Boolean flag column, or filter locally on a pre-narrowed set. |
 | Top N newest | `FirstN(Sort(l, Created, Descending), 20)` | `FirstN(...)` is local, but `Sort(...)` on a DateTime **delegates** — so the sort runs server-side and `FirstN` trims the returned page. Keep the delegable sort inside. |
 | Ordering on a Text column | `Sort(l, Title)` then `<`/`>` filters | Sort on Text delegates; the relational **filter** on Text does not. Filter on a Number/DateTime column instead, or narrow server-side then refine locally. |

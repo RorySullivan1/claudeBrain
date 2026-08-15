@@ -66,7 +66,7 @@ Gallery.Items = Filter(Projects, StartsWith(Title, TextBox.Text))
 
 Flag these delegation traps specifically:
 
-- **Non-delegable functions inside a query** — `Search`, `First`/`Last`, `CountRows`/`CountIf` (SharePoint), `Sum`/`Average`/`Max`/`Min` over a large source, `in` on SharePoint. If any part of the expression is non-delegable, **the whole query is non-delegable**.
+- **Non-delegable functions inside a query** — `Search`, `Last`/`FirstN`/`LastN`, `CountRows`/`CountIf` (SharePoint), `Sum`/`Average`/`Max`/`Min` over a large source, `in` on SharePoint. (`First` is *delegable* per MS Learn's delegable-functions list — don't flag it as a blanket defect.) If any part of the expression is non-delegable, **the whole query is non-delegable**.
 - **Non-delegable predicates** — `Filter(list, IsBlank(Owner))` does **not** delegate; `Filter(list, Owner = Blank())` **does** (they differ on the empty string, but the delegable form is usually what you want). Same for many string ops depending on source.
 - **Column-order and operator quirks** — `StartsWith(Title, x)` delegates but `StartsWith(x, Title)` doesn't; `"a" in Column` delegates on SQL where `Column in "a"` doesn't.
 - **Sorting and aggregation** — `Sort`/`SortByColumns` delegate on most sources, but a `Sort` wrapped around a non-delegable inner expression inherits its locality; aggregates like `Average(BigList, Amount)` silently average only 500 rows.

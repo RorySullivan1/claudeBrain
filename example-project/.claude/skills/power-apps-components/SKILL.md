@@ -77,7 +77,8 @@ Key rules grounded in the docs:
   don't trigger data flow — everything they need is passed as arguments. Use them for
   pure transforms only.
 - **Behavior/Action and Event properties** are the enhanced-component-properties
-  feature; enable it in **Settings → Upcoming features** if the option to add them
+  feature — **on by default for new apps**; in an existing app turn on
+  **Enhanced component properties** under **Settings → Updates → New** if the option to add them
   isn't shown. They allow chained/side-effecting formulas (`Set`, `Collect`, `Reset`).
 - Give a Data-of-type-Table/Record property a **default value** that shows the expected
   schema (e.g. `Table({Title:"", Subtitle:""})`) so consumers know the shape to pass.
@@ -294,7 +295,9 @@ formatting: **tables, badges, mixed inline styling, bulleted content from data**
 
 ### What it supports — and what it strips
 
-- **Stripped/ignored:** `<script>`, `<style>`, `<object>`, and unsupported elements/
+- **Stripped/ignored** *(experience-settled: MS Learn documents this removal list for the
+  Rich text editor control, not for HtmlText — treat as observed, checked 2026-08-15)*:
+  `<script>`, `<style>`, `<object>`, and unsupported elements/
   attributes are removed. There is **no JS, no external CSS, no `<link>`/`<style>`
   blocks** — style with **inline `style="..."`** only.
 - **Default browser styling is dropped** for some elements — notably `<ul>`/`<ol>`: give

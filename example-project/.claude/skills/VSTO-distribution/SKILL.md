@@ -79,12 +79,13 @@ Prerequisites:        ✅ .NET Framework [target version]
 
 To sign manually via CLI:
 ```bash
-# Sign the deployment manifest
-mage.exe -Sign MyAddIn.vsto -CertHash <thumbprint>
-
-# Sign the application manifest
-mage.exe -Sign MyAddIn.dll.manifest -CertHash <thumbprint>
+# Order matters: the DEPLOYMENT manifest embeds a hash of the APPLICATION manifest,
+# so sign the application manifest first, then re-point and sign the deployment manifest.
+mage.exe -Update MyAddIn.dll.manifest -CertHash <thumbprint>
+mage.exe -Update MyAddIn.vsto -AppManifest MyAddIn.dll.manifest -CertHash <thumbprint>
 ```
+Signing the `.vsto` first is wasted work — re-signing the application manifest afterwards
+invalidates it. (MS Learn, *How to: Re-sign application and deployment manifests*.)
 
 ### ClickOnce Registry Entry (auto-created on install)
 ```
@@ -92,11 +93,18 @@ HKCU\Software\Microsoft\Office\Excel\Addins\MyCompany.MyAddIn
   Description    REG_SZ    "My Add-In Description"
   FriendlyName   REG_SZ    "My Add-In"
   LoadBehavior   REG_DWORD 3
-  Manifest       REG_SZ    "https://server/addins/MyAddIn.vsto|vstolocal"
+  Manifest       REG_SZ    "https://server/addins/MyAddIn.vsto"
 ```
+(No `|vstolocal` here — that suffix opts *out* of the ClickOnce cache and belongs to
+Windows Installer deployments, not to a ClickOnce URL.)
 
 ### ClickOnce Gotchas
-- **URL permanence is critical.** Changing the publish URL after deployment breaks all installed clients. Document the URL in your runbook and treat it as permanent.
+- **Treat the publish URL as sticky, not immutable.** Installed clients follow the
+  `deploymentProvider` codebase recorded in the deployment manifest, so moving the location
+  without updating it leaves them checking the old one. It *is* recoverable: re-run
+  `setup.exe /url="<new path>"` (document-level solutions also need `_AssemblyLocation`
+  updated). Document the URL in your runbook anyway — a planned move is cheap, an
+  unplanned one is a support ticket per user.
 - **Certificate expiry silently breaks updates.** Set a calendar reminder 60 days before cert expiry to renew and re-sign.
 - **C2R Office and ClickOnce VSTO can coexist**, but require the correct VSTO runtime version that matches the C2R Office channel.
 
@@ -168,7 +176,7 @@ HKCU\Software\Microsoft\Office\Excel\Addins\MyCompany.MyAddIn
           <RegistryValue Name="FriendlyName" Type="string"  Value="My Add-In" />
           <RegistryValue Name="LoadBehavior" Type="integer" Value="3" />
           <RegistryValue Name="Manifest"     Type="string"
-                         Value="[INSTALLFOLDER]MyAddIn.vsto|vstolocal"
+                         Value="file:///[INSTALLFOLDER]MyAddIn.vsto|vstolocal"
                          KeyPath="yes" />
         </RegistryKey>
       </Component>
@@ -179,21 +187,30 @@ HKCU\Software\Microsoft\Office\Excel\Addins\MyCompany.MyAddIn
 
 ### LoadBehavior Reference
 
-| Value | Behavior | Use For |
-|---|---|---|
-| `0` | Disconnected (not loaded) | Disabled state |
-| `2` | Load on demand (user must manually activate) | Optional add-ins |
-| `3` | **Load at startup** ← standard production value | All production add-ins |
-| `8` | Load next time, then set to 2 | One-time load |
-| `9` | Load at startup, set to 8 on error | Crash-resilient, but Office may disable after errors |
-| `16` | Load on demand (connected) | Rare |
+Per MS Learn's *Registry entries for VSTO Add-ins* (verified 2026-08-15) — the two
+columns are **load state** and **load rule**, which is why some values look alike:
 
-**Always deploy with `LoadBehavior = 3`.** If Office detects repeated load failures, it will reset this to `2` or `0` and add the add-in to Disabled Items.
+| Value | State · Rule | Meaning |
+|---|---|---|
+| `0` | Unloaded · Don't load automatically | Deliberate "off": the app never auto-loads it. Loadable manually or programmatically. |
+| `2` | Unloaded · Load at startup | **The error state.** Office demotes 3 → 2 when a startup load fails, and it stays 2. |
+| `3` | Loaded · Load at startup | **Standard production value**, and what Visual Studio sets when you build or publish. |
+| `8` | Unloaded · Load on demand | Becomes 9 on a successful load. |
+| `9` | Loaded · Load on demand | Loaded only when the application requires it; drops to 8 on a load error. |
+| `16` | Loaded · Load first time, then on demand | Becomes 9 after the app closes. |
+
+**Install with `0`, `3`, or `16`** — Learn names those three as the values intended to be
+set at install time. **Never ship `2`**: it is what Office writes *after a failure*, so
+seeing it in the wild means the add-in threw during startup. A repeatedly-failing add-in is
+also added to Disabled Items, which is a separate mechanism from LoadBehavior.
 
 ### MSI Gotchas
 - **UpgradeCode must never change** across versions. It's how Windows Installer recognizes your product as an upgrade vs. a new install. Generate it once and commit it to source control.
 - **HKLM vs HKCU:** Machine-wide installs require admin rights and write to `HKLM`. Per-user installs write to `HKCU` and don't require elevation. Choose before building — changing this later requires an uninstall/reinstall.
-- **`|vstolocal` suffix on Manifest path** tells VSTO to load from the local installation path rather than fetching from a network location. Required for MSI-deployed add-ins.
+- **`|vstolocal` suffix on Manifest path** tells VSTO to load from the local installation
+  path rather than the ClickOnce cache. Required for MSI-deployed add-ins — **together with
+  the `file:///` prefix**, which Learn also requires for Windows Installer deployments. Omit
+  either and the runtime fails to resolve the deployment manifest.
 
 ---
 
@@ -209,7 +226,8 @@ HKCU\Software\Microsoft\Office\Excel\Addins\MyCompany.MyAddIn
 2. Place MSI on a network share accessible to all target machines
 3. In Group Policy Management Console: Computer Configuration → Software Settings → Software Installation → New Package
 4. Point to the UNC path of the MSI: `\\dc\software\MyAddIn\MyAddIn.msi`
-5. Choose **Assigned** (not Published) so the software installs on next login without user action
+5. Choose **Assigned** (not Published). A *computer*-assigned package installs at the next
+   **computer startup** — it is user-assigned packages that install at logon.
 
 ### Verify GPO Deployment
 ```powershell
@@ -294,6 +312,10 @@ Document this before every production release:
 
 ## Watch Out
 
-1. **Office Click-to-Run and MSI Office cannot coexist.** Know which is installed before choosing a deployment method. Running `Get-ItemProperty "HKLM:\Software\Microsoft\Office\16.0\Common\InstallRoot"` will show the install type. C2R will have a `VersionToReport` property.
+1. **Click-to-Run and MSI Office cannot coexist *at the same version*.** The documented rule
+   is version-scoped: you can't install two products of the same version with different
+   installation technologies (e.g. Microsoft 365 Apps 16.0 beside Office 2016 MSI 16.0).
+   Different-version combinations are a supported coexistence scenario. Know which is
+   installed before choosing a deployment method. Running `Get-ItemProperty "HKLM:\Software\Microsoft\Office\16.0\Common\InstallRoot"` will show the install type. C2R will have a `VersionToReport` property.
 2. **Missing VSTO runtime is the #1 cause of silent add-in load failure.** Always bundle it as a prerequisite in ClickOnce or MSI. Don't assume it's present.
 3. **ClickOnce update failures after cert expiry are silent.** Office will continue loading the cached version without warning the user that updates have stopped. Monitor cert expiry dates actively.

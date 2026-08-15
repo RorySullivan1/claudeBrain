@@ -39,7 +39,7 @@ Before diagnosing, collect:
 
 | Error | Usual meaning | First thing to check |
 |---|---|---|
-| `1004` "Application-defined or object-defined" | Bad range/sheet reference, or write to a protected/missing object | Is the sheet name right and qualified? Is the sheet protected? Is `ActiveWorkbook` not what you assumed? |
+| `1004` (often "Application-defined or object-defined"; Excel raises 1004 with many message texts) | Bad range/sheet reference, or write to a protected/missing object | Is the sheet name right and qualified? Is the sheet protected? Is `ActiveWorkbook` not what you assumed? |
 | `91` "Object variable not set" | Used an object before `Set`, or a `Find`/`ActiveX` returned `Nothing` | Guard the result of `.Find`, `ActiveExplorer`, `ActiveInspector` for `Nothing` before use |
 | `13` "Type mismatch" | Reading a cell error/empty into a typed var; passing a single cell where a 2D array was assumed | Handle the single-cell scalar vs. 2D-array case; check for `IsError(cell.Value)` |
 | `438` "Object doesn't support this property/method" | Wrong object type, or a late-bound member that doesn't exist in this version | Confirm the member in the Object Browser; check the actual runtime type |
@@ -119,7 +119,7 @@ Measure before and after with `Timer`; don't guess which step mattered.
 
 VBA lives inside a binary container, which fights Git. To make it diffable:
 
-- **Export source as text:** standard modules `.bas`, classes `.cls`, forms `.frm` **plus** the binary `.frx` (commit the `.frx`).
+- **Export source as text:** standard modules `.bas`, classes `.cls`, forms `.frm` **plus** the binary `.frx` (commit the `.frx`). *(Export is documented as saving "a separate file or files"; the `.frx` companion itself is observed, not named on Learn — checked 2026-08-15.)*
 - Prefer a **round-tripped build** — text source in Git, a build step that rebuilds the `.xlsm`/`.xlam` from those files — over committing the binary workbook. Treat the binary as an artifact, not source.
 - For recovery of a locked/corrupted `VBAProject`, export every module you can reach to text first; that text is your backup before any repair attempt.
 

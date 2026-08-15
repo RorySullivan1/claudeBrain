@@ -72,8 +72,9 @@ foreach ($p in $paths) {
 | LoadBehavior Found | Meaning | Fix |
 |---|---|---|
 | `3` | Should load at startup — something else is wrong | Continue to Step 3 |
-| `2` | Load on demand — Office likely reset it after a crash | Reset to `3` |
-| `0` | Disconnected — Office disabled it after repeated failures | Check Disabled Items, reset to `3`, fix root cause |
+| `2` | **Office demoted it after a failed startup load** (3 → 2, and it stays there) | Reset to `3` *after* fixing the load error, or it demotes again |
+| `0` | "Don't load automatically" — a deliberate install/policy/user setting, **not** a crash symptom | Decide whether it should be `3`; check Disabled Items separately |
+| `8` / `9` / `16` | Load-on-demand family (`16` = load first time, then on demand) | Expected if the add-in ships on-demand; not an error |
 | Key missing | Add-in not registered at all | Re-run installer or add key manually |
 
 Reset to 3:
@@ -127,12 +128,17 @@ Create a new Windows user profile and test the add-in fresh. If it works on the 
 ### Step 7: Enable VSTO Load Logging
 
 ```powershell
-# Enable detailed VSTO diagnostic logging
-New-ItemProperty -Path "HKCU:\Software\Microsoft\VSTO\Security" `
-  -Name "EnableLogging" -Value 1 -PropertyType DWORD -Force
+# Enable VSTO startup logging — ENVIRONMENT VARIABLES, not a registry value
+[Environment]::SetEnvironmentVariable("VSTO_LOGALERTS", "1", "User")
+# ...and to see each error in a message box as well:
+[Environment]::SetEnvironmentVariable("VSTO_SUPPRESSDISPLAYALERTS", "0", "User")
 
-# Log written to: %TEMP%\VSTOInstaller.log and %APPDATA%\Microsoft\VSTO\
+# Log is written beside the deployment manifest (falling back to %TEMP%),
+# named <add-in name>.vsto.log.  Restart the Office app to pick the variables up.
 ```
+(Verified 2026-08-15. There is no documented `EnableLogging` value under
+`HKCU\Software\Microsoft\VSTO\Security`; `VSTOInstaller.log` belongs to
+`VSTOInstaller.exe`, the ClickOnce installer tool, and is a different artifact.)
 
 ---
 
@@ -152,8 +158,12 @@ The most common post-update failures and their fixes:
 
 ### .NET Framework Update Broke Something
 - **Symptom:** Works on some machines, not others; started after a Windows Update
-- **Check:** `<supportedRuntime>` element in your add-in's `.dll.config` or `app.config`
-- **Fix:** Ensure config specifies the correct runtime version range
+- **Check:** which .NET Framework the *host* process runs, and what your project targets —
+  a VSTO add-in is a class library loaded into Excel/Word/Outlook, so it runs on the CLR the
+  **host** selects. `<supportedRuntime>` in `MyAddIn.dll.config` does **not** choose it
+  (only an application's own config does that).
+- **Fix:** treat this as a targeting/prerequisite problem — align the project's target
+  framework and make sure that framework version is installed on the machine.
 
 ```xml
 <!-- MyAddIn.dll.config -->
@@ -254,13 +264,16 @@ Clean machine → install v1.0 → run smoke test
 Monitor these and update your test matrix when versions go end-of-life:
 - **Office 2016 Extended Support End:** October 2025
 - **Office 2019 Extended Support End:** October 2025
-- **Office 2021 Extended Support End:** October 2026
+- **Office LTSC 2021 end of support:** October 13, 2026 (five years of Mainstream Support —
+  there is **no** Extended Support phase for this product)
 - **Microsoft 365 Apps:** Evergreen — always test against current + previous Semi-Annual Channel build
 
 ### Migration Path Awareness
 
 VSTO is a .NET Framework technology. Microsoft has not announced end-of-support, but be aware:
-- **.NET Framework 4.x** is in maintenance mode (security fixes only)
+- **.NET Framework 4.8/4.8.1** is the last major version and ships as a supported Windows
+  component — it receives cumulative security **and** reliability/quality updates, with no
+  announced end of support. ("Security fixes only" overstates the freeze.)
 - **Office JavaScript Add-ins** are Microsoft's stated future direction — not a drop-in replacement, but worth tracking for new feature development
 - **ExcelDNA** is an alternative for Excel-only add-ins that supports .NET 6+ — relevant if .NET Framework support becomes a blocker
 
@@ -341,6 +354,13 @@ if ($events) {
 
 ## Watch Out
 
-1. **Office 365's Monthly Channel updates can silently break event behavior.** Behaviors that worked in one build may change in the next. Pin critical production users to the Semi-Annual Enterprise Channel and test each update before promoting.
+1. **Office updates can silently break event behavior.** Behaviors that worked in one build
+   may change in the next — but **channel choice is no longer the lever it was**: from the
+   Version 2606 release (July 2026) Semi-Annual Enterprise Channel receives Monthly
+   Enterprise Channel builds, and "Monthly Channel" is no longer a channel name (the three
+   are Current, Monthly Enterprise, and Semi-Annual Enterprise). Stage rollouts with
+   **version pinning and the rollback window** plus update-management tooling, and test each
+   update before promoting. *(Checked 2026-08-15 — verify current channel policy before
+   relying on this.)*
 2. **LoadBehavior resets to `2` or `0` after crashes are Office's self-protection.** Resetting it to `3` without fixing the underlying crash will just get it disabled again. Always find and fix the root cause.
 3. **Certificate expiry causes silent update failure, not visible load failure.** Users keep running the cached version indefinitely, unaware updates stopped. The only indication is checking the cert expiry date in the manifest. Put a recurring calendar reminder 60 days before expiry.

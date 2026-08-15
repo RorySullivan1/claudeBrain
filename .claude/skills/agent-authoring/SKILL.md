@@ -135,6 +135,28 @@ common stances:
   reserve it for trusted, narrowly-scoped automation, never as a convenience. When
   in doubt, don't.
 
+### If the agent VERIFIES, `plan` is the wrong posture
+
+"Least powerful" has one systematic exception, and it has now bitten this repo twice
+(`goal-auditor`, `pre-paste-review` — both shipped as `plan`, both fixed in review).
+
+An agent whose mandate is to **audit, validate, or gate** earns its keep by running the
+real checks and citing their real output. `plan` is built for the opposite stance —
+investigate and *propose*, don't act. Put the two together and the agent still returns a
+confident verdict; it just derives it from reading the code instead of from running the
+validator. **The failure is invisible: you get a plausible pass instead of a proven one**,
+which is precisely the outcome a verification agent exists to prevent.
+
+So: if the body says "run the validators", "cite real output", "reproduce the failure", or
+"do not infer a pass", the posture must let it execute. Give it `default` and a tight
+`tools` allowlist (`Read, Grep, Glob, Bash`) instead. Read-only *behaviour* comes from the
+allowlist — no `Edit`, no `Write` — not from `plan`; that combination stays non-mutating
+while still being able to prove what it claims.
+
+This tension is about the **mandate**, not the mechanics: it holds however a given harness
+version implements plan mode, so treat "verifying agent carrying `plan`" as a review
+finding on sight.
+
 Safe default: pair a **least-privilege `tools` allowlist** with the
 **least-powerful `permissionMode`** the agent actually needs. Note that a stricter
 *parent* posture wins — an agent can't grant itself more freedom than the session
@@ -172,7 +194,9 @@ The body is the agent's entire system prompt. Make it focused and self-contained
 - [ ] `name` is unique, kebab-case, and matches the agent's actual job.
 - [ ] `description` leads with the use case and names concrete triggers.
 - [ ] `tools` is a reviewed least-privilege allowlist (or a justified inherit).
-- [ ] `permissionMode` is the least powerful posture that still completes the job.
+- [ ] `permissionMode` is the least powerful posture that still completes the job —
+      and if the agent verifies/audits, it is **not** `plan` (it must be able to run the
+      checks it cites; enforce read-only via the `tools` allowlist instead).
 - [ ] `model` fits the reasoning load.
 - [ ] Body has a role line, a workflow, and an explicit summary output format.
 - [ ] Tested: invoked via `@agent-<name>`, or inspected/edited through `/agents`.
@@ -182,6 +206,8 @@ The body is the agent's entire system prompt. Make it focused and self-contained
 - **Generic description** ("a helpful agent") → never delegated.
 - **No tool allowlist** → over-broad reach the mandate doesn't need.
 - **`bypassPermissions` for convenience** → use the weakest mode that works instead.
+- **A verifying agent set to `plan`** → it reports a verdict it inferred rather than
+  proved. Seen twice in this repo; check it whenever the body promises real output.
 - **Body assumes conversation/CLAUDE.md context** → the agent starts fresh; restate it.
 - **Open-ended mandate with no exit criteria** → the agent wanders and never returns.
 - **Duplicate `name`** → collisions are resolved unpredictably; keep names unique.
