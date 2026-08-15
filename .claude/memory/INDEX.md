@@ -49,7 +49,7 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
-- **PR #31 MERGED** (354f1b7). Branch `claude/laughing-ride-pyhmzj` restarted from main; now carries the taskmaster HEAD re-sync (pushed, no PR opened yet — open one when asked).
+- **PR #32 open** on `claude/laughing-ride-pyhmzj` (restarted from main after #31 merged): the taskmaster HEAD re-sync — freeze-rule reversal + Aug-9 corrections + SVG charts + docs-source brief. Remove this line when it merges.
 - Run `verify-claims` against the Power Platform + VBA families (canvas family now field-corrected via the taskmaster re-sync, which itself demonstrated the risk: the freeze rule we consolidated as an owned fact had been experimentally falsified downstream 2 days earlier).
 - PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
