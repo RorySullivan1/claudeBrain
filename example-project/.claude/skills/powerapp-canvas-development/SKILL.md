@@ -136,6 +136,18 @@ Prefer **named formulas in `App.Formulas`** over `OnStart` for anything derivabl
 have a value, have no timing dependency, and cannot be overwritten from elsewhere. Note the
 App object has **no code view** — its body is typed into the formula bar (see studio-transfer).
 
+Two field-learned traps around app-level state:
+
+- **Don't name your theme formula `Theme`.** It collides with modern theming (`App.Theme` and
+  theme objects loaded by instance name); Studio TOLERATES the collision silently and the
+  player does not, so the app works for its author and renders blank for users. Use a prefixed
+  name (`gTheme` or similar — the examples in this skill family write `Theme.*` for brevity;
+  in a real app declare it prefixed).
+- **`Set(x, Filter(...))` captures a TABLE VALUE, and filtering a variable does not delegate.**
+  A named formula over the data source stays a delegable query; the same expression stored
+  with `Set` becomes a frozen local table capped at the row limit. Keep data-source filters as
+  named formulas; use `Set` for scalars and UI state.
+
 ## Workflow: authoring a change
 
 The full pipeline (ground → author → validate → audit → human paste gate → record) is

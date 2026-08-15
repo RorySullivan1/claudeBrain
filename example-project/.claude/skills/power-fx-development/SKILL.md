@@ -122,7 +122,7 @@ bodies, `Distinct`, `GroupBy`, and `IsBlank()` inside a predicate.
 |---|---|---|
 | `Search(Tasks, box.Text, "Title")` | `Filter(Tasks, StartsWith(Title, box.Text))` | prefix match delegates; substring never does |
 | `Filter(l, Status in myList)` | `Filter(l, Status="A" \|\| Status="B")` | explicit `Or` of `=` delegates |
-| `Filter(l, IsBlank(Owner))` | `Filter(l, Owner = Blank())` | `= Blank()` delegates (for `=`, not `<>`) |
+| `Filter(l, IsBlank(DueDate))` | `Filter(l, DueDate = Blank())` | `= Blank()` delegates on **simple** columns (Text/Number/Date/Bool), **not** Person/Lookup/Choice — for those keep a Boolean flag |
 
 **Set the data row limit to 1 while developing.** Then any non-delegable formula returns a
 single record and the bug is obvious immediately — far better than discovering it in production.

@@ -121,6 +121,113 @@ A dot that recolours by status (encode any data-sourced label with `EncodeHTML`)
     Switch(ThisItem.Health, "Green","#107C10","Amber","#986F0B","Red","#C42B1C","#605E5C") & "'/></svg>")
 ```
 
+## Data-driven charts — N elements from a table
+
+Everything above draws **one** value. A real chart draws **one element per row**, and the whole
+difference is `Concat`. **`Concat( Table, Formula, Separator )`** evaluates *Formula* for every
+record and joins the results into one string — so it is the SVG element generator. `Filter` it
+to skip empty rows:
+
+```power
+Concat( Filter(bars, v > 0),
+    "<rect x='" & x & "' y='" & y & "' width='" & w & "' height='10' fill='" & c & "'/>" )
+```
+
+Three problems come with it, and each has exactly one right answer.
+
+### 1. A row needs a POSITION (for its y-coordinate)
+
+Power Fx has no row number. `Sequence` + `Index` is the only way:
+
+```power
+ForAll( Sequence(CountRows(src)) As s,
+    With( { r: Index(src, s.Value) }, { idx: s.Value, nm: r.Name, v: r.Value } ) )
+```
+
+Take the count from the same table `Index` reads. **`Index` ERRORS when out of range — it does
+not return blank** — so any other count is a live error. `Sequence(0)` is a documented empty
+table, so an empty source collapses safely to nothing.
+
+### 2. A part-to-whole chart needs a RUNNING TOTAL
+
+There is no scan/accumulate function. Each row sums the rows before it, and the outer scope
+must be named with `As` or the inner `Filter` shadows it:
+
+```power
+AddColumns( cats As r,
+    pct, r.n / tot * 100,
+    cum, Coalesce( Sum( Filter(cats, i < r.i), n ), 0 ) / tot * 100 )
+```
+
+`Sum` of an empty table is *blank*, so `Coalesce(…, 0)` is required on the first row, not
+optional. Guard the denominator with `Max(1, Sum(…))`.
+
+A multi-slice donut is then the single-ring trick once per slice, walked round by the running
+total. **`stroke-dashoffset` counts backwards**: on a circumference-1000 circle
+(`r='159.155'` in a scaled viewBox — see the fraction rule below), an offset of 250 puts the
+start at 12 o'clock, so each slice offsets by `250 - cum`. **Keep the offset positive**:
+`250 - cum` goes negative past the first slice, and a negative `stroke-dashoffset` is an error
+in SVG 1.1 — a renderer that clamps it to 0 stacks every later slice at the same start angle
+and leaves the track showing through as a phantom category. The dash pattern repeats every
+circumference, so `Mod(1250 - cum, 1000)` is the same angle, always positive:
+
+```power
+Concat( Filter(arcs, u > 0),
+    "<circle cx='200' cy='200' r='159.155' fill='none' stroke='" & c & "' stroke-width='45'" &
+    " stroke-dasharray='" & u & " " & (1000 - u) & "'" &
+    " stroke-dashoffset='" & Mod(1250 - uc, 1000) & "'/>" )
+```
+
+### 3. Categories: WRITE THEM OUT, don't `GroupBy` — and add an "Other"
+
+`GroupBy` only produces a group where a row exists, so it drops empty categories, can reorder
+run to run, and therefore **recolours a category between two refreshes**. Author the category
+table as a literal with a fixed index and a fixed colour, and count into it:
+
+```power
+AddColumns(
+    Table( { i: 1, k: "Not Started", c: "#B9C0C8" }, { i: 2, k: "Planning", c: "#6E7882" } ) As cat,
+    n, CountRows( Filter(colTasks, stage.Value = cat.k) ) )
+```
+
+That is an **allow-list, and it fails closed**. Give it an `"Other"` row that counts everything
+matching none of the named values, so the total is always the real row count and a live
+vocabulary that has drifted shows up as a labelled slice instead of silently wrong proportions.
+Without it, a column whose real values differ from the ones you typed produces `tot = Max(1, 0)`
+— and then **one matching row renders as 100% of the ring**. Add a `"Not set"` row too whenever
+the source column is optional.
+
+## NEVER INTERPOLATE A FRACTION — SCALE THE viewBox INSTEAD
+
+A bare fraction is written with the **viewer's** decimal separator, and
+`stroke-dasharray='33,3 66,7'` is not a number pair — it fails for comma-decimal locales and
+nowhere else, never on the machine that authored it.
+
+`Text(v, "[$-en-US]0.#", "en-US")` is the documented cure and it is **the wrong trade here**:
+an attribute Power Fx cannot render comes out *empty*, and empty attributes do not degrade —
+they delete the geometry. `width=''` on a `<rect>` draws nothing (bars missing, only the track
+showing); `stroke-dasharray=''` on a `<circle>` means no dashing at all (a **solid ring in the
+last slice's colour**).
+
+**So make every coordinate a whole number.** Scale the viewBox up until integer precision is
+enough (×10 gives a donut a tenth of a percent) and let `Round(v, 0)` do the rest. Whole
+numbers carry no separator in any locale. Reserve `Text` for *label text*, where a wrong
+separator is cosmetic and an empty string is visible.
+
+## What SVG charting can and cannot do
+
+| Want | Verdict |
+|---|---|
+| Donut / pie, stacked or grouped bars, sparkline, gauge, Gantt, heat grid, scatter | **Yes** — all are `Concat` over a table |
+| Axis ticks, gridlines, in-chart legend, data labels | **Yes** — draw them; a legend must live *inside* the SVG |
+| Hover tooltip, click a slice, drill-down, zoom, pan, select | **No.** An Image is ONE control with one hit area. Overlay a transparent Button for a whole-chart click, or put a gallery beside it |
+| Animation, transitions | **No.** SMIL/CSS animation does not survive the data URI |
+| Text that fits its box | **No.** Power Fx cannot measure text — budget by character count and truncate (`Left(nm, 14) & "…"`), or the label overruns |
+| Live redraw as data changes | **Yes, if the formula is declarative.** Read the collection in the `Image` property; a chart fed from imperative `Set`s goes stale until something re-runs them |
+| Non-ASCII in labels | **Only with `data:image/svg+xml;charset=utf-8,`** — a data URI defaults to US-ASCII and mangles accented text |
+| Fractional coordinates | **Avoid.** Scale the viewBox and use integers — see the rule above |
+| Hundreds of points | Watch it. The string is rebuilt on every dependency change; cap rows and keep per-row markup short |
+
 ## Watch Out
 
 1. **Forgetting `EncodeUrl` (or `xmlns`).** Without `EncodeUrl` the URI breaks on `#`, `<`,

@@ -171,9 +171,11 @@ permission detail is in `endpoints.md`.
 - **`$expand=fields`** — surfaces column values; narrow with
   `fields(select=Col1,Col2)`.
 - **`$select`** — trims top-level item properties.
-- **`$filter=fields/{internalName} eq '…'`** — server-side filter on a column. The
-  column often must be **indexed** in SharePoint or the query fails past the list-view
-  threshold. Use the **internal** name (spaces → `_x0020_`), not the display name.
+- **`$filter=fields/{internalName} eq '…'`** — server-side filter on a column. Send the
+  header **`Prefer: HonorNonIndexedQueriesWarningMayFailRandomly`**, or a non-indexed
+  column (or any list past the view threshold) returns **HTTP 400**; index the column for
+  the durable fix. Text `eq` is **case-insensitive**. Use the **internal** name
+  (spaces → `_x0020_`), not the display name.
 - **`$top`, `$orderby`** — page size and ordering.
 
 ### 5. Pagination — loop on `@odata.nextLink`
@@ -250,6 +252,7 @@ GET https://graph.microsoft.com/v1.0/sites/{site-id}/lists/{list-id}/items
     ?expand=fields(select=Title,Status,AssignedTo,DueDate)
     &$filter=fields/Status eq 'Open'
 Authorization: Bearer {token}
+Prefer: HonorNonIndexedQueriesWarningMayFailRandomly
 ```
 ```json
 {
@@ -260,8 +263,9 @@ Authorization: Bearer {token}
   "@odata.nextLink": "https://graph.microsoft.com/v1.0/sites/{site-id}/lists/{list-id}/items?..."
 }
 ```
-(`Status` must be an **indexed** column for the `$filter` to hold past the list-view
-threshold.)
+(The `Prefer: HonorNonIndexedQueriesWarningMayFailRandomly` header is required or the
+`$filter` returns HTTP 400; `Status` should also be an **indexed** column for the query to
+hold reliably past the list-view threshold.)
 
 ### Create an item
 
@@ -350,9 +354,10 @@ the native connector (that's `power-fx-development`, not this skill).
   flow "suddenly can't find the site," check whether someone tightened it to
   `Sites.Selected` without provisioning site discovery.
 - **`$filter`/`$orderby` on a non-indexed column fails on large lists.** SharePoint's
-  list-view threshold rejects unindexed queries past ~5,000 items. Index the column in
-  SharePoint or narrow the set — this is a *SharePoint* limit surfacing through Graph,
-  not a Graph bug.
+  list-view threshold rejects unindexed queries past ~5,000 items with **HTTP 400**. Send
+  the header **`Prefer: HonorNonIndexedQueriesWarningMayFailRandomly`** to let the query run,
+  and index the column in SharePoint for the durable fix (or narrow the set) — this is a
+  *SharePoint* limit surfacing through Graph, not a Graph bug.
 - **Internal name ≠ display name.** `$select`/`$filter` that "returns nothing" is usually
   the display name being used where the internal name is required (a renamed column keeps
   its old internal name; spaces become `_x0020_`). Read `…/lists/{list-id}/columns` to

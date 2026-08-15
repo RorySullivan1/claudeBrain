@@ -40,7 +40,7 @@ delegation in a canvas app*.
 | `Sort` / `SortByColumns` | **Yes** (Number/Text/Bool/DateTime) | **Not** on Complex-type columns. |
 | `StartsWith` | **Yes** (Text) | **Not** on subfields of Choice/Lookup complex types. |
 | `Search` | **No** | Substring/"contains" match — never delegates. See rewrite §4. |
-| `IsBlank` inside a predicate | **No** on Text/Complex | `Filter(l, IsBlank(x))` → `Filter(l, x = Blank())` delegates (for `=` only, not `<>`). |
+| `IsBlank` inside a predicate | **No** on Text/Complex | `Filter(l, IsBlank(x))` → `Filter(l, x = Blank())` delegates for `=` **on simple columns only** (Text/Number/Date/Bool); a Person/Lookup/Choice root does **not** — flag those with a maintained Boolean. |
 | `EndsWith` | **No** | No SharePoint equivalent. |
 | `in` / `exactin` | **No** | Rewrite to `Or`/`=` chain or `StartsWith`. |
 | `Sum` `Average` `Min` `Max` `StdevP` `VarP` | **No** | Aggregates don't delegate to SharePoint → wrong totals past the limit. |
@@ -76,10 +76,11 @@ it — small static lists (< 500) are safe with any formula.
 | "Contains" text search | `Search(Tasks, txt.Text, "Title")` | `Filter(Tasks, StartsWith(Title, txt.Text))` — prefix match delegates. True substring can't delegate; index/redesign or accept prefix. |
 | Match any of N values | `Filter(Orders, Status in tblStatuses)` | `Filter(Orders, Status = "New" \|\| Status = "Open" \|\| Status = "Held")` — explicit `Or` of `=` delegates. |
 | "Not equal to X" on Text | `Filter(l, Category <> "Archived")` | Add a Boolean `IsArchived` column and `Filter(l, IsArchived = false)`. Text `<>` doesn't delegate. |
-| Blank check | `Filter(l, IsBlank(Owner))` | `Filter(l, Owner = Blank())` — delegates for `=`. |
+| Blank check (simple column) | `Filter(l, IsBlank(DueDate))` | `Filter(l, DueDate = Blank())` — `= Blank()` delegates on Text/Number/Date/Bool. **A Person/Lookup/Choice column does NOT** — maintain a Boolean flag (see the row below). |
 | "Is not blank" | `Filter(l, !IsBlank(Owner))` | No delegable form via `<>`; add/maintain a Boolean flag column, or filter locally on a pre-narrowed set. |
 | Top N newest | `FirstN(Sort(l, Created, Descending), 20)` | `FirstN(...)` is local, but `Sort(...)` on a DateTime **delegates** — so the sort runs server-side and `FirstN` trims the returned page. Keep the delegable sort inside. |
 | Ordering on a Text column | `Sort(l, Title)` then `<`/`>` filters | Sort on Text delegates; the relational **filter** on Text does not. Filter on a Number/DateTime column instead, or narrow server-side then refine locally. |
+| "Children of MY parents" (fan-out) | `Filter(children, parent_id.Id in colMyParents.ID)` | **`in` against a collection does not delegate — it caps at the row limit and UNDERCOUNTS SILENTLY.** Run one delegable round trip per parent instead: `Sum( ForAll(colMyParents As p, CountRows(Filter(children, parent_id.Id = p.ID))), Value )` — the single-value ForAll result is a one-column table named `Value` (MS Learn). Cost scales with the number of parents, not the child list — check that trade first. |
 | Count of matches | `CountRows(Filter(BigList, Status="Open"))` | No delegable count on SharePoint. Maintain a rollup, use Daverse, or accept an approximate/capped count and label it as such. |
 
 **Choice/Lookup columns:** filter on the delegable subfield with `=`, e.g.
