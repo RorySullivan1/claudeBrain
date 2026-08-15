@@ -27,12 +27,13 @@ Evaluate in this sequence. Never skip to style while a correctness issue stands:
 
 1. **`Option Explicit` + declaration bugs** — missing `Option Explicit`; grouped `Dim` that silently makes `Variant`s; `Integer` where overflow is possible
 2. **Error handling** — bare `On Error Resume Next`, swallowed errors, UDFs that raise instead of returning `CVErr`
-3. **Performance** — cell-by-cell range loops instead of array round-tripping; unnecessary `Application.Volatile`
-4. **Application-state hygiene** — `Calculation`/`EnableEvents`/`ScreenUpdating` not saved-and-restored (or hardcoded back to `True`)
-5. **Binding consistency** — half-converted late/early binding; references the user must set manually
-6. **Object-reference correctness** — `.Select`/`.Activate`/`ActiveSheet`; unqualified `Sheets(...)`; hardcoded sheet indices
-7. **Architecture & API surface** — work in sheet/event modules instead of standard modules; oversized public surface
-8. **Style** — naming, dead code, magic numbers
+3. **Data-access safety** — SQL built by concatenating values instead of `Command` parameters (breaks on an apostrophe, mis-sends dates under another locale, and is injectable — all three, always); connections not closed in the error path; a hardcoded password. Route the fix to `vba-data-access`
+4. **Performance** — cell-by-cell range loops instead of array round-tripping; unnecessary `Application.Volatile`; per-row `INSERT`/`ListRows.Add` loops where a batch would do
+5. **Application-state hygiene** — `Calculation`/`EnableEvents`/`ScreenUpdating` not saved-and-restored (or hardcoded back to `True`)
+6. **Binding consistency** — half-converted late/early binding; references the user must set manually
+7. **Object-reference correctness** — `.Select`/`.Activate`/`ActiveSheet`; unqualified `Sheets(...)`; hardcoded sheet indices; unguarded `DataBodyRange`/`SpecialCells` (see `vba-excel-object-model`)
+8. **Architecture & API surface** — work in sheet/event modules instead of standard modules; oversized public surface
+9. **Style** — naming, dead code, magic numbers
 
 ## What to Ask For (if absent)
 

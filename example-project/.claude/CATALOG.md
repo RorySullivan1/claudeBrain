@@ -58,8 +58,10 @@
 - user-guide-drafter — Expert technical writer for end-user documentation. Use this skill whenever the user wants to … -> skills/user-guide-drafter/SKILL.md
 - vba-addin-building — Expert at building distributable Office VBA add-ins (.xlam / .ppam / .otm / Word .dotm) from … -> skills/vba-addin-building/SKILL.md
 - vba-code-test-writing — Expert at writing tests for VBA (Excel/Word/Outlook/PowerPoint macros and add-ins), where the test … -> skills/vba-code-test-writing/SKILL.md
+- vba-data-access — Expert on getting data into and out of external stores from VBA — SQL Server, Access/ ACE, ODBC … -> skills/vba-data-access/SKILL.md
 - vba-development — Expert VBA (Visual Basic for Applications) development assistant for writing, architecting, and … -> skills/vba-development/SKILL.md
 - vba-distribution — Expert VBA packaging, signing, and deployment specialist for getting Excel/Word/ Outlook/PowerPoint … -> skills/vba-distribution/SKILL.md
+- vba-excel-object-model — Expert on driving Excel's object model from VBA — the worksheet-shaped surface that general VBA … -> skills/vba-excel-object-model/SKILL.md
 - vba-maintenance — Expert VBA maintenance, debugging, and modernization specialist for existing … -> skills/vba-maintenance/SKILL.md
 - vba-review — Expert VBA code reviewer for Excel/Word/Outlook/PowerPoint macros and add-ins. Use this skill … -> skills/vba-review/SKILL.md
 - vba-userforms — Expert on building VBA UserForms — the dialog/GUI layer of Excel/Word/Outlook/ PowerPoint macros. … -> skills/vba-userforms/SKILL.md
