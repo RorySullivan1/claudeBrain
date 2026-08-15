@@ -172,3 +172,26 @@ dated caveat rather than a correction).
 - Two skills came back with ZERO errors: coding-standards (21/22 confirmed) and
   backtesting-validation + quant-code-review. Both are heavily judgment-based, which is
   itself the pattern: the more falsifiable a skill, the more it decays.
+
+## Addendum 4 — the agent-authoring verifying-agent rule (the last open item)
+
+Codified the defect that shipped twice: `agent-authoring` now has a dedicated subsection
+("If the agent VERIFIES, `plan` is the wrong posture") plus a checklist line and an
+anti-pattern entry.
+
+Deliberate framing choice: the rule argues from the **mandate**, not from harness
+mechanics. I did not assert what plan mode blocks at the tool level — that is a falsifiable
+claim about a moving target, and this session was largely about not making those. The
+tension holds regardless: `plan` exists to propose rather than act, an auditor's value is
+running the check and citing output, and combining them yields a verdict inferred rather
+than proven. Stated that way the rule survives harness changes and needs no dated caveat.
+
+Prescribed shape: `default` + `Read, Grep, Glob, Bash`. Read-only behaviour comes from
+OMITTING Edit/Write, not from `plan` — you keep non-mutating while staying able to prove
+what you claim.
+
+Conformance swept across all 12 example-project agents: **clean.** The three `plan` agents
+are genuine propose-only design agents (data-analyst, presentation-architect,
+software-architect) with zero verify-signals; both original offenders were already fixed in
+review. So this codifies a fix rather than exposing new violations — which is the point of
+promoting a twice-seen defect into an authoring rule.
