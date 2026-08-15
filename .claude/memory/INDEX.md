@@ -51,10 +51,16 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
-- **PR #34 open** on `claude/laughing-ride-pyhmzj` → main (11 commits, 35 files): the whole
-  `verify-claims` arc over 22 skills + the two new VBA skills. Supersedes the earlier #32
-  line (that PR is no longer open). Remove this line when #34 merges.
-- `verify-claims` RUN over **22 skills** (2026-08-15, 21 verifiers, ~390 claims): **63 ledger rows — 40 corrections, 22 experience-settled labels, 1 contested**. Pass 1 = Power Platform + VBA; pass 2 = VSTO (worst: 22 errors), coding-standards, Python, quant; pass 3 = light sweep of presentation/docs (3 errors in ~23 claims — thin as predicted). Judgments in `example-project/.claude/skills/claim-grounding/reviews/ledger.jsonl`. **Every skill family is now gated.**
+- **No open PRs.** #34 merged 2026-08-15 (carried the whole `verify-claims` arc + both new VBA
+  skills); `claude/laughing-ride-pyhmzj` restarted from main. Any follow-up is a NEW PR — never
+  stack onto the merged history.
+- `verify-claims` RUN over **22 skills + 2 authored-through-the-gate** (2026-08-15, 21 verifiers, ~390 claims): **78 ledger rows — 46 corrections, 29 experience-settled labels, 2 contested, 1 confirmed-pre-ship**. Pass 1 = Power Platform + VBA; pass 2 = VSTO (worst: 22 errors), coding-standards, Python, quant; pass 3 = light sweep of presentation/docs (3 errors in ~23 claims — thin as predicted); pass 4 = `vba-excel-object-model` + `vba-data-access` gated **at authoring**, which caught 3 defects in the draft. Judgments in `example-project/.claude/skills/claim-grounding/reviews/ledger.jsonl`. **Every skill family is now gated.**
+- **Open gap:** no Windows/Office host here, so `verify-claims` step 4 (live-authority probe)
+  has never run. 3 VBA claims stand as experience-settled that a probe would settle —
+  `SpecialCells` raising 1004 on no match, the PivotTable data-field rename collision,
+  `UsedRange` over-reporting. Recorded as a ledger row so it can't read as coverage.
+- **Open gap:** `branding` tells the reader to verify contrast but never says what passes.
+  Filling it means *adding* claims — a human call, deliberately not made unilaterally.
 - PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 - DONE: `agent-authoring` now carries the verifying-agent posture rule (see Decisions).
