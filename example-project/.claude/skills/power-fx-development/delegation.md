@@ -40,7 +40,7 @@ delegation in a canvas app*.
 | `Sort` / `SortByColumns` | **Yes** (Number/Text/Bool/DateTime) | **Not** on Complex-type columns. |
 | `StartsWith` | **Yes** (Text) | **Not** on subfields of Choice/Lookup complex types. |
 | `Search` | **No** | Substring/"contains" match — never delegates. See rewrite §4. |
-| `IsBlank` inside a predicate | **No** on Text/Complex | `Filter(l, IsBlank(x))` → `Filter(l, x = Blank())` delegates (for `=` only, not `<>`). |
+| `IsBlank` inside a predicate | **No** on Text/Complex | `Filter(l, IsBlank(x))` → `Filter(l, x = Blank())` delegates for `=` **on simple columns only** (Text/Number/Date/Bool); a Person/Lookup/Choice root does **not** — flag those with a maintained Boolean. |
 | `EndsWith` | **No** | No SharePoint equivalent. |
 | `in` / `exactin` | **No** | Rewrite to `Or`/`=` chain or `StartsWith`. |
 | `Sum` `Average` `Min` `Max` `StdevP` `VarP` | **No** | Aggregates don't delegate to SharePoint → wrong totals past the limit. |
@@ -76,7 +76,7 @@ it — small static lists (< 500) are safe with any formula.
 | "Contains" text search | `Search(Tasks, txt.Text, "Title")` | `Filter(Tasks, StartsWith(Title, txt.Text))` — prefix match delegates. True substring can't delegate; index/redesign or accept prefix. |
 | Match any of N values | `Filter(Orders, Status in tblStatuses)` | `Filter(Orders, Status = "New" \|\| Status = "Open" \|\| Status = "Held")` — explicit `Or` of `=` delegates. |
 | "Not equal to X" on Text | `Filter(l, Category <> "Archived")` | Add a Boolean `IsArchived` column and `Filter(l, IsArchived = false)`. Text `<>` doesn't delegate. |
-| Blank check | `Filter(l, IsBlank(Owner))` | `Filter(l, Owner = Blank())` — delegates for `=`. |
+| Blank check (simple column) | `Filter(l, IsBlank(DueDate))` | `Filter(l, DueDate = Blank())` — `= Blank()` delegates on Text/Number/Date/Bool. **A Person/Lookup/Choice column does NOT** — maintain a Boolean flag (see the row below). |
 | "Is not blank" | `Filter(l, !IsBlank(Owner))` | No delegable form via `<>`; add/maintain a Boolean flag column, or filter locally on a pre-narrowed set. |
 | Top N newest | `FirstN(Sort(l, Created, Descending), 20)` | `FirstN(...)` is local, but `Sort(...)` on a DateTime **delegates** — so the sort runs server-side and `FirstN` trims the returned page. Keep the delegable sort inside. |
 | Ordering on a Text column | `Sort(l, Title)` then `<`/`>` filters | Sort on Text delegates; the relational **filter** on Text does not. Filter on a Number/DateTime column instead, or narrow server-side then refine locally. |
@@ -96,3 +96,53 @@ delegate — reserve `StartsWith` for plain Text columns.
 - Delegable **data sources** differ: Dataverse and SQL delegate more (e.g. `in` on SQL as
   `("val" in col)`, aggregates on Dataverse to 50k). This file is **SharePoint-specific** —
   moving the backend changes the matrix.
+
+## 6. When reasoning runs out: LIVE MONITOR is the positive test
+
+§5's warning is a **one-way signal** and Microsoft says so outright:
+
+> A delegation warning often appears in the formula bar as a yellow triangle when Power Apps
+> can't push a formula operation to the data source, **but not every nondelegable case shows
+> this warning.**
+> — MS Learn, *Understand data sources for canvas apps*
+
+So "no underline" is not evidence of delegation, and on a small list it is nearly meaningless.
+The documented tool for exactly this is **Live Monitor**:
+
+> To troubleshoot delegation issues that aren't flagged, use Live Monitor under **Advanced
+> tools** to inspect the queries Power Apps sends and the data returned from each data source.
+
+**The procedure — the only way to actually settle a delegation question, and the only one
+that yields evidence someone else can read back in a sentence:**
+
+1. Studio → **Advanced tools** → **Monitor**. Play the app; events stream live.
+2. Do the one thing under test (open the screen, type in the search box).
+3. Find the **`getRows`** event for the list. Select it to see the data source, timing, result
+   and the formula that caused it.
+4. **Delegated:** a small number of `getRows`, each returning a page of already-filtered rows.
+   **Not delegated:** *repeated* `getRows` walking the list, then filtering on the client —
+   "look for repeated `getRows` calls; these calls might indicate a nondelegable formula."
+
+Pair it with **Settings → General → Data row limit = 1** when you want the failure to be
+loud: anything non-delegable then returns a single record, which is impossible to miss.
+
+**Ask for the `getRows` count, not for "did it work".** A non-delegable query looks completely
+correct on a small list — that is the entire danger — so "it works" is not an answer to a
+delegation question, and neither is a screenshot of the gallery.
+
+### A Monitor-verified result: composing over a named formula folds
+
+**Nesting a `Filter` over a named formula that is itself a `Filter` DOES fold into one server
+query.** Verified by Live Monitor on `Filter(ActiveProjects, StartsWith(project_name, …))`,
+where `ActiveProjects` is an `App.Formulas` filter over the list — one `getRows`, returning
+already-filtered rows. So a named formula is a safe place to put a shared predicate.
+
+Two caveats the verification does **not** cover:
+
+- It proved **one** level of composition. A named formula defined over another named formula
+  is two, and is not evidence-backed — write the predicate out rather than layering.
+- It says nothing about which queries *should* use a shared set. A query already scoped to one
+  parent usually should not: it is bounded anyway, and the shared filter can hide rows the
+  caller needs. The worst version is a maintenance routine that must read *every* child,
+  including the ones it is about to change — filtering there makes it skip exactly its own
+  work.

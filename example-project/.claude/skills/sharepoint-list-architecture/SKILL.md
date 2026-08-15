@@ -46,9 +46,11 @@ Internalize these before proposing any schema. Every trap below flows from ignor
   scan or return at once. Design is the art of never asking a question that scans
   more than 5,000 rows.
 - **There are no real joins.** Lookup columns *look* relational but each one is a
-  costly join, and a view/query may use at most **12 joins (lookup, Person/Group,
-  and Managed Metadata columns all count)** before it's blocked. There is no
-  foreign-key engine enforcing integrity for you.
+  costly join, and **a query using more than 8 joins (lookup, Person/Group, and
+  Managed Metadata columns all count) is blocked**. The "List View Lookup Threshold"
+  is nominally 12, but SharePoint blocks any query above **8** joins (12 is only how
+  many a *maximal* view returns), so treat **8 as the hard design ceiling**. There is
+  no foreign-key engine enforcing integrity for you.
 - **Denormalize deliberately.** In a relational DB you normalize by default. In
   SharePoint you often do the opposite — copy a value into the child list — because
   a stored string costs nothing to read while a lookup costs a join against the
@@ -92,21 +94,21 @@ force local processing and quietly cap results.
 | Data | Use | Not | Delegation / cost notes |
 |---|---|---|---|
 | Short text (name, ID, code) | **Single line of text** (≤255 chars) | Multiple lines | Delegable for `=`, `StartsWith`. **Indexable** — the workhorse filter column. |
-| Long/notes/HTML | **Multiple lines of text** | Single line | **Not filterable, not indexable, not delegable.** Never filter on it; store keys elsewhere. |
+| Long/notes/HTML | **Multiple lines of text** | Single line | **Not filterable, not indexable, not delegable.** Never filter on it; store keys elsewhere. Pick **Enhanced rich text** if a `RichTextEditor@2.7.0` writes it — that control emits markup, and a plain-text column stores the tags literally. |
 | Small fixed set of values you own | **Choice** | Lookup | Delegable on `=`. No join cost. Best for Status/Category/Priority. Avoid "Fill-in" values — they wreck reporting. |
-| A value that lives in and is maintained by another list | **Lookup** | Choice | Costs **1 join** (12-join view cap). Delegation is limited — filtering on lookup subfields is restricted. Use only for genuine shared reference data. |
+| A value that lives in and is maintained by another list | **Lookup** | Choice | Costs **1 join** (8-join query ceiling — see below). Delegation is limited — filtering on lookup subfields is restricted. Use only for genuine shared reference data. |
 | Enterprise taxonomy / cross-site tags | **Managed Metadata** | Choice | Central term store, but **counts as joins** and adds hidden columns; heavier than Choice. Reserve for true org-wide taxonomy. |
 | A person or team | **Person or Group** | Text | Stores a directory reference (name, email, ID). **Counts as a join.** Delegation limited; filtering by `Email`/`current user` needs care. |
 | A calendar date / timestamp | **Date and Time** | Text | Delegable for `<,>,=`. **Indexable** — index it if you filter by date range. Watch time-zone display. |
 | Quantity / money | **Number** / **Currency** | Text | Delegable for comparisons. Currency adds formatting only; both indexable. |
-| A true/false flag | **Yes/No** | Choice | Delegable, cheap, indexable. Default it explicitly. |
+| A true/false flag | **Yes/No** | Choice | Delegable, cheap, indexable. Default it explicitly. A Yes/No column bound to a toggle is **two-state only** — if "not answered" must be distinguishable from "no", use a Choice column and a dropdown, because a toggle cannot produce `Blank()`. |
 | A value derived from other columns | **Calculated** | (store it) | **Cannot be indexed, cannot be filtered delegably.** Fine for display; never a query key. |
 | A link or image | **Hyperlink or Picture** | Text | Display only; not a filter/index target. Stored as two subfields (URL + description). |
 | The record's own identity | **ID** (built-in) | a custom key | Auto, unique, **always indexed**. `LookUp(list, ID=n)` is the fastest possible query — the ideal way to fetch one record. |
 
 Rules of thumb: **Choice beats Lookup** whenever the values are stable and owned by
 this app (no join, delegable). **Lookup beats duplicating a whole related table**,
-but each lookup spends join budget — cap yourself well under 12 per view. **Never
+but each lookup spends join budget — a query above 8 joins is blocked, so cap at 8. **Never
 plan to filter or sort on** Multiple-lines, Calculated, or Hyperlink columns.
 
 ---
@@ -154,8 +156,9 @@ it returns two. An index changes what gets scanned. Work this playbook in order:
 SharePoint models one-to-many with a **Lookup** column on the child pointing at the
 parent — but you own the trade-offs a real database would handle for you:
 
-- **The 12-join wall.** Lookup, Person/Group, and Managed Metadata columns each cost
-  a join, capped at 12 per view/query. A child list with several lookups plus a
+- **The 8-join wall.** Lookup, Person/Group, and Managed Metadata columns each cost
+  a join, and a query using more than **8** of them is blocked (the threshold is
+  nominally 12, but SharePoint blocks above 8). A child list with several lookups plus a
   couple of people columns burns the budget fast. Count joins per *view*, and drop
   unused lookup columns from heavy views.
 - **Projected (lookup) fields still count.** Pulling extra columns from the parent

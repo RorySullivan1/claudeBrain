@@ -198,7 +198,10 @@ workaround.
 
 `SAMEPERIODLASTYEAR ( 'Date'[Date] )` is exactly `DATEADD ( 'Date'[Date], -1, YEAR )`.
 Use `DATEADD` when you need a different offset (a month, a quarter, N years). A
-fiscal year-end is a third argument on `TOTALYTD` (e.g. `"6/30"`).
+fiscal year-end is the **fourth** argument on `TOTALYTD` —
+`TOTALYTD ( <expr>, <dates>, [<filter>], [<year_end_date>] )` — so the third slot is a
+*filter*. To pass a year-end without a filter, leave the third slot empty:
+`TOTALYTD ( [Total Sales], 'Date'[Date], , "6/30" )`.
 
 ---
 
@@ -263,16 +266,18 @@ RETURN
     CALCULATE (
         [Total Sales],
         FILTER (
-            ALL ( 'Date'[Date] ),          // clear the axis, keep other filters
+            ALL ( 'Date' ),                 // clear the WHOLE Date table (works for any axis column)
             'Date'[Date] <= LastVisibleDate // then re-apply "up to this date"
         )
     )
 ```
 
-`ALL ( 'Date'[Date] )` lifts the date filter the visual's axis imposes, then the
-`FILTER` re-applies "every date on or before the current one." Capturing
-`LastVisibleDate` in a variable *before* the `CALCULATE` is essential — inside the
-`CALCULATE` the date context is gone. For a within-year reset, use
+`ALL ( 'Date' )` lifts the axis filter the visual imposes, then the `FILTER` re-applies
+"every date on or before the current one." Clear the **whole table**, not just the column:
+`ALL ( 'Date'[Date] )` removes the filter on that *one* column only, so on a matrix whose axis is
+`'Date'[Month]` or `'Date'[Year]` the period filter survives and the running total collapses to the
+period value. Capturing `LastVisibleDate` in a variable *before* the `CALCULATE` is essential —
+inside the `CALCULATE` the date context is gone. For a within-year reset, use
 `DATESYTD ( 'Date'[Date] )` as the filter instead.
 
 ### Ranking

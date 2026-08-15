@@ -116,9 +116,15 @@ in
   depending on column kind):
 
 ```m
-    // Owner is a Person column → expand the nested record, keep just the display name
+    // Owner is a SINGLE-value Person column → it arrives as a nested [Record]; expand it,
+    // keeping just the display name:
     Expanded = Table.ExpandRecordColumn(Projects, "Owner", {"Title"}, {"OwnerName"})
 ```
+
+A **multi-value** Person or Lookup column (or anything showing `[Table]`, not `[Record]`) arrives
+as a nested *table* — expand it with **`Table.ExpandTableColumn`** instead. Using
+`Table.ExpandRecordColumn` on a `[Table]` value errors with *"We cannot convert a value of type
+Table to type Record."*
 
 Reduce columns **before** expanding — expanding a wide lookup pulls extra fields you'll
 only discard.
