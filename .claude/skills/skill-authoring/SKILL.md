@@ -171,6 +171,31 @@ body. A skill that builds on a base skill should be written as a **delta** — s
 front and cover only the difference (see `developer-agent-authoring`: "this layers on
 `agent-authoring` — read that first; this skill covers only the delta").
 
+## Two patterns worth reaching for
+
+**Mode routing — when one job has distinct phases.** Some domains are a lifecycle, not a
+task: the same subject wants *triage*, *draft*, *lint*, *review*, and *audit*, and they
+need different behavior. Splitting those into five skills triggers badly (they all match
+the same words); one shapeless skill does all five vaguely. Instead give one skill explicit
+**modes**: name them, say what each is for, and — the part that's usually missing — state
+how to infer the mode when the user didn't, plus any ordering constraint between them
+("lint before review; don't proceed to review while unresolved high findings remain").
+Then the skill picks a lane instead of blending them.
+
+While you're at it: have the skill **detect the project's own conventions first** and fall
+back to its bundled defaults only when none exist — and don't let it invent artifacts a
+project doesn't already use.
+
+**Name the authority — when the skill carries factual claims.** A skill describing an
+external system (an API, a platform limit, a language's constants) will outlive its own
+accuracy. Say what governs it and defer explicitly:
+
+> The vendor documentation is the schema authority. If this skill and that documentation
+> disagree, follow the documentation and report the drift.
+
+Without that line a skill quietly becomes a competing spec, and readers can't tell which
+to trust. Pair it with `claim-grounding` to tier and date the claims themselves.
+
 ## Authoring checklist
 
 - [ ] Cleared the fold-first gates: significant, and net-new (not an extension of an existing skill).
@@ -192,6 +217,18 @@ front and cover only the difference (see `developer-agent-authoring`: "this laye
 - **A new skill where an existing one should be extended** → proliferation degrades all triggering.
 - **Frontmatter borrowing agent fields** (`tools`, `model`) → skills don't take them; drop them.
 - **Examples-free prose** → the method stays abstract; add a worked case.
+
+## After it's written: two independent gates
+
+Shaping a skill well is not evidence that it works. Two further checks exist, neither
+catches the other's failure, and neither is owned here:
+
+- **Does it trigger and perform?** → **`skill-creator`** (evals vs a no-skill baseline,
+  variance analysis, description optimization). Don't hand-roll an eval loop.
+- **Is what it says true?** → **`claim-grounding`** / the `verify-claims` workflow, which
+  own the shape-vs-performance-vs-truth division of labor and the grounding method.
+
+Run both on anything that carries external-system claims.
 
 ## Template
 

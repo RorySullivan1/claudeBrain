@@ -9,3 +9,7 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+
+# Python bytecode from hook scripts
+__pycache__/
+*.pyc

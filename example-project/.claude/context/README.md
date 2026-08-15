@@ -27,5 +27,6 @@ This layer has **two tiers**:
 | `cpp-bot-instructions.md` | "Cero" C++ assistant brief — modern C++ (C++98→C++23) teaching, debugging, generation. |
 | `python-project-instructions.md` | Python full-lifecycle brief — development, review, debugging, deployment standards. |
 | `vba-development.md` | VBA engineering brief — production-grade VBA across Excel/Outlook/PowerPoint/Word. |
+| `air-gap.md` | The one-way clipboard air-gap model — repo as golden source, hand-pasted into Power Apps Studio, and the drift it implies. |
 
 Reference notes are catalogued automatically in `INDEX.md` — not listed here.

@@ -16,6 +16,7 @@
 - backtesting-validation — Backtest correctness and quant-model validation in Python — point-in-time data, … -> skills/backtesting-validation/SKILL.md
 - branding — Expert at defining and applying a brand identity — the durable, reusable system that every artifact … -> skills/branding/SKILL.md
 - brochure-builder — Expert at building a folded brochure — the execution tier that turns a design spec into a finished, … -> skills/brochure-builder/SKILL.md
+- claim-grounding — Establish whether a factual claim is actually true, and record the judgment so it isn't … -> skills/claim-grounding/SKILL.md
 - coding-standards — Baseline cross-project coding conventions — descriptive naming, readability, immutability, error … -> skills/coding-standards/SKILL.md
 - deck-builder — Expert at assembling a real slide deck in a concrete tool — the execution tier that turns a design … -> skills/deck-builder/SKILL.md
 - development-mapping — Expert at turning a whole-project objective into a **development map** — an ordered plan of stages … -> skills/development-mapping/SKILL.md
@@ -29,10 +30,16 @@
 - one-pager-builder — Expert at building a single-page document — the execution tier that turns a design spec into a … -> skills/one-pager-builder/SKILL.md
 - pamphlet-builder — Expert at building a multi-page pamphlet or booklet — the execution tier that turns a design spec … -> skills/pamphlet-builder/SKILL.md
 - power-apps-components — Expert at building reusable Power Apps canvas components and UI elements — the … -> skills/power-apps-components/SKILL.md
+- power-apps-editable-table — Expert at building an editable table / spreadsheet-style grid in a canvas Power App — a … -> skills/power-apps-editable-table/SKILL.md
+- power-apps-svg — Expert at rendering dynamic SVG inside a canvas Power App — vector charts, KPI rings, gauges, … -> skills/power-apps-svg/SKILL.md
 - power-bi-dax — Expert at DAX for Power BI — measures, evaluation context, and model calculations over a … -> skills/power-bi-dax/SKILL.md
 - power-fx-development — Expert Power Fx developer for writing, architecting, and debugging formulas in canvas Power Apps … -> skills/power-fx-development/SKILL.md
 - power-fx-review — Expert Power Fx code reviewer for Power Apps canvas apps — delegation, performance, and … -> skills/power-fx-review/SKILL.md
 - power-query-m — Expert at Power Query and the M language — the ETL layer that shapes, cleans, and combines data … -> skills/power-query-m/SKILL.md
+- powerapp-canvas-controls — The grounded control catalogue for canvas-app YAML — which `Control:` tokens, `Variant:` values, … -> skills/powerapp-canvas-controls/SKILL.md
+- powerapp-canvas-design — Screen layout, geometry and interaction design for canvas apps — where controls go, how big they … -> skills/powerapp-canvas-design/SKILL.md
+- powerapp-canvas-development — Authoring canvas-app source in pa-yaml v3.0 — the file structure itself and the Power Fx that lives … -> skills/powerapp-canvas-development/SKILL.md
+- powerapp-canvas-project-management — Running a canvas-app project as a repo — source control, provisioning, hand-off discipline and the … -> skills/powerapp-canvas-project-management/SKILL.md
 - presentation-design — Expert visual-design and copy craft for communication artifacts — the subjective *how* that turns a … -> skills/presentation-design/SKILL.md
 - python-deployment — Expert Python deployment, packaging, and operations — preparing Python code to ship to production, … -> skills/python-deployment/SKILL.md
 - python-development — Expert Python development for new code — writing modules, functions, classes, scripts, APIs, and … -> skills/python-development/SKILL.md
@@ -45,6 +52,7 @@
 - sharepoint-column-formatting — Expert at SharePoint column and view formatting — the declarative JSON that styles list cells and … -> skills/sharepoint-column-formatting/SKILL.md
 - sharepoint-list-architecture — Expert at designing SharePoint lists as an application backend — the schema, column types, … -> skills/sharepoint-list-architecture/SKILL.md
 - skill-distiller — Spot reusable know-how produced during a plan or conversation and decide whether to promote it into … -> skills/skill-distiller/SKILL.md
+- studio-transfer — Expert at moving canvas Power App source between Power Apps Studio (on a locked-down work machine) … -> skills/studio-transfer/SKILL.md
 - technical-documentation-drafter — Expert technical writer for developer-facing documentation. Use this skill whenever the user wants … -> skills/technical-documentation-drafter/SKILL.md
 - token-optimizer — Keep a Claude Code session token-efficient by deciding where work runs before it floods the main … -> skills/token-optimizer/SKILL.md
 - user-guide-drafter — Expert technical writer for end-user documentation. Use this skill whenever the user wants to … -> skills/user-guide-drafter/SKILL.md
@@ -61,6 +69,8 @@
 - finance-quantitative-developer — Senior Python quantitative-finance engineer for this repo's analytics/tooling layer. Use … -> agents/finance-quantitative-developer.md
 - github-operator — GitHub workflow operator for this repo — opens and formats pull requests, files and triages issues, … -> agents/github-operator.md
 - goal-auditor — Acceptance/goal auditor — judges whether an implemented change actually achieves the goals and … -> agents/goal-auditor.md
+- powerapp-canvas-developer — End-to-end canvas-app developer for a repo that authors canvas-app source offline — designs, … -> agents/powerapp-canvas-developer.md
+- pre-paste-review — Pre-paste auditor for authored canvas-app Power Fx — the last gate before a human pastes YAML into … -> agents/pre-paste-review.md
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
 - python-developer — Senior Python engineer for this repo's general tooling layer (`tools/`). Use proactively when … -> agents/python-developer.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
@@ -77,4 +87,8 @@
 
 ## Workflows (workflows/*.md)
 - advance-roadmap-step — advance-roadmap-step -> workflows/advance-roadmap-step.md
+- change-end-to-end — change-end-to-end -> workflows/change-end-to-end.md
+- control-grounding — control-grounding -> workflows/control-grounding.md
+- screen-build — screen-build -> workflows/screen-build.md
 - ship-version — ship-version -> workflows/ship-version.md
+- verify-claims — verify-claims -> workflows/verify-claims.md

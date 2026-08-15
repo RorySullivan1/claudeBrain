@@ -70,6 +70,12 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
   front-half of the authoring path; `knowledge-router` routes procedures here. Engine:
   `scripts/skills.py` (`list`/`similar`/`candidates`/`add-candidate`) + a plan-approval nudge
   hook (`scripts/plan_nudge.py` on `ExitPlanMode`). **(built)**
+- `claim-grounding` — the **truth** layer for an asset's factual content: triage each claim
+  by what would settle it (a live authority / vendor docs / one project's experience / not
+  a claim), ground it, then record the judgment so it isn't re-litigated or silently
+  overwritten. Owns the shape/performance/truth division of labor (see its Out-of-scope).
+  Driven by the `verify-claims` workflow; structural counterpart is the `asset_integrity`
+  hook. **(built)**
 
 ## Format
 
@@ -84,5 +90,8 @@ the `name:` frontmatter value.
 `context-vs-skill/` placement skill — covering the skill, agent, workflow, and
 context-vs-skill authoring playbooks. Alongside them are the operational skills
 (`session-memory/`, `agent-finder/`, `knowledge-router/`, `token-optimizer/`,
-`skill-distiller/`). A `command-authoring` skill is the remaining gap — commands are
-still covered by `commands/README.md` until one is codified.
+`skill-distiller/`, `claim-grounding/`). A `command-authoring` skill is the remaining gap —
+commands are still covered by `commands/README.md` until one is codified.
+
+The authoring path now closes over three independent gates — shape, performance, truth —
+whose division of labor is stated once, in `claim-grounding`'s Out-of-scope.

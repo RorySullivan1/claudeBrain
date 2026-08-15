@@ -92,14 +92,14 @@ force local processing and quietly cap results.
 | Data | Use | Not | Delegation / cost notes |
 |---|---|---|---|
 | Short text (name, ID, code) | **Single line of text** (≤255 chars) | Multiple lines | Delegable for `=`, `StartsWith`. **Indexable** — the workhorse filter column. |
-| Long/notes/HTML | **Multiple lines of text** | Single line | **Not filterable, not indexable, not delegable.** Never filter on it; store keys elsewhere. |
+| Long/notes/HTML | **Multiple lines of text** | Single line | **Not filterable, not indexable, not delegable.** Never filter on it; store keys elsewhere. Pick **Enhanced rich text** if a `RichTextEditor@2.7.0` writes it — that control emits markup, and a plain-text column stores the tags literally. |
 | Small fixed set of values you own | **Choice** | Lookup | Delegable on `=`. No join cost. Best for Status/Category/Priority. Avoid "Fill-in" values — they wreck reporting. |
 | A value that lives in and is maintained by another list | **Lookup** | Choice | Costs **1 join** (12-join view cap). Delegation is limited — filtering on lookup subfields is restricted. Use only for genuine shared reference data. |
 | Enterprise taxonomy / cross-site tags | **Managed Metadata** | Choice | Central term store, but **counts as joins** and adds hidden columns; heavier than Choice. Reserve for true org-wide taxonomy. |
 | A person or team | **Person or Group** | Text | Stores a directory reference (name, email, ID). **Counts as a join.** Delegation limited; filtering by `Email`/`current user` needs care. |
 | A calendar date / timestamp | **Date and Time** | Text | Delegable for `<,>,=`. **Indexable** — index it if you filter by date range. Watch time-zone display. |
 | Quantity / money | **Number** / **Currency** | Text | Delegable for comparisons. Currency adds formatting only; both indexable. |
-| A true/false flag | **Yes/No** | Choice | Delegable, cheap, indexable. Default it explicitly. |
+| A true/false flag | **Yes/No** | Choice | Delegable, cheap, indexable. Default it explicitly. A Yes/No column bound to a toggle is **two-state only** — if "not answered" must be distinguishable from "no", use a Choice column and a dropdown, because a toggle cannot produce `Blank()`. |
 | A value derived from other columns | **Calculated** | (store it) | **Cannot be indexed, cannot be filtered delegably.** Fine for display; never a query key. |
 | A link or image | **Hyperlink or Picture** | Text | Display only; not a filter/index target. Stored as two subfields (URL + description). |
 | The record's own identity | **ID** (built-in) | a custom key | Auto, unique, **always indexed**. `LookUp(list, ID=n)` is the fastest possible query — the ideal way to fetch one record. |

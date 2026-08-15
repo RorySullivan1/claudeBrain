@@ -49,36 +49,38 @@ def has_version(text: str) -> bool:
     return False
 
 
-def main() -> int:
-    try:
-        data = json.loads(sys.stdin.read() or "{}")
-    except (json.JSONDecodeError, ValueError):
-        return 0
-    if data.get("tool_name") != "Bash":
-        return 0
-    command = (data.get("tool_input") or {}).get("command") or ""
+def check(command: str, root: Path) -> str | None:
+    """Advisory message for the dispatcher (`git_guards.py`), or None to stay silent."""
     if not PUSH_RE.search(command):
-        return 0
-
-    mv = meta_version_path()
+        return None
+    mv = root / ".meta" / "version"
     if not mv.is_file():
-        return 0  # project hasn't adopted version labeling — stay silent
+        return None  # project hasn't adopted version labeling — stay silent
     try:
         text = mv.read_text(encoding="utf-8", errors="replace")
     except OSError:
-        return 0
-
+        return None
     missing = []
     if not has_version(text):
         missing.append("a `version:` label")
     if not goals_present(text):
         missing.append("at least one goal under `## Goals`")
     if not missing:
-        return 0  # complete — nothing to say
+        return None  # complete — nothing to say
+    return (".meta/version exists but is missing " + " and ".join(missing) + ". This push "
+            "isn't fully labeled — consider `/version-set` so the PR can be named from the "
+            "version's goals (`/version-ship`).")
 
-    msg = (".meta/version exists but is missing " + " and ".join(missing) + ". This push "
-           "isn't fully labeled — consider `/version-set` so the PR can be named from the "
-           "version's goals (`/version-ship`).")
+
+def main() -> int:
+    try:
+        data = json.loads(sys.stdin.read() or "{}")
+    except ValueError:
+        return 0
+    command = (data.get("tool_input") or {}).get("command") or ""
+    msg = check(command, meta_version_path().parent.parent)
+    if not msg:
+        return 0
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",

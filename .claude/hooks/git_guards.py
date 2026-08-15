@@ -1,0 +1,1 @@
+../../example-project/.claude/hooks/git_guards.py
