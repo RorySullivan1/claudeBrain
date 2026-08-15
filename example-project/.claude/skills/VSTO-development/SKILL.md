@@ -37,7 +37,9 @@ State all assumptions explicitly in a comment at the top of every code block:
 ### Required in Every Code Example
 - All relevant `using` statements included at the top
 - `try/finally` blocks around every COM object that must be released
-- `Marshal.ReleaseComObject` called explicitly — never rely on GC
+- `Marshal.ReleaseComObject` called explicitly where deterministic release is genuinely
+  needed (a project convention, not a universal rule — Microsoft says to use it "only if it
+  is absolutely required", and to prefer `FinalReleaseComObject` when you must fully release)
 - Null checks before dereferencing Office objects
 - XML doc comments (`/// <summary>`) on all public methods in teaching examples
 - PascalCase for public members, camelCase for locals, `_` prefix for private fields
@@ -300,5 +302,14 @@ Task.Run(() =>
 ## Watch Out
 
 1. **GC.Collect() is not a fix.** If you're calling `GC.Collect(); GC.WaitForPendingFinalizers()` to make Excel close, you have unreleased COM objects. Fix the release pattern instead — GC is a workaround, not a solution.
-2. **Office 32-bit vs. 64-bit.** Your compiled add-in bitness must match the installed Office bitness. Target `AnyCPU` with `Prefer 32-bit` unchecked, or explicitly target the right platform. Mismatch = silent load failure.
-3. **Event handler leaks.** Always unsubscribe every event you subscribe to in `Startup`, inside `Shutdown`. A leaked event handler keeps object graphs alive indefinitely and causes Excel to fail to close.
+2. **Office 32-bit vs. 64-bit — keep `Any CPU`.** That is the Office-project default and
+   Microsoft's advice is that you "typically should not change this setting": an `Any CPU`
+   solution runs under both 32-bit and 64-bit Office. Bitness only has to match when you
+   deliberately target x86/x64 — which you should do only when calling native APIs of that
+   bitness, and where a mismatch then means the solution won't run. *(Verified 2026-08-15.)*
+3. **Event handler leaks — and the Outlook exception.** Unsubscribe in `Shutdown` every
+   event you subscribed to in `Startup`; a leaked handler keeps object graphs alive and stops
+   Excel closing. **But in Outlook add-ins `ThisAddIn_Shutdown` is not raised when Outlook
+   exits** (only when the user disables the add-in via the COM Add-ins dialog), so cleanup
+   placed there silently never runs — handle `Application.Quit` or `Explorer.Close` instead.
+   *(Verified 2026-08-15.)*

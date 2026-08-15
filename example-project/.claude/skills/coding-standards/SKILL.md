@@ -305,14 +305,25 @@ Validate at the boundary with a schema/attributes; don't trust raw input.
 ```csharp
 using System.ComponentModel.DataAnnotations;
 
+// NOTE the `property:` targets — they are load-bearing, not decoration.
+// An un-targeted attribute on a positional record parameter does not reliably land on the
+// compiler-generated PROPERTY, and Validator.ValidateObject evaluates the attributes
+// attached to the object's *properties*. Without the target you can get validation that
+// silently passes everything. (ASP.NET Core model binding special-cases record parameters,
+// which is why this often "works" there and not in plain console/library code.)
+// Checked 2026-08-15; if you'd rather not think about it, declare a non-positional record.
 public record CreateMarket(
-    [Required, StringLength(200, MinimumLength = 1)] string Name,
-    [Required] DateTime EndDate,
-    [MinLength(1)] IReadOnlyList<string> Categories);
+    [property: Required, StringLength(200, MinimumLength = 1)] string Name,
+    [property: Required] DateTime EndDate,
+    [property: MinLength(1)] IReadOnlyList<string> Categories);
 
 // throws ValidationException on invalid input
 Validator.ValidateObject(model, new ValidationContext(model), validateAllProperties: true);
 ```
+On **.NET Framework** (this project's add-in stack) `MinLengthAttribute` historically only
+handled arrays and strings; the reflection-based `Count` path for other collections is
+modern-.NET behaviour. Verify `[MinLength]` on an `IReadOnlyList<T>` against your actual
+target framework rather than assuming it validates.
 
 ```python
 from datetime import datetime
@@ -418,8 +429,11 @@ Optimize where it's measured, not speculatively.
 
 ```csharp
 // PASS — compute an expensive result once; Lazy<T> defers and caches single init
-private readonly Lazy<IReadOnlyList<Market>> _sortedMarkets =
-    new(() => markets.OrderByDescending(m => m.Volume).ToList());
+private readonly Lazy<IReadOnlyList<Market>> _sortedMarkets;
+
+public MarketCache(IReadOnlyList<Market> markets) =>
+    // the factory closes over the ctor parameter — a field initializer can't see it
+    _sortedMarkets = new(() => markets.OrderByDescending(m => m.Volume).ToList());
 
 // PASS — stream large data with yield instead of building a huge list
 IEnumerable<Row> ReadRows(string path)

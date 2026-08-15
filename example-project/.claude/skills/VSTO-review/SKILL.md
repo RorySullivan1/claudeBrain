@@ -48,6 +48,15 @@ Before reviewing, request the following if absent:
 
 Check every Office object reference for these issues:
 
+**Threading — the documented failure is a REJECTED call, not a crash**
+Background-thread object-model calls are *automatically marshaled* across the STA boundary;
+they are not a hard "STA violation". What actually happens is that a busy Office app rejects
+the call and COM interop surfaces it as a `COMException` ("The message filter indicated that
+the application is busy" / `RPC_E_SERVERCALL_RETRYLATER`), and the thread blocks while the STA
+is busy. So the review rule is: **every background-thread OM call needs `COMException`
+handling with retry, or must be marshaled back to the UI thread** — flag the missing handling,
+not the thread itself. *(Verified 2026-08-15.)*
+
 **Unreleased intermediates (two-dot rule)**
 ```csharp
 // BUG: intermediate Worksheets object never released
@@ -81,8 +90,23 @@ try   { sheet.Activate(); DoSomethingRisky(); }
 finally { Marshal.ReleaseComObject(sheet); }
 ```
 
-**Using `Marshal.FinalReleaseComObject`**
-Flag any use of this as a high-severity issue. It forcibly releases a COM object regardless of reference count, which will crash other code holding the same object. Only `Marshal.ReleaseComObject` is safe in general use.
+**Explicit COM release — `ReleaseComObject` vs `FinalReleaseComObject`**
+Neither is categorically "safe", and the docs' warning points the *opposite* way from the
+folklore (verified 2026-08-15). Microsoft says to use `ReleaseComObject` "only if it is
+absolutely required" because improper use "may cause your application to fail, or may cause
+an access violation" — and that if you want a component released at a determined time, you
+should "consider using the `FinalReleaseComObject` method instead."
+
+So don't flag `FinalReleaseComObject` on sight. The reviewable defect is releasing an RCW
+that **something else may still hold** — a singleton like `Application`, or an object the
+caller passed in (an `ItemAdd` handler releasing the item it was handed is this bug). Flag
+that; treat the choice between the two calls as secondary.
+
+*(Tier note, checked 2026-08-15: the two-dot rule, the `foreach`-enumerator leak, and the
+Outlook item-recycling rule below are long-standing VSTO practice and consistent with how RCWs
+are documented to work, but Microsoft Learn does not state any of them outright. Keep applying
+them — they are the safe direction — but treat them as **experience-settled**, and don't cite
+a doc page for them in a review comment.)*
 
 **`foreach` over Office collections**
 ```csharp
@@ -121,10 +145,12 @@ private void ThisAddIn_Startup(object sender, EventArgs e)
 }
 // No corresponding -= anywhere
 
-// FIX: always mirror in Shutdown
+// FIX: mirror in Shutdown — but see the Outlook caveat below
 private void ThisAddIn_Shutdown(object sender, EventArgs e)
 {
     Application.WorkbookOpen -= Application_WorkbookOpen;
+    // NB (Outlook): ThisAddIn_Shutdown is NOT raised when Outlook exits — only when the
+    // user disables the add-in. Outlook cleanup belongs on Application.Quit / Explorer.Close.
 }
 ```
 
@@ -157,10 +183,10 @@ private void Items_ItemAdd(object item)
 Flag any Office object model call that occurs off the UI thread:
 
 ```csharp
-// BUG: Office call on a background thread — will crash or corrupt state
+// BUG: unguarded Office call on a background thread (see note below)
 Task.Run(() =>
 {
-    _worksheet.Cells[1, 1].Value2 = "result"; // STA violation
+    _worksheet.Cells[1, 1].Value2 = "result"; // marshaled across the STA — can be REJECTED
 });
 
 // FIX: marshal back to UI thread
@@ -207,7 +233,17 @@ Every method that acquires COM objects must have a `finally` block, even if a `u
 ### 5. Office API Correctness
 
 **`Range.Value` vs `Range.Value2`**
-`Range.Value` returns `Currency` and `DateTime` as their COM variants. `Range.Value2` always returns `double`. Use `Value2` unless you specifically need Currency/Date coercion.
+`Range.Value` returns `Currency` and `DateTime` as their COM variants. `Range.Value2` is
+typed `object` too — the *only* difference is that it never uses the Currency or Date types,
+so a date-formatted cell comes back as an OADate `double`. It still returns `string` for
+text, `bool` for booleans, and an error value for error cells, so keep type-checking the
+result. Use `Value2` unless you specifically need Currency/Date coercion.
+
+**`Items.ItemAdd` does not fire for bulk additions**
+Documented behaviour: the event "does not run when a large number of items are added to the
+folder at once." An add-in that relies on `ItemAdd` alone to see every new item will silently
+miss batches (a move of many messages, a sync). Flag designs that assume completeness; a
+periodic reconcile is the fix.
 
 **`Application.ActiveWorkbook` / `ActiveSheet` without null checks**
 These return `null` when no workbook is open. Always guard:
