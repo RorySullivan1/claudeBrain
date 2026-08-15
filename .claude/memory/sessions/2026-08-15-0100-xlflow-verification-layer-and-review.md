@@ -56,3 +56,37 @@
   re-verified — now the factory's own review demonstrated why that matters).
 - agent-authoring: add the "validating agent must not carry `permissionMode: plan`" check
   (defect seen twice: goal-auditor #30, pre-paste-review).
+
+## Addendum — taskmaster re-review (same session, later)
+
+Re-reviewed powerapp_taskmaster at HEAD (2026-08-14; 9 days of field use since the Aug-5
+assimilation) and distilled everything new/corrected into claudeBrain:
+
+- **THE FREEZE RULE WAS FALSE.** taskmaster probed it (tests/scrProbe-layout-freeze.pa.yaml,
+  Studio 2026-08-13): layout formulas SURVIVE a code-view paste and stay live; only direct
+  manipulation (drag, resize handles, position/size boxes) writes back constants. The MS Learn
+  quote always said "drag". Rewrote canvas-design §4/§5 + studio-transfer; the real paste
+  hazard is suffixed-name reference resolution. We had consolidated the false claim as the
+  owned fact THE SAME DAY the field falsified it — the strongest possible case for the
+  verify-claims follow-up.
+- **Aug-9 corrections sweep ported** (12 files corrected downstream 4 days AFTER we imported
+  them): Graph `Prefer: HonorNonIndexedQueriesWarningMayFailRandomly` + HTTP 400 + eq is
+  case-INSENSITIVE; 8-join wall (boundaries doc: nominal 12/query, blocked above 8 — verified);
+  TOTALYTD year-end is the 4th arg; ALL('Date') whole-table for running totals; IsBlank→=Blank()
+  delegates on simple columns only; Table.ExpandTableColumn for multi-value Person/Lookup;
+  pac download -d vs Expand-Archive are alternatives; ModernNumberInput version ungrounded.
+- **Bulk-Patch dispute settled vs MS Learn**: taskmaster's "a table is not a valid base record"
+  rationale is wrong (Patch(DS, Collection) and Patch(DS, Base, Changes) both take tables), but
+  ForAll+Patch is the documented pattern for control-harvest joins. editable-table now teaches
+  both forms with their conditions.
+- **New content**: SVG data-driven charts (Concat generator, Sequence+Index positions, running
+  totals, Mod-positive dashoffset, allow-list+Other categories, integer-viewBox locale rule,
+  can/cannot table); App.OnStart comment trap (= and // failures, expand-the-formula-bar,
+  IntelliSense diagnostic); GridLayout variant (partially grounded, honestly labeled);
+  scale-to-fit vs lock-aspect divergence; theme-blank "squished and black" diagnosis;
+  gTheme-not-Theme collision; Set(x,Filter()) kills delegation; component-in-gallery ban;
+  per-parent delegable aggregation row in delegation.md; pre-paste-review golden-source-only
+  token resolution; context/powerapps-docs-source.md (semantics vs tokens split; "omission
+  means unconfirmed, not unsupported").
+- Their Aug-9 pre-paste-review freshness fix CONVERGED with ours independently — kept ours
+  (role-based), folded their golden-source nuance.

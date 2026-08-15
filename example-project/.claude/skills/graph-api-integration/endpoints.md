@@ -76,11 +76,12 @@ SharePoint APIs). **A** = Application (app-only / daemon).
   expand-select to fetch only what you render — the single biggest lever against
   throttling.
 - **`$filter` on list items must target `fields/{internalName}`**, e.g.
-  `$filter=fields/Status eq 'Open'`. Filtering/sorting a **custom** column often
-  requires the column to be **indexed** in SharePoint, and non-indexed columns
-  over the list view threshold return an error — index the column or reduce the
-  result set. String equality is case-sensitive; use the column's **internal
-  name**, not its display name.
+  `$filter=fields/Status eq 'Open'`. Most field filters also require the request header
+  **`Prefer: HonorNonIndexedQueriesWarningMayFailRandomly`** — without it, filtering a
+  **non-indexed** column (or any list over the 5,000-item view threshold) returns
+  **HTTP 400**. Indexing the column is the durable fix; the header is what lets the query
+  run at all. String equality is **case-insensitive** (SharePoint text `eq` ignores case);
+  use the column's **internal name**, not its display name.
 - Column **internal names** differ from display names (spaces become `_x0020_`,
   a renamed column keeps its original internal name). Read them from
   `GET …/lists/{list-id}/columns` when a `$filter`/`$select` silently returns

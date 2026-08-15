@@ -59,21 +59,39 @@ it's the single most common bug in this pattern.
    in the source, also record it for deletion (a `colDeletes` collection) to remove on save.
 5. **Harvest edits + save.** On Save, read the *current control values* per row. The robust
    pattern is a bulk `Patch` of a shaped table:
+   Two documented shapes exist (MS Learn, *Patch function* + *Create or update bulk records*),
+   and which one you want depends on whether the save mixes creates with updates:
+
+   **Updates only → one bulk call.** `Patch( DataSource, Collection )` is the documented bulk
+   form — records shaped to match the source, each carrying its primary key. ForAll only
+   SHAPES here; the single Patch is the only write:
    ```power
-   // Update existing + create new in ONE bulk call; split by whether the row has a real ID.
-   // ForAll only SHAPES records here — the single outer Patch is the only write. (AllItems
-   // records expose fields and controls directly: row.ID, row.txtField — there is no
-   // row.ThisItem, and an inner 3-arg Patch(Source, …) would fire one write per row.)
    Patch( Source,
-       ForAll( Gallery.AllItems As row,
-           If( row.ID > 0,
-               { ID: row.ID, Field: row.txtField.Text },
-               // new row → 2-arg Patch is a pure record merge onto Defaults, not a write
-               Patch( Defaults(Source), { Field: row.txtField.Text } )
-           )
+       ForAll( Filter(Gallery.AllItems, ID > 0) As row,
+           { ID: row.ID, Field: row.txtField.Text } ) );
+   ```
+   (The pairwise 3-arg form — `Patch(DS, BaseRecordsTable, ChangeRecordTable)`, tables matched
+   one-for-one — is the other documented bulk shape, including bulk *creates* via a base table
+   of `Defaults(DS)` records.)
+
+   **Mixed update + create harvested from controls → one Patch per row inside ForAll.** This
+   is the pattern MS Learn itself gives for joining control values to source records:
+   ```power
+   ForAll( Gallery.AllItems As row,
+       If( row.ID > 0,
+           Patch(Source, LookUp(Source, ID = row.ID), { Field: row.txtField.Text }),
+           Patch(Source, Defaults(Source), { Field: row.txtField.Text })
        )
    );
    ```
+   It fires one request per row — accept that cost for the mixed case, or split the save into
+   a bulk-update call plus a bulk-create call if the grid is large.
+
+   Two shape facts both prior versions of this section got wrong at least once: with `As row`,
+   **the alias IS the record** — read `row.ID` / `row.txtField.Text`; there is no `.ThisItem`
+   member on an `AllItems` row. And tables are perfectly valid Patch arguments — both bulk
+   forms take them — so don't avoid the bulk shapes for that reason; what you must not do is
+   wrap per-row *writes* (3-arg Patches) inside another Patch, which double-writes.
    Then reconcile deletes: `ForAll(colDeletes, Remove(Source, LookUp(Source, ID = ThisRecord.ID)))`,
    wrap in `IfError`, and `Notify` success/failure.
 6. **Refresh + confirm.** Re-`ClearCollect` from the source so server-assigned `ID`s/keys appear,

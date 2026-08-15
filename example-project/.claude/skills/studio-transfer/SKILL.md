@@ -82,22 +82,26 @@ Instead, establish paste-readiness *before* the human ever pastes:
    Across a one-way gap a false negative is expensive: it looks like an authoring bug, and the
    revise-blind loop that follows rewrites correct code.
 
-## What survives the paste — the two transfer-side layout facts
+## What survives the paste — the transfer-side layout facts
 
-Two layout facts change how you author for the crossing. Both are **owned elsewhere** — the
-container's tokens, YAML shape, and still-inferred properties by **`powerapp-canvas-controls`**,
-the freeze mechanics and the geometry consequences by **`powerapp-canvas-design`** (§ *layout
-formulas do not survive the paste*). What this skill adds is their transfer meaning:
+The mechanics are **owned elsewhere** — container tokens and YAML shape by
+**`powerapp-canvas-controls`**, direct-manipulation write-back and geometry by
+**`powerapp-canvas-design`** (§4). What this skill adds is their transfer meaning:
 
-1. **Auto-layout containers are the one layout that survives the gap intact.** Children of a
-   `GroupContainer`/`AutoLayout` carry no X/Y — and X/Y are exactly what Studio freezes at
-   paste time, so everything inside a container is immune to that failure mode. Prefer a
-   container over absolute positions for anything that stacks.
-2. **Every layout formula lands as a frozen constant** — the value it evaluated to at the
-   instant of the paste. So at *authoring-for-paste* time: plain integers for X/Y/Width/Height
-   unless genuine responsiveness is wanted, never position one control off another, and tell
-   the human that fixing a frozen value means editing it in Studio's formula bar — re-pasting
-   just re-freezes it.
+1. **Layout formulas cross the gap LIVE.** Settled by experiment (a probe screen pasted in
+   Studio, 2026-08-13): `Parent` arithmetic, references to controls declared earlier *and*
+   later, and a container's own `Width` all kept recomputing after a code-view paste. This
+   section previously taught the opposite ("every layout formula lands as a frozen constant")
+   by over-reading the MS Learn drag quote — that claim is **false for pasting**. What freezes
+   a formula is **direct manipulation** in Studio (drag, resize handle, position/size boxes),
+   so the transfer instruction to the human is: *change such a control only through the
+   formula bar*.
+2. **The real paste hazard is the name suffix, a different mechanism.** If a control lands as
+   `txtSearch_1`, every reference to `txtSearch` inside that same paste resolves to the old
+   control or to nothing — misplaced-control reports after a paste are almost always this,
+   not "freezing". Deleting a screen before re-pasting it avoids the collision entirely.
+3. Auto-layout containers are still preferred for anything that stacks — because they express
+   intent and re-flow siblings, not because anything needs escaping.
 
 ## The channel — code view mechanics
 
@@ -128,6 +132,29 @@ Code view (GA **17 Mar 2025**) is the interactive channel. Grounded on Microsoft
 - **The code-view pane is not editable.** You cannot edit code inside code view — pasting
   creates, it never patches. To change a control, author the new YAML in the repo, paste to
   create, rename, and delete the old one (or patch its properties in the formula bar).
+
+### The App-object paste: the comment trap
+
+Everything in `App.OnStart` / `App.Formulas` lives in a **single property**, so one rejected
+paste takes out every global it defines at once — the theme, nav state, reference tables —
+and every screen then reads blank (see `powerapp-canvas-design`'s "squished and black"
+diagnosis). Two ways that paste fails, both near-silent:
+
+1. **The leading `=`.** It is the pa-yaml marker, not part of the formula. The formula bar
+   renders its own `=` outside the editable area, so pasting yours yields `==` and an error
+   that reads like a syntax fault in the first statement. Strip it.
+2. **`//` runs to end of line.** A **collapsed** formula bar flattens a multi-line paste into
+   one line — and a body that OPENS with a comment then has its first `//` swallow the entire
+   property. Nothing is defined, and there is no error, because a comment is valid.
+
+**EXPAND the formula bar before pasting**, and when in doubt hand the human a comment-free
+body (keep a comment-stripping helper in the repo's tools). The reasoning belongs in the repo,
+which is the authoritative source; Studio only needs the code.
+
+**The decisive diagnostic** ("it didn't work" cannot localise a long property): have the human
+run OnStart, then type the theme variable and a dot into any `Fill`. If IntelliSense offers no
+members, the property set nothing — check whether it landed as one long line or with a stray
+`=`. App checker (Advanced tools) lists the error app-wide.
 
 ## Two artifacts, one is read-only — don't confuse them
 

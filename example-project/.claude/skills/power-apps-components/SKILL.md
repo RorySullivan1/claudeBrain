@@ -224,8 +224,21 @@ enclosing container/component:
 Inside a **component**, these same formulas use `Parent.Width`/`Parent.Height` to mean
 the *component's* size — that's what makes a component resize with its instance.
 
-> Once X/Y/Width/Height is a formula, **stop dragging the control** — a drag overwrites
-> your formula with frozen constants.
+> Once X/Y/Width/Height is a formula, set it only through the **formula bar** — any direct
+> manipulation (drag, resize handle, the position/size boxes) overwrites it with a constant.
+
+### A COMPONENT CANNOT GO INSIDE A GALLERY OR A FORM
+
+First-party and flat — MS Learn, *Canvas component overview → Known limitations*:
+
+> *"You can't insert a component into a gallery or a form (including SharePoint form)."*
+
+Studio refuses the control outright. **Check this before designing any per-row visual as a
+component**: a status glyph, a pill, a mini chart in a gallery template must be built from
+plain controls (an `Image` with an SVG data URI, a `Label`, a `Rectangle`), inlined in the
+template. The other limitations worth knowing from the same list: no data sources inside a
+component, no `UpdateContext` (use `Set`), and two instances of one component cannot wire an
+output of one to an input of the other.
 
 ---
 

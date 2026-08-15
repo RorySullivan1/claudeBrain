@@ -72,7 +72,11 @@ still fails the whole paste. **Casing stays per-token**: `DropDown` has a capita
 
 **Modern family** — `ModernTextInput@1.0.0`, `ModernNumberInput@1.0.0`, `ModernCombobox@1.0.0`,
 `ModernDatePicker@1.0.0`, `ModernTabList@1.0.0`, `ModernButton@1.0.0`,
-`GroupContainer@1.5.0` (`Variant: AutoLayout`).
+`GroupContainer@1.5.0` (`Variant: AutoLayout`; also `Variant: GridLayout` — grounded from
+Studio code view 2026-08-10. Grid children place themselves with `LayoutGridColumnStart` /
+`LayoutGridColumnEnd` / `LayoutGridRowStart` / `LayoutGridRowEnd`; Studio writes X/Y on them
+anyway and ignores it. **The grid's own shape — column/row count, track sizes — is still
+ungrounded**, so fill a grid Studio already made; don't author the container blind).
 
 **`Classic/ComboBox@2.4.0` and `ModernCombobox@1.0.0` are different controls.** Studio generates
 the classic one inside data cards; the modern one is what you insert by hand today. The classic
@@ -95,7 +99,7 @@ mismatch is not a failure mode. **Only the control name and the `Variant` matter
 | Control | Read it as | Note |
 |---|---|---|
 | `ModernTextInput` | `.Text` | **Unchanged from classic** — converting inputs is a property rename only |
-| `ModernNumberInput` | `.Value` | a real number; `TriggerOutput` was removed from this control |
+| `ModernNumberInput` | `.Value` | *reference only* — its `@version` is ungrounded, so prefer `Classic/TextInput@2.3.2` + `Value(ctl.Text)` until a code-view sample grounds it (a real number; the modern control's `TriggerOutput` was removed) |
 | `ModernCombobox` | `.Selected.Value` | with `SelectMultiple: =false`, `Selected` is a record |
 | `ModernDatePicker` | `.SelectedDate` | `Blank()` when unset |
 | `ModernTabList` | `.Selected.Value` | the tab label |

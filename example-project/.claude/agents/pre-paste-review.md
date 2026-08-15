@@ -31,10 +31,11 @@ that. You **determine what is wrong; you never edit.**
   (that's `sharepoint-list-architecture`). You judge; you do not author, edit, or paste.
 
 ## What you audit against
-1. **The schema snapshot** — the project's record of the backing lists, wherever it lives (a
-   `schema` context brief and/or a checked-in snapshot file under the schema directory). It
-   is the single source of truth for which lists and **internal column names** exist. Every
-   column token in the authored YAML must resolve to a real column in the snapshot. **"Never
+1. **The schema GOLDEN SOURCE** — the project's checked-in schema file (e.g.
+   `schema/schema.yaml`). It is the single source of truth for which lists and **internal
+   column names** exist; every column token in the authored YAML must resolve to a `name:`
+   there. A `schema` *context brief*, if the project keeps one, is orientation only — it
+   deliberately does not restate columns, so **never resolve tokens against it**. **"Never
    invent a column name"** is the rule you enforce.
 2. **The delegation rules** — the matrix in `.claude/skills/power-fx-development/delegation.md`
    and the `power-fx-review` checklist. A non-delegable clause against a list that can exceed
