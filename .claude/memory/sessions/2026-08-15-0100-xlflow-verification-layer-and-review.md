@@ -195,3 +195,47 @@ are genuine propose-only design agents (data-analyst, presentation-architect,
 software-architect) with zero verify-signals; both original offenders were already fixed in
 review. So this codifies a fix rather than exposing new violations — which is the point of
 promoting a twice-seen defect into an authoring rule.
+
+## Addendum 5 — light sweep of presentation/docs (pass 3, completes the gate)
+
+4 verifiers over 10 skills, grouped by where checkable content plausibly lived rather than
+one-per-file. Brief said explicitly: **an empty array is a success, don't grade opinions,
+name what you skipped.** That instruction did real work — two groups returned near-zero and
+said so cleanly instead of padding.
+
+**~23 claims, 3 errors.** Thin, as predicted from the pass-2 observation that the most
+judgment-heavy skills return zero.
+
+- `report-builder` had Word's broken-cross-reference string as "Error! Reference not found";
+  the real string is **"Error! Reference source not found."** Severity is higher than its
+  size: it sat in a VERIFY step, so an agent grepping the literal would match nothing in a
+  genuinely broken document and report it clean. Third variant of the session's recurring
+  theme — a verification step that cannot verify. Added "Error! Bookmark not defined." too.
+- `brochure-builder` listed the LaTeX `ticket` class as a brochure tool. It makes visiting
+  cards/labels/stickers and is a package, not a class. `leaflet` (also listed) is correct
+  and genuinely does two-fold imposition, so the row now names it alone.
+- `technical-documentation-drafter` said GitHub surfaces CONTRIBUTING.md "in PR templates" —
+  it links on the PR-creation page, a different feature from PULL_REQUEST_TEMPLATE.md.
+
+**Print geometry was the one place I guessed right.** Fold arithmetic verified by
+computation, not citation: US Letter tri-fold 3.6875+3.6875+3.625=11.000in exactly (tuck
+panel 1.59mm narrower — inside the 1/16-1/8in trade range the skill's "~2-3mm" brackets);
+A4 gate-fold 74.25+148.5+74.25=297.0; Z-fold 297/3=99.0 equal; saddle-stitch pages=4x
+sheets; spine pairs sum to n+1. All sound.
+
+**Three predictions wrong, worth remembering.** I seeded the brief with WCAG contrast
+ratios, python-pptx/python-docx APIs, and Diatraxis as likely targets. None exist anywhere
+in these families: branding/presentation-design reference contrast only as an instruction
+to CHECK (never a threshold), the builders name libraries only as tools to PICK (no
+signatures), and neither drafter uses Diataxis at all. In judgment-heavy families the
+falsifiable surface is thinner AND differently placed than it looks from outside — guess
+the location badly and a sweep finds nothing while looking thorough.
+
+**Zero-yield coverage rows added to the ledger** for branding/presentation-design and the
+verified fold geometry. Without them a future pass cannot distinguish "examined and
+genuinely empty" from "never looked at" — the same absence-means-unreviewed logic the
+ledger schema already applies to findings.
+
+**Observation, not acted on:** `branding` tells the reader to verify contrast but never says
+what passes. That is a content GAP, and filling it means ADDING claims — out of scope for a
+verification pass. Flagged for a human decision rather than fixed unilaterally.
