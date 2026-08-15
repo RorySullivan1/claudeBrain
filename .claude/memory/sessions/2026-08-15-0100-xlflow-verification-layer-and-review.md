@@ -127,3 +127,48 @@ multi-site claims (Prefer header = 5).
 either family carried dated grounding, which is itself the finding. Verifiers reliably
 self-limited to ~15-23 claims each; that granularity felt right. Rubberduck-specific claims
 in vba-code-test-writing are out of Learn's scope entirely and need a different source.
+
+## Addendum 3 — verify-claims pass 2 (VSTO, coding-standards, Python, quant)
+
+10 more verifiers in two batches of five (smaller batches after pass 1's session-limit
+deaths). Totals across both passes: **21 verifiers, ~390 claims, 22 skills, 63 ledger rows
+(40 corrected, 22 experience-settled, 1 contested).**
+
+**VSTO was by far the worst family: 22 errors.** The LoadBehavior registry table was wrong
+in TWO files and differently wrong in each — `2` called load-on-demand when it is the
+post-failure error state, `0` called a crash symptom when it is a deliberate setting, `9`
+and `16` both mislabeled. Anyone debugging a failed load would read the registry backwards.
+Also: the WiX Manifest value was missing the required `file:///` prefix (an MSI from that
+template would not load), the mage.exe signing order was inverted, `|vstolocal` appeared on
+a ClickOnce URL where it opts out of the very cache being described, and GPO
+computer-assigned packages were said to install at logon rather than startup.
+
+**The highest-yield finding class across the whole exercise: review skills teaching
+inverted rules.** Three independent instances —
+- VSTO-review flagged `FinalReleaseComObject` as high-severity; Microsoft's warning is about
+  `ReleaseComObject`, and it recommends FinalRelease for deterministic release.
+- python-review's late-binding example (`lambda i: i`) was the documented FIX, not the bug —
+  its parameter shadows the loop variable. The real bug is the parameterless `lambda: i`.
+- financial-timeseries told readers to hunt look-ahead leakage in `ewm`, which has no
+  `center` parameter and is provably causal (verified by perturbation).
+Each one would make a reviewer flag correct code and miss the actual defect. Worth a
+standing rule: **when a skill teaches "spot X", verify the example IS X.**
+
+**Second class: freshness decay, not authoring error.** The Semi-Annual Enterprise Channel
+advice was true when written; the July 2026 (2606) release unified SAEC into Monthly
+Enterprise, so it silently stopped working. Different failure mode, different fix (a
+dated caveat rather than a correction).
+
+**Method notes:**
+- Empirical grounding beat citation-hunting on Python/quant — catastrophic cancellation vs
+  np.var's two-pass implementation, `freq="B"` including July 4th, ewm causality by
+  perturbation, sqrt-of-time by simulation. For runtime behaviour, run it.
+- Standards/review skills are ~80% judgment by design; verifiers correctly extracted only
+  the checkable minority. That ratio is healthy, not a defect.
+- Egress: docs.python.org, peps.python.org, docs.pydantic.dev, numpy.org,
+  pandas.pydata.org and docs.scipy.org are ALL blocked by the proxy. Only
+  learn.microsoft.com and raw.githubusercontent.com are reliably reachable. The OSS
+  template now says so.
+- Two skills came back with ZERO errors: coding-standards (21/22 confirmed) and
+  backtesting-validation + quant-code-review. Both are heavily judgment-based, which is
+  itself the pattern: the more falsifiable a skill, the more it decays.
