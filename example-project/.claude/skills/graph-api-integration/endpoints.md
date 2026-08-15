@@ -55,7 +55,7 @@ SharePoint APIs). **A** = Application (app-only / daemon).
 |---|---|
 | Identifiers | Application: `883ea226-0bf2-4a8f-9f9d-92c9162a727d` · Delegated: `f89c84ef-20d0-4b54-87e9-02e856d66d53` |
 | What it does | Grants the app access to **only the specific site collections** an admin has assigned it in SharePoint — nothing tenant-wide. Preferred over `Sites.Read.All`/`Sites.ReadWrite.All` for a solution that touches a known handful of sites. |
-| Granting per-site roles | An admin writes a permission entry per site (`POST /sites/{site-id}/permissions`) with `read` / `write` / `fullcontrol` / `owner` roles. Doing the grant itself requires `Sites.FullControl.All` (and, delegated, a site-collection admin). |
+| Granting per-site roles | An admin writes a permission entry per site (`POST /sites/{site-id}/permissions`) with `read` / `write` / `manage` / `fullcontrol` roles (the docs list `manage`, not `owner`). Doing the grant itself requires `Sites.FullControl.All` (and, delegated, a site-collection admin). |
 | Hard limitation | An app holding **only** `Sites.Selected` **cannot list or search sites** (`GET /sites?search=` fails) — you must already know the site id or URL. Resolve the id out-of-band or via the path addressing above. |
 
 ## Batch & service root

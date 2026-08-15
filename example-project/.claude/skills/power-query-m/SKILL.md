@@ -124,7 +124,8 @@ in
 A **multi-value** Person or Lookup column (or anything showing `[Table]`, not `[Record]`)
 arrives as a nested *table* — expand it with **`Table.ExpandTableColumn`** instead. Using
 `Table.ExpandRecordColumn` on a `[Table]` value errors with *"We cannot convert a value of type
-Table to type Record."*
+Table to type Record."* *(the function's input kinds are documented; the verbatim message is
+observed, not doc-stated — checked 2026-08-15.)*
 
 Reduce columns **before** expanding — expanding a wide lookup pulls extra fields you'll
 only discard.
@@ -200,7 +201,8 @@ Order your applied steps to fold first and reshape last:
     AddName  = Table.ExpandTableColumn(Merged, "People", {"FullName"}, {"OwnerName"})
   ```
 
-  `JoinKind` values: `Inner`, `LeftOuter`, `RightOuter`, `FullOuter`, `LeftAnti`,
+  `JoinKind` values (all eight): `Inner`, `LeftOuter`, `RightOuter`, `FullOuter`, `LeftSemi`,
+  `RightSemi`, `LeftAnti`,
   `RightAnti`. Default (omit the arg) is `LeftOuter`.
 
 - **Append** = a **union**: stack rows of queries with the same shape

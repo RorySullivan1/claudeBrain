@@ -93,7 +93,10 @@ memory and refresh time and don't respond to the report, so an aggregation store
 as a column is almost always a mistake.
 
 If the value could be produced upstream during data load, prefer a **Power Query**
-column over a calculated column — it compresses better and keeps the model lean.
+column over a calculated column — it keeps model logic in one layer and avoids DAX-side
+recomputation. (The often-repeated "compresses better" rationale is community lore, **not**
+stated on Microsoft Learn — which notes both kinds are computed at refresh and stored, and
+that calculated columns can even win for some aggregations. Checked 2026-08-15.)
 That's `power-query-m` territory.
 
 ---
@@ -285,6 +288,8 @@ essential — inside the `CALCULATE` the date context is gone. For a within-year
 ```dax
 Product Rank =
 RANKX ( ALL ( Product[ProductName] ), [Total Sales], , DESC, DENSE )
+-- order: the docs specify 0/FALSE (descending) and 1/TRUE (ascending); the DESC/ASC
+-- keywords are widely used and accepted but are not listed on Learn (checked 2026-08-15).
 ```
 
 `RANKX` iterates the table in its first argument; `ALL ( Product[ProductName] )`
@@ -301,7 +306,9 @@ Product[OrderCount] = COUNTROWS ( RELATEDTABLE ( Sales ) )
 ```
 
 `RELATED` follows a relationship from the many-side to the one-side (one value);
-`RELATEDTABLE` returns the related many-side rows. Both need row context, so they
+`RELATEDTABLE` returns the related many-side rows. `RELATED`'s row-context requirement is
+doc-stated; `RELATEDTABLE`'s is *observed* (its page describes it only as CALCULATETABLE with
+no filter — checked 2026-08-15). Both need row context in practice, so they
 live in calculated columns or iterators, not in a plain measure.
 
 ---

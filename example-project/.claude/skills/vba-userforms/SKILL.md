@@ -172,7 +172,7 @@ Common control events and what they're for:
 |---|---|
 | `Click` / `Change` | buttons; reacting to a selection or toggle |
 | `BeforeUpdate(ByVal Cancel As MSForms.ReturnBoolean)` | per-field validation — set `Cancel = True` to keep focus in the field |
-| `KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)` | restrict input (e.g. digits only: set `KeyAscii = 0` to reject) |
+| `KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)` | restrict input (e.g. digits only: set `KeyAscii = 0` to reject — documented for Access forms, observed for MSForms) |
 | `Enter` / `Exit` | field focus transitions |
 | `UserForm_Initialize` | populate controls, set defaults — runs once on creation |
 | `UserForm_QueryClose` | intercept the [X] (see below) |

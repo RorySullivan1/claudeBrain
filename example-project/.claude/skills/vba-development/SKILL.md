@@ -45,7 +45,8 @@ State assumptions explicitly at the top of every code block:
 
 ```vba
 Option Explicit          ' non-negotiable — never produce a module without it
-Option Private Module    ' for modules whose procedures should not show in the macro dialog
+Option Private Module    ' hides the module's contents from OTHER projects (doc-stated);
+                         ' also keeps its procedures out of the macro dialog (observed)
 ```
 
 ### Naming — naming carries the load (VBA has no namespaces)
@@ -194,7 +195,8 @@ Fail:
 End Function
 ```
 
-UDFs: standard module only (not a class, not a sheet module); no workbook mutation, no
+UDFs: standard module only (not a class, not a sheet module) — *long-established behaviour,
+but stated only in community answers, not on Microsoft Learn (checked 2026-08-15)*; no workbook mutation, no
 `Application.*` side effects; deterministic unless explicitly `Application.Volatile` (avoid
 volatility unless required); return a **2D** `Variant` for dynamic-array spilling.
 
@@ -237,7 +239,7 @@ If Not cache.Exists(key) Then cache.Add key, value   ' .Exists / .Keys / .Items 
 ```vba
 Dim http As Object
 Set http = CreateObject("MSXML2.ServerXMLHTTP.6.0")   ' server/unattended; XMLHTTP for interactive
-http.setTimeouts 5000, 5000, 15000, 30000             ' default is effectively unbounded — always set
+http.setTimeouts 5000, 5000, 15000, 30000             ' resolve/connect/send/receive (ms) — always set
 http.Open "GET", url, False
 http.setRequestHeader "Authorization", AuthHeader()   ' isolate header construction in one function
 http.send

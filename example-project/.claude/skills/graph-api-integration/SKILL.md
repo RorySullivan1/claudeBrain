@@ -72,9 +72,12 @@ rewrites the whole design:
 - **Which identity / OAuth flow?** Is there a signed-in user (delegated) or is this an
   unattended daemon/service (application)? A "sync job that runs at 2 a.m." is app-only;
   a "button in our web app that saves as *me*" is delegated.
-- **Delegated vs. app-only permissions** — and does an admin need to grant them? App-only
-  and `Sites.Selected` both require **admin consent**; a delegated `Sites.Read.All`
-  usually does too in an enterprise tenant.
+- **Delegated vs. app-only permissions** — and does an admin need to grant them? **App-only
+  (Application) permissions always require admin consent**, including application
+  `Sites.Selected`; the *delegated* form of `Sites.Selected` is marked
+  `AdminConsentRequired: No` in the permissions reference (verified 2026-08-15). A delegated
+  `Sites.Read.All` usually does need consent in an enterprise tenant. Note the per-site role
+  grant itself always needs an admin holding `Sites.FullControl.All`.
 - **Which tenant, and which SharePoint site(s)?** Get the tenant id and the exact site
   hostname + server-relative path (e.g. `contoso.sharepoint.com` + `/teams/hr`). If only
   a few sites are in scope, plan for `Sites.Selected`.
@@ -172,9 +175,11 @@ permission detail is in `endpoints.md`.
   `fields(select=Col1,Col2)`.
 - **`$select`** — trims top-level item properties.
 - **`$filter=fields/{internalName} eq '…'`** — server-side filter on a column. Send the
-  header **`Prefer: HonorNonIndexedQueriesWarningMayFailRandomly`**, or a non-indexed
-  column (or any list past the view threshold) returns **HTTP 400**; index the column for
-  the durable fix. Text `eq` is **case-insensitive**. Use the **internal** name
+  header **`Prefer: HonorNonIndexedQueriesWarningMayFailRandomly`** *(experience-settled:
+  widely reported and reproduced, but absent from the official `listItem: list` reference —
+  checked 2026-08-15)*, or a non-indexed column (or any list past the view threshold)
+  returns **HTTP 400**; index the column for
+  the durable fix. Text `eq` is **case-insensitive** *(observed behaviour; not stated in the Graph reference)*. Use the **internal** name
   (spaces → `_x0020_`), not the display name.
 - **`$top`, `$orderby`** — page size and ordering.
 
