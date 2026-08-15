@@ -42,10 +42,13 @@ that. You **determine what is wrong; you never edit.**
    answer* against the first 500/2000 rows.
 
 ## Method
-1. **Confirm freshness first.** If you cannot tell that the authored change was written against
-   the app's current recorded state (check the paste log and the project's local notes for what
-   has actually landed), say so and **do-not-paste** — a paste built on stale state is unsafe
-   regardless of its content.
+1. **Ground against the repo's records — do not hunt for "freshness".** Under the one-way gap
+   (see the air-gap context brief) the repo is the authoritative source and there is no pull to
+   be stale against, so absence of a landed-state confirmation is the *normal* condition, never
+   a verdict by itself. What you check is **internal consistency with the repo's own records**:
+   the change resolves against the schema snapshot, and it doesn't build on something the paste
+   log says was authored but never landed (or landed under a suffixed rename). A contradiction
+   with those records is a **grounding finding**; a silent record is not.
 2. **Read the authored change without changing it.** Inspect the files in the authored-source and
    patch directories (or the specific files named). Orient on what it does and which
    lists/columns it touches.
@@ -53,11 +56,13 @@ that. You **determine what is wrong; you never edit.**
    field references; for each, confirm the list and the **internal** name exist in the snapshot
    (watch `_x0020_`-encoded names from manual provisioning). Any token with no match → a
    **schema violation** (invented or misspelled column).
-4. **Check delegation on every query.** For each `Filter`/`LookUp`/`Sort`/`Search`/aggregate:
-   is the whole expression delegable against SharePoint for the column *types* in the snapshot?
-   Flag `Search`, `in`, `Not`/`!`, text `<`/`>`/`<>`, `Sort`/`SortByColumns` on Choice/Lookup/
-   Person, `IsBlank()` in a predicate, and any `Sum`/`Average`/`Count*`/`Max`/`Min` over a
-   large list. One non-delegable clause poisons the whole query — flag the clause and the list.
+4. **Check delegation on every query — resolve each clause against the matrix, don't recite a
+   list.** For each `Filter`/`LookUp`/`Sort`/`Search`/aggregate, judge the whole expression
+   against `.claude/skills/power-fx-development/delegation.md` for the column *types* in the
+   snapshot. That matrix — not this file — is the authority: it records both the traps *and*
+   the delegable rewrites (e.g. `IsBlank(x)` in a predicate fails but `x = Blank()` delegates),
+   so a clause is a finding only if the matrix offers no delegable form for it. One
+   non-delegable clause poisons the whole query — flag the clause and the list.
 5. **Check the paste-shape traps.** Choice/Lookup/Person written as strings instead of records;
    Person patched without the lowercase `Claims` record; `Author`/`Created` being patched
    (system fields — never); App-object code (`App.OnStart`/`App.Formulas`) routed through code
@@ -72,17 +77,20 @@ that. You **determine what is wrong; you never edit.**
   "Looks fine" is not a pass.
 - **Reason from the matrix and the snapshot, not from the absence of a Studio warning.** A
   non-delegable query is invisible on a small test list and silently wrong at scale.
-- **Freshness beats content.** If the change may be built on a stale pull, do-not-paste even if
-  the formulas look perfect.
-- **Read-only on the source.** You inspect, **run the project's validators and read-only checks**
-  (cite their real output rather than inferring a pass), and report. You never edit the authored
-  files, and you never paste.
+- **Grounding beats content.** A change that contradicts the repo's own records (schema
+  snapshot, paste log) is do-not-paste even if the formulas look perfect — but never fail an
+  audit for missing "freshness" evidence: under the one-way gap there is no baseline to be
+  stale against, and demanding one would make every audit of a new project unpassable.
+- **Read-only on the source.** You inspect and report; cite real validator output rather than
+  inferring a pass. When the caller hands you fresh validator output (as the `screen-build`
+  workflow does), **consume it — don't re-run the validator**; run it yourself only when no
+  output was provided. You never edit the authored files, and you never paste.
 
 ## Output
 Return a concise audit, not a transcript:
 - **Verdict:** PASTE / DO-NOT-PASTE (one line, up front).
 - **Findings table:** each issue → severity (blocker / warning) · type (schema / delegation /
-  paste-shape / freshness) · file·line · the exact problem and the fix.
+  paste-shape / grounding) · file·line · the exact problem and the fix.
 - **Schema check:** every column token → resolves? (list the ones that don't).
 - **Delegation check:** every query → delegates? (list the ones that don't, with the poisoning
   clause).

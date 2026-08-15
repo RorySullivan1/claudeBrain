@@ -164,7 +164,7 @@
             "type": "command",
             "command": "python",
             "args": [
-              "${CLAUDE_PROJECT_DIR}/.claude/hooks/asset_integrity.py"
+              "${CLAUDE_PROJECT_DIR}/.claude/hooks/git_guards.py"
             ],
             "timeout": 15
           }
@@ -178,19 +178,6 @@
             "command": "python",
             "args": [
               "${CLAUDE_PROJECT_DIR}/.claude/hooks/pre_read_guard.py"
-            ],
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "python",
-            "args": [
-              "${CLAUDE_PROJECT_DIR}/.claude/hooks/version_guard.py"
             ],
             "timeout": 10
           }

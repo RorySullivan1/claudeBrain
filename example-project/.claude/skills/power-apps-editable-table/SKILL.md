@@ -60,13 +60,16 @@ it's the single most common bug in this pattern.
 5. **Harvest edits + save.** On Save, read the *current control values* per row. The robust
    pattern is a bulk `Patch` of a shaped table:
    ```power
-   // Update existing + create new in one call; split by whether the row has a real ID.
+   // Update existing + create new in ONE bulk call; split by whether the row has a real ID.
+   // ForAll only SHAPES records here — the single outer Patch is the only write. (AllItems
+   // records expose fields and controls directly: row.ID, row.txtField — there is no
+   // row.ThisItem, and an inner 3-arg Patch(Source, …) would fire one write per row.)
    Patch( Source,
        ForAll( Gallery.AllItems As row,
-           If( row.ThisItem.ID > 0,
-               Patch(Source, LookUp(Source, ID = row.ThisItem.ID), { Field: row.txtField.Text }),
-               // new row → merge onto Defaults(Source)
-               Patch(Source, Defaults(Source), { Field: row.txtField.Text })
+           If( row.ID > 0,
+               { ID: row.ID, Field: row.txtField.Text },
+               // new row → 2-arg Patch is a pure record merge onto Defaults, not a write
+               Patch( Defaults(Source), { Field: row.txtField.Text } )
            )
        )
    );
@@ -87,9 +90,12 @@ load, one write pass:
 
 // Save button OnSelect:
 IfError(
-    ForAll(
-        Filter(Gallery2.AllItems, Toggle1.Value = true) As r,
-        Patch(Training, r.ThisItem, { Status: {Value: "Complete"}, CompletedOn: Today() })
+    // One bulk write: shape the checked rows into ID-keyed records, Patch the table once.
+    Patch( Training,
+        ForAll(
+            Filter(Gallery2.AllItems, Toggle1.Value = true) As r,
+            { ID: r.ID, Status: {Value: "Complete"}, CompletedOn: Today() }
+        )
     ),
     Notify("Some rows failed to save: " & FirstError.Message, NotificationType.Error),
     Notify("Saved.", NotificationType.Success)
@@ -97,8 +103,9 @@ IfError(
 ClearCollect(colTraining, Filter(Training, AssignedTo.Email = gUserEmail))
 ```
 
-`Patch(Training, r.ThisItem, {...})` updates the **existing** record (merges onto the record, not
-`Defaults`), because these rows came from the source and carry their `ID`.
+The shaped records carry `ID`, so the single `Patch` updates the **existing** rows (an ID-keyed
+record targets its source record; no `Defaults` merge), and the whole checked set goes out in
+one call.
 
 ## Watch Out
 

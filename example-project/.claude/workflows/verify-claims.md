@@ -5,9 +5,8 @@ whether those facts are true — then label each one with its provenance so a fu
 can tell a vendor-documented rule from somebody's Tuesday afternoon.
 
 Run this **before shipping** a skill or context doc that carries factual weight, and when
-adopting an asset from elsewhere. It is the truth gate; `skill-creator`'s evals are the
-performance gate. They are independent — an asset can pass evals while asserting something
-false, and that is the failure this workflow exists to catch.
+adopting an asset from elsewhere. It is the **truth gate** — independent of `skill-creator`'s
+performance evals; `claim-grounding` (this workflow's engine) states that division of labor.
 
 **Inputs:** a target asset (a `SKILL.md`, a context brief, a bundle).
 **Output:** the asset updated with tier-labeled claims and dated citations; a report of
@@ -25,21 +24,19 @@ what was verified, what was corrected, and **what could not be verified**.
    governs), experience-settled (only observed behavior supports it), or not-a-claim.
    Sort by blast radius — verify what a reader will *act on* first.
 
-3. **Ground the doc-settled claims.** Query the governing source and confirm the sentence
-   actually says what the asset says. For Microsoft surfaces use
+3. **Ground the doc-settled claims.** Confirm the governing source actually says what the
+   asset says, and record the URL **and the retrieval date** — `claim-grounding` owns the
+   citation rules; don't restate them here. For Microsoft surfaces use
    `mcp__Microsoft_Learn__microsoft_docs_search` then `microsoft_docs_fetch` for the full
-   page; otherwise `WebFetch` the spec. Record the URL **and the retrieval date**. A
-   citation that doesn't contain the claim is a failed check, not a passed one.
+   page; otherwise `WebFetch` the spec.
 
-4. **Ground the authority-settled claims** *(only where a probe is available)*. Build the
-   smallest probe, run the known accept/reject controls first, round-trip the input, and
-   promote only confirmed outcomes. A timeout or harness failure is a **non-result** —
-   stop the line, don't record it as a negative. Keep the probe local; never wire it into
-   CI or a shipped command.
+4. **Ground the authority-settled claims** *(only where a probe is available)*. Apply
+   `claim-grounding`'s **"Grounding against a live authority"** section as written —
+   controls, round-trip, serialization, stop-the-line, deliberate promotion, no CI wiring.
+   The skill is the source of truth for that discipline; a summary here would only drift.
 
-5. **Label the rest honestly.** Any claim that survives without a doc or a probe gets
-   marked experience-settled in the asset itself, naming where it was observed. Do not
-   delete it and do not launder it — an accurate weak label is more useful than either.
+5. **Label the rest honestly** per the skill's experience-settled tier: mark the claim in
+   the asset itself, naming where it was observed — never delete it, never launder it.
 
 6. **Correct what's wrong.** Fix false claims at the source; delete claims that turned out
    to be unfounded and unverifiable. Never soften the check to make a claim survive.

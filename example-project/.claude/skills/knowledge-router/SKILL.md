@@ -42,9 +42,11 @@ Identify what *kind* of knowledge it is and send it to the matching home:
   autonomously; their creation stays deliberate (use the `add-agent` command when a human
   decides to).
 - **A mistake worth never repeating** (a correction you were given, a trap you fell into)
-  → a **recurrence-prevention rule**, kept separate from everything above. Write the *rule*,
-  not the story: "don't X, because Y" in one line. This home has exactly one job — keep it
-  free of design decisions and specifications, or it degenerates into a diary nobody reads.
+  → a **reference note of type `lesson`** (`context.py new --type lesson`, same tier and
+  catalog as the notes below). Write the *rule*, not the story: "don't X, because Y" in one
+  line. Lessons share the notes' plumbing but not their content rules — a lesson is a
+  standing instruction, not a fact — and they stay free of design decisions and
+  specifications, or the tier degenerates into a diary nobody reads.
 - **None of the above / a one-off / already captured** → **drop it.** Most observations
   land here.
 

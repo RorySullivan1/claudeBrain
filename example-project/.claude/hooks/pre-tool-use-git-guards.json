@@ -6,8 +6,8 @@
         {
           "type": "command",
           "command": "python",
-          "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/version_guard.py"],
-          "timeout": 10
+          "args": ["${CLAUDE_PROJECT_DIR}/.claude/hooks/git_guards.py"],
+          "timeout": 15
         }
       ]
     }

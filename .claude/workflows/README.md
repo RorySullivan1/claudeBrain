@@ -20,8 +20,7 @@ symlinked operational ones.)
 - `verify-claims` — **(built, operational/symlinked)** the truth gate for an asset that
   asserts facts about an external system: extract the claims, tier each by what would
   settle it, ground them against docs or a local probe, and label what stayed unverified.
-  Complements `skill-creator`'s evals (the *performance* gate) — an asset can pass those
-  while asserting something false. Engine: the `claim-grounding` skill.
+  Engine: the `claim-grounding` skill, which owns the shape/performance/truth split.
 - `author-skill` — scaffold → draft `SKILL.md` → audit against conventions → place
   the finished bundle into `example-project/.claude/skills/` (or a downstream repo).
 - `harvest-context` — turn a stack brief into a context doc, validate, file it.

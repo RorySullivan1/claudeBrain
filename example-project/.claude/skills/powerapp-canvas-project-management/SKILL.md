@@ -6,10 +6,7 @@ description: >
   process rather than code: "what's the state of the app", "what's left to build", "how do I
   get the source out of Studio", "pac canvas download", "what's in an .msapp", "update the
   build book", "log this paste", "the lists are provisioned", "what should I do next", "did
-  this land". Covers: the golden-source inversion (repo defines, SharePoint applies), the
-  authored→landed lifecycle and the four records that support it (a golden-source schema file,
-  a build book, a paste/transfer log, a decisions ledger), provisioning verification, `.msapp`
-  structure and the CLI, and the diagnostic discipline for reports that arrive as one sentence.
+  this land".
   Boundaries: the clipboard mechanics themselves are studio-transfer; formulas are
   powerapp-canvas-development; schema column design is sharepoint-list-architecture; durable
   decisions are session-memory. This skill owns *the project's state and its paper trail*.
@@ -81,10 +78,10 @@ Expand-Archive -Path app.msapp -DestinationPath C:\dest    # an .msapp IS a zip
 Inside: `\src\App.pa.yaml`, `\src\<Screen>.pa.yaml`, `\src\Component\<Name>.pa.yaml`. Only
 `\src` is meant for source control; the JSON files are not stable.
 
-**`References/Templates.json` is the hidden prize** — it carries the enum tables as
-pipe-delimited runs. That is where the complete 180-value classic `Icon` enum comes from, and
-it is the strongest grounding evidence available without a round trip. Always look there
-before declaring a token ungroundable.
+**`References/Templates.json` is the hidden prize** — it carries the enum tables, the
+strongest grounding evidence available without a round trip. The recovery technique is
+**owned by `powerapp-canvas-controls`** (its evidence ladder); always look there before
+declaring a token ungroundable.
 
 **`pac` cannot author component custom properties** (`PA3004`). Component contracts are typed
 by hand in Studio; only bodies paste. Plan any component work as three phases: properties →
@@ -111,24 +108,21 @@ The human's whole return channel is a sentence. Extract the most from it:
 
 ## Workflow: a change, end to end
 
-1. **Decide** — check the decisions ledger first; do not relitigate a settled call.
-2. **Schema first** — if the change touches data, edit the golden-source schema file before any
-   app code, and note whether SharePoint needs re-provisioning.
-3. **Author** into the repo's authored-source area (e.g. `src/authored/` for control YAML,
-   `src/patches/` for App-object bodies that go through the formula bar), grounding every
-   token first.
-4. **Validate** — run the repo's YAML/Power Fx validator (in this example,
-   `python tools/validate_pa_yaml.py`). Add a lint for any new failure class; a bug found twice
-   should have been a lint after the first time.
-5. **Audit** — the `pre-paste-review` agent, for a paste / do-not-paste verdict.
-6. **Update the build book** with anything the human must type by hand (component custom
-   properties, connections, list settings).
-7. **Hand off** — say plainly what to paste, in what order, and what to report back.
-8. **Record** — a paste-log row on the report; a decision in the ledger if it settles something.
-9. **Commit and push.**
+The pipeline itself — the ordered steps, the audit loop, the human paste gate, and the stop
+conditions — is **owned by the `change-end-to-end` workflow** (whole screens:
+`screen-build`); run it rather than a from-memory step list, because the gates live there.
+What this skill adds around the pipeline is the paper trail:
 
-The `change-end-to-end` workflow orchestrates these steps; `studio-transfer` owns the crossing
-itself (steps 7–8).
+- **Before it:** check the decisions ledger — do not relitigate a settled call — and if the
+  change touches data, edit the golden-source schema file *first* (note whether SharePoint
+  needs re-provisioning).
+- **During it:** a new validator failure class earns a new lint in the same change; a bug
+  found twice should have been a lint after the first time. Update the build book with
+  anything the human must type by hand.
+- **After it:** a paste-log row on the human's report; a decision in the ledger if it settles
+  something; commit and push.
+
+`studio-transfer` owns the crossing itself — the paste hand-off and the outcome report.
 
 ## When to stop and ask
 

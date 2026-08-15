@@ -6,10 +6,7 @@ description: >
   visual or spatial question: "lay out this form", "the dropdown covers the fields below",
   "controls are overlapping", "make this screen scroll", "make the form more compact", "build
   a modal", "why is my Y value hardcoded after pasting", "nothing on this screen is
-  clickable", "design the header / nav". Covers: vertical band planning and the collision
-  arithmetic that must be done at author time, auto-layout containers vs absolute positioning,
-  overlay and modal patterns, scrolling, the paste-time freezing of X/Y/Width/Height, hit
-  testing and z-order, and Theme-driven spacing and type. Boundaries: which control to place
+  clickable", "design the header / nav". Boundaries: which control to place
   is powerapp-canvas-controls; the formulas in its properties are powerapp-canvas-development;
   reusable component contracts are power-apps-components; SVG visuals are power-apps-svg.
   This skill owns *where things sit and whether the user can actually touch them*.

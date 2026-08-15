@@ -23,7 +23,15 @@ command is one shot, a workflow is a whole pipeline.
   drive implement → review → reiterate → assess, stop for approval, and ship.
 - `ship-version` — label a unit of work with its goals in `.meta/version`, then name and
   ship the PR from those goals (`/version-set` + `/version-ship`).
-- `verify-claims` — the **truth gate**: extract an asset's factual claims, tier each by what
-  would settle it, ground them against docs or a probe, and label what stayed unverified.
-  Run before shipping anything that asserts facts about an external system. Independent of
-  `skill-creator`'s eval loop, which is the *performance* gate.
+- `verify-claims` — the **truth gate** for assets that assert facts about an external
+  system (engine: the `claim-grounding` skill; independent of `skill-creator`'s
+  performance evals).
+- `change-end-to-end` — one canvas-app change from intent to landed-in-Studio across the
+  clipboard air gap: ground → author → audit → human paste gate → record.
+- `screen-build` — build one canvas screen end to end: ground data + controls, plan
+  layout, author, geometry-check, validate, audit, hand off, record.
+- `control-grounding` — ground an unknown control/property/enum token before it is
+  authored, then propagate the grounding to every catalogue surface.
+
+To add one, create a `<name>.md` describing the sequence (see Format above); the
+auto-generated `../CATALOG.md` is the always-current inventory.

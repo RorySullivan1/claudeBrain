@@ -73,10 +73,9 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
 - `claim-grounding` — the **truth** layer for an asset's factual content: triage each claim
   by what would settle it (a live authority / vendor docs / one project's experience / not
   a claim), ground it, then record the judgment so it isn't re-litigated or silently
-  overwritten. Fills the gap between `skill-authoring` (is it *shaped* right?) and
-  `skill-creator` (does it *perform*?) — neither asks whether the content is *true*. Driven
-  by the `verify-claims` workflow; structural counterpart is the `asset_integrity` hook.
-  **(built)**
+  overwritten. Owns the shape/performance/truth division of labor (see its Out-of-scope).
+  Driven by the `verify-claims` workflow; structural counterpart is the `asset_integrity`
+  hook. **(built)**
 
 ## Format
 
@@ -94,7 +93,5 @@ context-vs-skill authoring playbooks. Alongside them are the operational skills
 `skill-distiller/`, `claim-grounding/`). A `command-authoring` skill is the remaining gap —
 commands are still covered by `commands/README.md` until one is codified.
 
-The authoring path now closes over three independent questions: **shape** (`skill-authoring`
-and its family), **performance** (`skill-creator`'s eval + description-optimization loop —
-an external module, deliberately not duplicated here), and **truth** (`claim-grounding` +
-the `verify-claims` workflow). A skill can pass any one of these while failing the others.
+The authoring path now closes over three independent gates — shape, performance, truth —
+whose division of labor is stated once, in `claim-grounding`'s Out-of-scope.

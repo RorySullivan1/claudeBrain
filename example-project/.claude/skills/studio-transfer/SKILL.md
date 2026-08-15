@@ -38,17 +38,14 @@ For the model itself and its consequences, see the **`air-gap`** context brief; 
 
 ## Core principles (these are rules)
 
-1. **The gap is ONE-WAY: repo → Studio. The repo is the authoritative source; Studio is the
-   downstream apply-target.** Authored source flows out (a human pastes it); **nothing comes
-   back** — no pull, no export, no code-view sample. The only return signal is the human's
-   binary **"it works / it doesn't."** Anything edited directly in Studio is invisible drift,
-   lost to the repo forever — so author in the repo and treat its files as the truth.
+1. **The gap is ONE-WAY: repo → Studio.** The model — why the repo is the authoritative
+   source, what "nothing comes back" implies, why Studio edits are invisible drift — is the
+   **`air-gap`** brief's to state, not this skill's. Operate on its two consequences: author
+   in the repo and treat its files as the truth, and expect no return signal beyond the
+   human's binary **"it works / it doesn't."**
 2. **No round-trip, so resolve unknowns yourself — don't defer to a pull that can't happen.**
-   Unknown paste tokens or dialect can't be confirmed by a returned sample. Resolve them from
-   **public sources** (MS Learn, the `microsoft/PowerApps-Tooling` repo, public `.msapp`
-   exports), or ship a **grounded fallback**. A wrong guess is a failed manual paste the human
-   reports only as "didn't work," after which you revise blind — so **maximise first-try
-   correctness** and prefer grounded constructs over nicer-but-unverified ones.
+   Resolve unknown paste tokens from **public sources** or ship a **grounded fallback**; a
+   wrong guess is a failed paste you revise blind, so **maximise first-try correctness**.
 3. **Every paste costs human effort.** Few large *correct* pastes beat many small
    speculative ones. Get the formula right (and audited — see the pre-paste-review agent)
    *before* asking a human to paste it.
@@ -68,25 +65,13 @@ exist.
 
 Instead, establish paste-readiness *before* the human ever pastes:
 
-1. **Ground every token from public sources.** Control names/versions and gallery `Variant`
-   values come from an `.msapp` you can obtain offline, MS Learn, or the
-   `microsoft/PowerApps-Tooling` schema — not from a pull. (Version suffixes are optional;
-   Studio uses the current version if omitted, so only the control *name* and `Variant` matter.)
-
-   **An `.msapp` carries the ENUM TABLES, and that is the strongest evidence available in an
-   air-gapped setup.** MS Learn documents properties like `Icon` and never lists their values.
-   But an `.msapp` is a zip, and `References/Templates.json` inside it holds the enums as
-   pipe-delimited runs:
-
-   ```bash
-   unzip -o app.msapp -d /tmp/app                       # note: backslash paths, ignore the warning
-   grep -oE '[A-Za-z0-9_]+(\|[A-Za-z0-9_]+){20,}' /tmp/app/References/Templates.json
-   ```
-
-   That recovers the complete **180-value classic `Icon` enum** — and immediately exposes
-   invented names (`Icon.Back`, `Icon.Documents`, `Icon.Table` are not in it). Extract the list
-   once into a checked-in data file (e.g. `tools/studio-enums.json`) and have your validator
-   check against it. **Check an `.msapp` you already have BEFORE declaring a value ungroundable.**
+1. **Ground every token from public sources.** Control names/versions, gallery `Variant`
+   values, and enum members come from an `.msapp` you can obtain offline, MS Learn, or the
+   `microsoft/PowerApps-Tooling` schema — not from a pull. The evidence ladder and the
+   `.msapp` enum-recovery technique (`References/Templates.json` holds the enum tables — the
+   strongest evidence in an air-gapped setup) are **owned by `powerapp-canvas-controls`**;
+   apply them from there rather than a restated copy. **Check an `.msapp` you already have
+   BEFORE declaring a value ungroundable.**
 2. **For anything still uncertain, author the grounded fallback**, and keep the risky-but-nicer
    variant documented as an alternative to try if the first paste is rejected.
 3. **The human's feedback is binary** — "it pasted / it didn't." Design each paste so a failure
@@ -97,86 +82,22 @@ Instead, establish paste-readiness *before* the human ever pastes:
    Across a one-way gap a false negative is expensive: it looks like an authoring bug, and the
    revise-blind loop that follows rewrites correct code.
 
-## The auto-layout container
+## What survives the paste — the two transfer-side layout facts
 
-`GroupContainer@1.5.0` with `Variant: AutoLayout`, read straight off Studio's code view. This is
-the control the Insert pane calls *Horizontal container* / *Vertical container* — one control,
-direction chosen by a property.
+Two layout facts change how you author for the crossing. Both are **owned elsewhere** — the
+container's tokens, YAML shape, and still-inferred properties by **`powerapp-canvas-controls`**,
+the freeze mechanics and the geometry consequences by **`powerapp-canvas-design`** (§ *layout
+formulas do not survive the paste*). What this skill adds is their transfer meaning:
 
-```yaml
-- Container3:
-    Control: GroupContainer@1.5.0
-    Variant: AutoLayout
-    Properties:
-      LayoutDirection:  =LayoutDirection.Horizontal    # or .Vertical
-      LayoutAlignItems: =LayoutAlignItems.Center
-      PaddingTop: =8
-      PaddingBottom: =8
-      PaddingLeft: =8
-      PaddingRight: =8
-    Children:
-      - Rectangle2:
-          Control: Rectangle@2.3.0
-          Properties:
-            LayoutMinWidth:  =16      # child-side layout properties
-            LayoutMinHeight: =16
-```
-
-**Children carry no X/Y** — the container positions them. That matters more here than it looks:
-X/Y are exactly the properties Studio freezes on paste, so **anything inside an auto-layout
-container is immune to that whole failure mode**. It is the one layout that survives the gap
-intact.
-
-**A SCROLLING COLUMN — every property below confirmed from Studio's own code view:**
-
-```yaml
-- frmScroll:
-    Control: GroupContainer@1.5.0
-    Variant: AutoLayout
-    Properties:
-      LayoutDirection:  =LayoutDirection.Vertical
-      LayoutAlignItems: =LayoutAlignItems.Center
-      LayoutGap:        =8
-      LayoutOverflowX:  =LayoutOverflow.Scroll
-      LayoutOverflowY:  =LayoutOverflow.Scroll
-      PaddingTop: =8   PaddingBottom: =8   PaddingLeft: =8   PaddingRight: =8
-```
-
-Still inferred (never observed non-default, so Studio never printed them):
-`LayoutJustifyContent`, `LayoutWrap`, `FillPortions`.
-
-**A hidden child takes no space**, so a results gallery placed inline after its search box
-expands the column when it opens and collapses when it closes — no overlay, no z-order, no
-one-picker-at-a-time gate. In a scrolling form that replaces the whole absolute-overlay pattern.
-
-## LAYOUT FORMULAS DO NOT SURVIVE THE PASTE
-
-First-party, from *Create responsive layouts in canvas apps*:
-
-> After you write formulas for the **X**, **Y**, **Width** and **Height** properties of a control,
-> your formulas will be overwritten with constant values if you subsequently drag the control in
-> the canvas editor.
-
-Studio does that positioning as part of a paste, so **every layout formula lands as a frozen
-constant** — the value the formula happened to evaluate to *at the instant of the paste*.
-
-Three consequences, all of which bite in practice:
-
-1. **A layout formula that references another control freezes to a transient value.** If the
-   referenced control isn't yet at its final position when the paste evaluates, the wrong number
-   is baked in permanently — e.g. a gallery positioned off a filter row lands at the row's
-   mid-paste `Y` and covers it. **Never position off another control** — the value must be
-   self-contained.
-2. **The landed app is not responsive.** `Width: =Parent.Width - 48` becomes `1318`. Fine for a
-   fixed-size tablet app, but it means a Theme change will never propagate to layout: re-pasting
-   is the only way, and re-pasting re-freezes.
-3. **Fixing a frozen value means editing that property in Studio**, not re-pasting — the paste
-   will just freeze it again. Set the number in the formula bar.
-
-**Authoring rule:** prefer plain integers for X/Y/Width/Height whenever the value is static
-anyway, so what lands equals what was authored and there is no evaluation-order dependency at
-all. Keep a formula only where genuine responsiveness is wanted, and tell the human not to drag
-that control.
+1. **Auto-layout containers are the one layout that survives the gap intact.** Children of a
+   `GroupContainer`/`AutoLayout` carry no X/Y — and X/Y are exactly what Studio freezes at
+   paste time, so everything inside a container is immune to that failure mode. Prefer a
+   container over absolute positions for anything that stacks.
+2. **Every layout formula lands as a frozen constant** — the value it evaluated to at the
+   instant of the paste. So at *authoring-for-paste* time: plain integers for X/Y/Width/Height
+   unless genuine responsiveness is wanted, never position one control off another, and tell
+   the human that fixing a frozen value means editing it in Studio's formula bar — re-pasting
+   just re-freezes it.
 
 ## The channel — code view mechanics
 

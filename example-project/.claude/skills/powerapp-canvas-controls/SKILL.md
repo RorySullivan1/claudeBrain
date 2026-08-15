@@ -8,13 +8,8 @@ description: >
   does a combobox return", "convert this to a modern control", "why did the paste fail on
   this control", "add a text input / gallery / tab list". Also use before writing ANY new
   control into your authored-source directory (e.g. `src/authored/`) — an ungrounded token fails
-  the whole paste and comes back only as "it didn't work". Covers: classic vs modern control
-  families, version suffixes, gallery
-  `BrowseLayout_*` variants, the 180-value classic `Icon` enum, `GroupContainer` auto-layout,
-  the `Classic/` prefix rule, the five single-select controls and how each is seeded, forms and
-  data cards, toggles, ratings, sliders, radio groups and the rich text editor, and the output
-  property of every control in use (`.Text`, `.Value`, `.Selected.Value`, `.SelectedDate`,
-  `.HtmlText`). Boundaries: the FORMULAS inside a control's properties are
+  the whole paste and comes back only as "it didn't work".
+  Boundaries: the FORMULAS inside a control's properties are
   powerapp-canvas-development and power-fx-development; screen layout and geometry are
   powerapp-canvas-design; getting the YAML into Studio is studio-transfer; reusable component
   contracts are power-apps-components. This skill owns *what a control is called and what it
@@ -150,7 +145,10 @@ classic enum.
       LayoutAlignItems: =LayoutAlignItems.Center       # Start/End/Stretch per docs
       LayoutGap:        =8
       LayoutOverflowY:  =LayoutOverflow.Scroll         # or .Hide
-      PaddingTop: =8   PaddingBottom: =8   PaddingLeft: =8   PaddingRight: =8
+      PaddingTop:       =8
+      PaddingBottom:    =8
+      PaddingLeft:      =8
+      PaddingRight:     =8
 ```
 
 Children carry `LayoutMinWidth` / `LayoutMinHeight` and **no X/Y** — see

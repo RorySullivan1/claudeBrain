@@ -71,13 +71,15 @@ To add a hook: drop a `<event>.json` fragment here and run `build-hooks.py`. A
 
 ## Guards and filters
 
-Advisory, non-mutating, opt-in by presence — each one allows the action and adds context:
+Advisory, non-mutating, opt-in by presence — each one allows the action and adds context.
+The git-triggered guards share **one fragment and one interpreter spawn**: the
+`git_guards.py` dispatcher parses stdin once and runs each guard's `check(command, root)`,
+so a plain `ls` pays one fast Python startup, not three. To add a git guard, give it a
+`check()` and register it in `git_guards.py` — don't add another per-Bash fragment.
 
 | Fragment | Event | Script | Effect |
 |---|---|---|---|
-| `pre-tool-use-asset-integrity.json` | `PreToolUse` (Bash) | `asset_integrity.py` | On `git commit`/`push`, reports `.claude/` asset defects: skill folder ≠ `name:`, missing `name:`/`description:`, a cited `references/` file that's absent, broken symlinks. |
-| `pre-tool-use-version-guard.json` | `PreToolUse` (Bash) | `version_guard.py` | On `git push`, warns when `.meta/version` exists but lacks a label or goals. |
-| `pre-tool-use-roadmap-guard.json` | `PreToolUse` (Bash) | `roadmap_guard.py` | On `git push`, warns when the version cursor has drifted from the roadmap. |
+| `pre-tool-use-git-guards.json` | `PreToolUse` (Bash) | `git_guards.py` → `version_guard` + `roadmap_guard` + `asset_integrity` | On `git commit`/`push`: reports `.claude/` asset defects (skill folder ≠ `name:`, missing `name:`/`description:`, a cited `references/` file that's absent, broken symlinks); warns when `.meta/version` lacks a label/goals; warns when the version cursor drifts from the roadmap. |
 | `pre-tool-use-read-guard.json` | `PreToolUse` (Read) | `pre_read_guard.py` | Stops an accidental whole-file slurp of a very large file. |
 | `post-tool-use-bash-filter.json` | `PostToolUse` (Bash) | `post_bash_filter.py` | Keeps verbose command output out of the main context. |
 

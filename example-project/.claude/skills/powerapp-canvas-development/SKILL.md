@@ -5,10 +5,8 @@ description: >
   that lives inside it. Use this skill when writing or fixing a `.pa.yaml` file: "add a screen",
   "what goes in the App section", "how do I declare a data source", "why won't this YAML
   parse", "where does EditorState go", "write the OnSelect for this", "this formula is
-  rejected by Studio", "IfError is complaining", "expecting an identifier name". Covers the
-  five root sections (App / Screens / ComponentDefinitions / DataSources / EditorState), the
-  control mapping shape, property vs behaviour formulas, YAML-vs-Power-Fx quoting traps, and
-  the dialect corrections teams doing this have paid for in failed pastes. Boundaries: WHICH control
+  rejected by Studio", "IfError is complaining", "expecting an identifier name".
+  Boundaries: WHICH control
   to use and what it returns is powerapp-canvas-controls; geometry, spacing and responsive
   layout are powerapp-canvas-design; delegation strategy and SharePoint column policy are
   power-fx-development; auditing before a paste is the pre-paste-review agent; moving the file
@@ -140,12 +138,13 @@ App object has **no code view** — its body is typed into the formula bar (see 
 
 ## Workflow: authoring a change
 
-1. Read the golden source — your list-schema file (e.g. `schema/schema.yaml`) — for every column
-   token you intend to write; **never invent a column name**.
-2. Ground every control token (powerapp-canvas-controls) before typing it.
-3. Author into your authored-source directory (e.g. `src/authored/`) for controls, and the
-   separate App-object-bodies directory (e.g. `src/patches/`) for formula-bar-only code.
-4. Run the validator — schema, tokens, icons, `IfError` typing, gallery `OnSelect`, cross-file
-   component contracts.
-5. Hand to the **pre-paste-review** agent for a paste/do-not-paste verdict.
-6. Cross the gap per studio-transfer, then record the outcome in the paste log.
+The full pipeline (ground → author → validate → audit → human paste gate → record) is
+**owned by the `change-end-to-end` workflow** — run it; the audit loop and stop conditions
+live there, not here. The two rules this skill contributes to it:
+
+- **Never invent a column name** — every column token resolves in the golden-source schema
+  file before it is typed, and every control token is grounded (`powerapp-canvas-controls`)
+  before it is typed.
+- **Two directories, two channels** — pasteable control YAML in the authored-source
+  directory; App-object bodies in the separate formula-bar-only directory (the App object
+  has no code view).

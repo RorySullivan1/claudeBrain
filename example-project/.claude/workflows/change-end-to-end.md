@@ -22,9 +22,11 @@ log, or **stopped** before a wasted paste — with the reason and the next step.
    paste approach you can defend without a return sample.
 
 2. **Author the change.** Apply the **`power-fx-development`** skill to write the formulas and
-   the **`studio-transfer`** skill for the paste-dialect shape; put control YAML in
-   `src/authored/` and any App-object body in `src/patches/`. Bind every column to an internal
-   name that resolves in `schema/schema.yaml` (the golden source) — never invent one. For a
+   the **`studio-transfer`** skill for the paste-dialect shape; put control YAML in the
+   project's authored-source directory (e.g. `src/authored/`) and any App-object body in its
+   patch directory (e.g. `src/patches/`). Bind every column to an internal name that resolves
+   in the golden-source schema file (declared in the project's `CLAUDE.md`; e.g.
+   `schema/schema.yaml`) — never invent one. For a
    substantial build, delegate to **`../agents/powerapp-canvas-developer.md`** instead of
    authoring inline. → hand-off: authored files.
 
@@ -42,15 +44,18 @@ log, or **stopped** before a wasted paste — with the reason and the next step.
    validated, then **rename** the suffixed control (`_1`) to its intended name. → hand-off:
    the landed name + Studio's suffix + outcome.
 
-6. **Record.** Append the crossing to `paste-log.md` (date, target screen, intended name,
-   Studio suffix, outcome). If the change carried a decision worth keeping, log it via
-   **`session-memory`**. → done.
+6. **Record.** Append the crossing to the paste log (e.g. `paste-log.md`): date, target
+   screen, intended name, Studio suffix, outcome. If the change carried a decision worth
+   keeping, log it via **`session-memory`**. → done.
 
 ## Control flow / stop conditions
 
 - **Bail (unverifiable token):** step 1 can't ground a paste token and has no safe fallback →
   **stop**; surface the uncertainty rather than shipping a blind guess a failed paste can't
   diagnose. (There is no pull to request — the gap is one-way.)
+- **Missing state roles:** the project's `CLAUDE.md` declares no golden-source schema file or
+  paste log → **stop and set them up first** (route to `powerapp-canvas-project-management`);
+  steps 2 and 6 gate on records that must exist.
 - **Loop (audit):** step 3 returns **DO-NOT-PASTE** → return to step 2 with the agent's fixes;
   re-audit. Repeat until PASTE. Never hand a human a paste that hasn't passed. Terminal state:
   a PASTE verdict (or the human explicitly overrides, recorded).
@@ -69,4 +74,5 @@ log, or **stopped** before a wasted paste — with the reason and the next step.
 - Agents: `../agents/pre-paste-review.md`, `../agents/powerapp-canvas-developer.md`.
 - Workflows: `control-grounding` (step 1), `screen-build` (when the unit is a whole screen).
 - Context: `../context/air-gap.md` (the one-way transfer model).
-- State: `schema/schema.yaml` (golden source for column names), `paste-log.md` (what landed).
+- State (by role; paths per the project's `CLAUDE.md`): the golden-source schema file (e.g.
+  `schema/schema.yaml`), the paste log (e.g. `paste-log.md`).

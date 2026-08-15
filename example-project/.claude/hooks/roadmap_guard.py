@@ -62,35 +62,29 @@ def parse_index(text: str) -> tuple[dict, str]:
     return statuses, cursor
 
 
-def main() -> int:
-    try:
-        data = json.loads(sys.stdin.read() or "{}")
-    except (json.JSONDecodeError, ValueError):
-        return 0
-    if data.get("tool_name") != "Bash":
-        return 0
-    command = (data.get("tool_input") or {}).get("command") or ""
+def check(command: str, root: Path) -> str | None:
+    """Advisory message for the dispatcher (`git_guards.py`), or None to stay silent."""
     if not PUSH_RE.search(command):
-        return 0
+        return None
 
-    index_path = meta_dir() / "roadmap" / "INDEX.md"
-    version_path = meta_dir() / "version"
+    index_path = root / ".meta" / "roadmap" / "INDEX.md"
+    version_path = root / ".meta" / "version"
     if not index_path.is_file() or not version_path.is_file():
-        return 0  # roadmap flow not adopted (or no cursor) — stay silent
+        return None  # roadmap flow not adopted (or no cursor) — stay silent
 
     try:
         index_text = index_path.read_text(encoding="utf-8", errors="replace")
         version_text = version_path.read_text(encoding="utf-8", errors="replace")
     except OSError:
-        return 0
+        return None
 
     current = current_version(version_text)
     if not current:
-        return 0
+        return None
     status = current_status(version_text)
     statuses, _cursor = parse_index(index_text)
     if not statuses:
-        return 0  # couldn't parse the table — say nothing rather than guess
+        return None  # couldn't parse the table — say nothing rather than guess
 
     # Only flag UNAMBIGUOUS drift, keyed off the version's own status, so the normal
     # between-versions state (last-shipped version + a different next-planned cursor)
@@ -108,15 +102,24 @@ def main() -> int:
     elif status == "in-progress" and "planned" in index_status:
         warning = (f"You're shipping in-progress work for {current}, but the roadmap INDEX "
                    f"still lists it as `planned`. Mark its row `in-progress`.")
-    if not warning:
-        return 0  # status and map agree — nothing to say
+    return warning or None  # empty when status and map agree — nothing to say
 
+
+def main() -> int:
+    try:
+        data = json.loads(sys.stdin.read() or "{}")
+    except ValueError:
+        return 0
+    command = (data.get("tool_input") or {}).get("command") or ""
+    msg = check(command, meta_dir().parent)
+    if not msg:
+        return 0
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
             "permissionDecision": "allow",
             "permissionDecisionReason": "Roadmap cursor drift (advisory)",
-            "additionalContext": warning,
+            "additionalContext": msg,
         }
     }))
     return 0

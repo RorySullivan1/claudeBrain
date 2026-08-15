@@ -220,19 +220,15 @@ to trust. Pair it with `claim-grounding` to tier and date the claims themselves.
 
 ## After it's written: two independent gates
 
-Shaping a skill well is not evidence that it works. Two different things can be wrong with
-a finished skill, and neither check catches the other's failure:
+Shaping a skill well is not evidence that it works. Two further checks exist, neither
+catches the other's failure, and neither is owned here:
 
-- **Does it trigger and perform?** → hand off to **`skill-creator`**, which runs the skill
-  against test cases *and a no-skill baseline*, grades the difference, analyses variance,
-  and optimizes the `description` for trigger accuracy. Don't hand-roll an eval loop here;
-  that skill owns measurement.
-- **Is what it says true?** → hand off to **`claim-grounding`** (and the `verify-claims`
-  workflow) to tier each factual assertion by what would settle it, ground it against docs
-  or a probe, and date the citation.
+- **Does it trigger and perform?** → **`skill-creator`** (evals vs a no-skill baseline,
+  variance analysis, description optimization). Don't hand-roll an eval loop.
+- **Is what it says true?** → **`claim-grounding`** / the `verify-claims` workflow, which
+  own the shape-vs-performance-vs-truth division of labor and the grounding method.
 
-A skill can win every eval while confidently asserting a false fact — high performance on a
-wrong premise. Run both gates on anything that carries external-system claims.
+Run both on anything that carries external-system claims.
 
 ## Template
 
