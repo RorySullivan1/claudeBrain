@@ -51,7 +51,9 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
-- **PR #32 open** on `claude/laughing-ride-pyhmzj` (restarted from main after #31 merged): the taskmaster HEAD re-sync — freeze-rule reversal + Aug-9 corrections + SVG charts + docs-source brief. Remove this line when it merges.
+- **PR #34 open** on `claude/laughing-ride-pyhmzj` → main (11 commits, 35 files): the whole
+  `verify-claims` arc over 22 skills + the two new VBA skills. Supersedes the earlier #32
+  line (that PR is no longer open). Remove this line when #34 merges.
 - `verify-claims` RUN over **22 skills** (2026-08-15, 21 verifiers, ~390 claims): **63 ledger rows — 40 corrections, 22 experience-settled labels, 1 contested**. Pass 1 = Power Platform + VBA; pass 2 = VSTO (worst: 22 errors), coding-standards, Python, quant; pass 3 = light sweep of presentation/docs (3 errors in ~23 claims — thin as predicted). Judgments in `example-project/.claude/skills/claim-grounding/reviews/ledger.jsonl`. **Every skill family is now gated.**
 - PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
