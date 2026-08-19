@@ -55,7 +55,7 @@ The skill-specific calls:
 
 Quick test: *Is this know-how I want applied whenever a certain kind of task comes up,
 in the main thread?* → skill. *Is it mostly facts I'll look up?* → context brief
-(the planned `context-vs-skill` skill owns that boundary in depth). *Must it fire
+(the `context-vs-skill` skill owns that boundary in depth). *Must it fire
 deterministically?* → hook.
 
 ## Fold-first: should this skill exist at all?
@@ -236,7 +236,7 @@ Confirm before acting: <the few things that change the approach>.
   isolated-context mechanics live in `agent-authoring`; this skill is only about skill
   definitions.
 - **Skill vs. context brief in depth** — when knowledge is reference rather than
-  behavior, that boundary is the planned `context-vs-skill` skill's job.
+  behavior, that boundary is `context-vs-skill`'s job.
 - **Deciding *whether* something is skill-worthy** — the significance/redundancy gates
   are `skill-distiller`'s; this skill assumes the decision is made and teaches the writing.
 - **Authoring hooks, commands, or workflows** — different layers, different rules.

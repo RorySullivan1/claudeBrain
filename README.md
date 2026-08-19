@@ -33,6 +33,12 @@ target project.
 - **A branding → presentation pipeline** of skills — `branding` (the durable identity,
   upstream of everything) → `presentation-design` (visual + copy) → format-specific
   **builders** (`deck-`, `one-pager-`, `brochure-`, `pamphlet-`, `report-builder`).
+- **A Power Platform family** — the canvas app (`powerapp-canvas-controls` / `-development` /
+  `-design` / `-project-management`, `power-apps-svg`, `power-apps-editable-table`), the Power Fx
+  in it, the SharePoint backend under it, and a `powerapp-canvas-developer` / `pre-paste-review`
+  agent pair. It also carries the worked example of a **one-way hand-off**: the `air-gap.md`
+  brief (the model) beside the `studio-transfer` skill (the mechanics) — the brief↔skill split
+  `context-vs-skill` teaches, in a project where the only feedback is "it works / it doesn't".
 - **Operational infrastructure** — `session-memory`, `knowledge-router`, `token-optimizer`,
   and lifecycle hooks compiled from fragments by `build-hooks.py`.
 

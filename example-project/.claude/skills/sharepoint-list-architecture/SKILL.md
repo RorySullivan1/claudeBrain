@@ -151,6 +151,25 @@ it returns two. An index changes what gets scanned. Work this playbook in order:
 
 ---
 
+## A column is required or it is not — conditional rules live in the app
+
+SharePoint cannot express *"required only when another field is set"*. There is no cross-column
+validation on a column, so any rule of that shape has exactly two homes, and picking the wrong one
+breaks data that has nothing to do with the rule:
+
+- **Mark the column required** → every row that legitimately has no value for it is rejected. On a
+  list where the rule applies to a subset, that is most rows.
+- **Leave it optional and enforce in the app** → the rule works, and **the list will happily accept
+  a row that violates it.** Anything writing outside that one screen — a Flow, a Graph call, an
+  import, a second app — bypasses it silently.
+
+Take the second, deliberately, and **write down where the enforcement lives**, on the column
+itself. A `required: false` with no explanation reads as "nobody thought about it" and the next
+person tightens it.
+
+The same applies to *which* value makes another field mandatory. That is a rule about two columns,
+so it is app logic; the list stores the values, not the constraint between them.
+
 ## Relationships & Referential Integrity
 
 SharePoint models one-to-many with a **Lookup** column on the child pointing at the
