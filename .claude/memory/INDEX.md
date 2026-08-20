@@ -51,10 +51,17 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
-- **PR #34 open** on `claude/laughing-ride-pyhmzj` → main (11 commits, 35 files): the whole
-  `verify-claims` arc over 22 skills + the two new VBA skills. Supersedes the earlier #32
-  line (that PR is no longer open). Remove this line when #34 merges.
-- `verify-claims` RUN over **22 skills** (2026-08-15, 21 verifiers, ~390 claims): **63 ledger rows — 40 corrections, 22 experience-settled labels, 1 contested**. Pass 1 = Power Platform + VBA; pass 2 = VSTO (worst: 22 errors), coding-standards, Python, quant; pass 3 = light sweep of presentation/docs (3 errors in ~23 claims — thin as predicted). Judgments in `example-project/.claude/skills/claim-grounding/reviews/ledger.jsonl`. **Every skill family is now gated.**
+- **PR #38 open** on `claude/laughing-ride-pyhmzj` → main: the Outlook HTML pair
+  (`outlook-html-specifications` skill + `outlook-html-designer` agent), gated at authoring,
+  ledger 78→83. Remove this line when it merges. (#34 merged 2026-08-15; branch was restarted
+  from main — any follow-up after a merge is a NEW PR, never stacked onto merged history.)
+- `verify-claims` RUN over **22 skills + 2 authored-through-the-gate** (2026-08-15, 21 verifiers, ~390 claims): **78 ledger rows — 46 corrections, 29 experience-settled labels, 2 contested, 1 confirmed-pre-ship**. Pass 1 = Power Platform + VBA; pass 2 = VSTO (worst: 22 errors), coding-standards, Python, quant; pass 3 = light sweep of presentation/docs (3 errors in ~23 claims — thin as predicted); pass 4 = `vba-excel-object-model` + `vba-data-access` gated **at authoring**, which caught 3 defects in the draft. Judgments in `example-project/.claude/skills/claim-grounding/reviews/ledger.jsonl`. **Every skill family is now gated.**
+- **Open gap:** no Windows/Office host here, so `verify-claims` step 4 (live-authority probe)
+  has never run. 3 VBA claims stand as experience-settled that a probe would settle —
+  `SpecialCells` raising 1004 on no match, the PivotTable data-field rename collision,
+  `UsedRange` over-reporting. Recorded as a ledger row so it can't read as coverage.
+- **Open gap:** `branding` tells the reader to verify contrast but never says what passes.
+  Filling it means *adding* claims — a human call, deliberately not made unilaterally.
 - PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 - DONE: `agent-authoring` now carries the verifying-agent posture rule (see Decisions).
@@ -67,6 +74,7 @@
   ledger row; 3 claims stand as experience-settled that a probe would settle.
 
 ## Log              (append-only pointers)
+- 2026-08-20 | Outlook HTML pair: `outlook-html-specifications` skill (Word-engine rendering contract) + `outlook-html-designer` agent (executor w/ parse-validation gate); gated at authoring, ledger 78→83 | sessions/2026-08-20-outlook-html-asset-pair.md
 - 2026-08-15 | taskmaster re-review: freeze reversal + Aug-9 corrections + SVG charts + docs-source brief distilled into 14 assets; bulk-Patch & 8-join disputes settled vs MS Learn | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - 2026-08-15 | xlflow distilled → verification layer (claim-grounding + verify-claims + asset_integrity + git_guards dispatcher + 4 folds); 8-angle review of PR #31 → 19 findings, all fixed | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - 2026-08-05 | powerapp_taskmaster assimilated: cloned public repo (no scope needed); 7 skills + 2 agents + 3 workflows + air-gap brief landed; 2 rules backported upstream | sessions/2026-08-05-0231-powerapp-taskmaster-assimilation.md
