@@ -37,11 +37,11 @@ prefixed tokens:
 
 | Generic doc says | Studio actually writes |
 |---|---|
-| `Button` | `Classic/Button@2.2.0` or `ModernButton@1.0.0` |
-| `TextInput` | `Classic/TextInput@2.3.2` or `ModernTextInput@1.0.0` |
+| `Button` | `Classic/Button@2.2.0` — modern button version UNKNOWN, so classic |
+| `TextInput` | `ModernTextInput@1.1.1` or `Classic/TextInput@2.3.2` |
 | `Container` | `GroupContainer@1.5.0` + `Variant: AutoLayout` |
-| `Dropdown` / `Combobox` | `ModernCombobox@1.0.0` |
-| `DatePicker` | `ModernDatePicker@1.0.0` |
+| `Dropdown` / `Combobox` | `ModernCombobox@1.1.1` (or `Classic/ComboBox@2.4.0`) |
+| `DatePicker` | `ModernDatePicker@1.0.1` |
 | `Timer` | `Timer` — no prefix, no version |
 
 Treat the generic docs as a guide to *structure*, never to *tokens*.
@@ -70,15 +70,19 @@ Use it to *guess which form to ask for* — never to author an ungrounded token.
 still fails the whole paste. **Casing stays per-token**: `DropDown` has a capital D mid-word,
 `ComboBox` a capital B, `RichTextEditor` neither.
 
-**Modern family** — `ModernTextInput@1.0.0`, `ModernNumberInput@1.0.0`, `ModernCombobox@1.0.0`,
-`ModernDatePicker@1.0.0`, `ModernTabList@1.0.0`, `ModernButton@1.0.0`,
-`GroupContainer@1.5.0` (`Variant: AutoLayout`; also `Variant: GridLayout` — grounded from
-Studio code view 2026-08-10. Grid children place themselves with `LayoutGridColumnStart` /
-`LayoutGridColumnEnd` / `LayoutGridRowStart` / `LayoutGridRowEnd`; Studio writes X/Y on them
-anyway and ignores it. **The grid's own shape — column/row count, track sizes — is still
-ungrounded**, so fill a grid Studio already made; don't author the container blind).
+**Modern family IN USE** — `ModernTextInput@1.1.1`, `ModernCombobox@1.1.1`,
+`ModernDatePicker@1.0.1`, `GroupContainer@1.5.0` (`Variant: AutoLayout`; also `Variant: GridLayout`
+— grounded from Studio code view 2026-08-10. Grid children place themselves with
+`LayoutGridColumnStart` / `LayoutGridColumnEnd` / `LayoutGridRowStart` / `LayoutGridRowEnd`; Studio
+writes X/Y on them anyway and ignores it. **The grid's own shape — column/row count, track sizes —
+is still ungrounded**, so fill a grid Studio already made; don't author the container blind).
+Version-confirmed but unused: `ModernDropdown@1.0.2`, `ModernRadio@1.0.1`, `ModernDataGrid@1.5.0`,
+`ModernCard@1.3.0` (2026-08-10).
 
-**`Classic/ComboBox@2.4.0` and `ModernCombobox@1.0.0` are different controls.** Studio generates
+**Version UNKNOWN, so NOT used** — `ModernButton`, `ModernNumberInput`, `ModernTabList`,
+`ModernSlider`. Author the classic control for these; see the standing rule below.
+
+**`Classic/ComboBox@2.4.0` and `ModernCombobox@1.1.1` are different controls.** Studio generates
 the classic one inside data cards; the modern one is what you insert by hand today. The classic
 adds `Chevron*` styling properties and takes `DefaultSelectedItems` to seed the selection —
 which is how a card wires it up:
@@ -91,8 +95,65 @@ DisplayMode: =Parent.DisplayMode
 PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
 ```
 
-Version suffixes are optional — Studio uses the current version if omitted — so a version
-mismatch is not a failure mode. **Only the control name and the `Variant` matter.**
+Version suffixes are optional on the CLASSIC family — Studio uses the current version if omitted.
+On the modern family they are **not** decoration: a wrong modern version rejects the whole paste.
+See the per-control table next.
+
+### MODERN VERSIONS ARE PER-CONTROL — read them, never infer them
+
+Read off the live Studio controls, **2026-08-07**:
+
+| Modern control | pa-yaml token |
+|---|---|
+| Text input | `ModernTextInput@1.1.1` |
+| Combo box | `ModernCombobox@1.1.1` |
+| Dropdown | `ModernDropdown@1.0.2` |
+| Date picker | `ModernDatePicker@1.0.1` |
+| Radio | `ModernRadio@1.0.1` |
+| Data grid | `ModernDataGrid@1.5.0` |
+
+**Nothing in that table is `@1.0.0`, and no two entries share a version.** A modern token carried
+`@1.0.0` on early grounding purely because the first few happened to ground that way — a pattern
+that was never real. A version cannot be inferred from a sibling control, from the family, or from
+a number in MS Learn's sample code.
+
+> **THE STANDING RULE: if you are unsure of a modern control's version, author the CLASSIC control
+> instead.** A wrong version rejects the *whole* paste and returns as "it didn't work". A working
+> classic control beats a guessed modern one every time — convert `ModernButton` →
+> `Classic/Button@2.2.0` and `ModernNumberInput` → `Classic/TextInput@2.3.2` (read the latter as
+> `Value(ctl.Text)`, since a classic text input outputs text).
+
+### Sibling modern controls do NOT share property names
+
+Two property errors that both come from assuming a neighbour's spelling:
+
+| Control | Right | Wrong — and what it belongs to |
+|---|---|---|
+| `ModernTextInput` | `Type: =TextInputType.Multiline` | `Mode: =TextMode.MultiLine` — the **classic** text input |
+| `ModernTextInput` | `TriggerOutput: =TriggerOutput.Delayed` | `DelayOutput: =true` — the **combo box** |
+
+`TriggerOutput` takes `Keypress` (default) / `FocusOut` / `Delayed`. The combo box is the control
+that renamed `TriggerOutput` to `DelayOutput`; the text input did **not**.
+
+> **`FocusOut` does NOT fire on Enter — confirmed in Studio 2026-08-11.** It means only what it
+> says: the output commits when the control *loses focus*. Author a single-line search box with
+> `FocusOut` on the assumption that it commits on Enter and you get a box where Enter does nothing
+> and results appear only when you click away.
+>
+> **There is no keypress or Enter event on a canvas text input at all**, so no formula can bind
+> Enter to an action. The two real options are `Delayed` (debounce — fires once typing stops) or an
+> explicit button beside the box. If a spec asks for "press Enter to search", say up front that it
+> cannot be built.
+
+### `AccessibleLabel` is a MODERN-ONLY property
+
+**`AccessibleLabel` does not exist on `Classic/*` controls — confirmed 2026-08-12.** Writing it on
+a `Classic/Button`, `Classic/Icon` or `Classic/TextInput` fails the paste. It is valid on modern
+controls, which is exactly why the mistake is easy: the property is real, it is just not on the
+family you reached for. The classic equivalent is **`Tooltip`** — a hover hint, not a name, so it
+does not solve the same problem. Where a classic control carries no visible text (a transparent
+hit target, a scrim) there is no property that names it; a screen reader announces a bare
+"button". Say so plainly rather than reaching for a label property that does not exist.
 
 ## Output properties — get these wrong and every formula breaks
 

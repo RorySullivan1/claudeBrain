@@ -98,3 +98,53 @@ delegate — reserve `StartsWith` for plain Text columns.
 - Delegable **data sources** differ: Dataverse and SQL delegate more (e.g. `in` on SQL as
   `("val" in col)`, aggregates on Dataverse to 50k). This file is **SharePoint-specific** —
   moving the backend changes the matrix.
+
+## 6. When reasoning runs out: LIVE MONITOR is the positive test
+
+§5's warning is a **one-way signal** and Microsoft says so outright:
+
+> A delegation warning often appears in the formula bar as a yellow triangle when Power Apps
+> can't push a formula operation to the data source, **but not every nondelegable case shows
+> this warning.**
+> — MS Learn, *Understand data sources for canvas apps*
+
+So "no underline" is not evidence of delegation, and on a small list it is nearly meaningless.
+The documented tool for exactly this is **Live Monitor**:
+
+> To troubleshoot delegation issues that aren't flagged, use Live Monitor under **Advanced
+> tools** to inspect the queries Power Apps sends and the data returned from each data source.
+
+**The procedure — the only way to actually settle a delegation question, and the only one
+that yields evidence someone else can read back in a sentence:**
+
+1. Studio → **Advanced tools** → **Monitor**. Play the app; events stream live.
+2. Do the one thing under test (open the screen, type in the search box).
+3. Find the **`getRows`** event for the list. Select it to see the data source, timing, result
+   and the formula that caused it.
+4. **Delegated:** a small number of `getRows`, each returning a page of already-filtered rows.
+   **Not delegated:** *repeated* `getRows` walking the list, then filtering on the client —
+   "look for repeated `getRows` calls; these calls might indicate a nondelegable formula."
+
+Pair it with **Settings → General → Data row limit = 1** when you want the failure to be
+loud: anything non-delegable then returns a single record, which is impossible to miss.
+
+**Ask for the `getRows` count, not for "did it work".** A non-delegable query looks completely
+correct on a small list — that is the entire danger — so "it works" is not an answer to a
+delegation question, and neither is a screenshot of the gallery.
+
+### A Monitor-verified result: composing over a named formula folds
+
+**Nesting a `Filter` over a named formula that is itself a `Filter` DOES fold into one server
+query.** Verified by Live Monitor on `Filter(ActiveProjects, StartsWith(project_name, …))`,
+where `ActiveProjects` is an `App.Formulas` filter over the list — one `getRows`, returning
+already-filtered rows. So a named formula is a safe place to put a shared predicate.
+
+Two caveats the verification does **not** cover:
+
+- It proved **one** level of composition. A named formula defined over another named formula
+  is two, and is not evidence-backed — write the predicate out rather than layering.
+- It says nothing about which queries *should* use a shared set. A query already scoped to one
+  parent usually should not: it is bounded anyway, and the shared filter can hide rows the
+  caller needs. The worst version is a maintenance routine that must read *every* child,
+  including the ones it is about to change — filtering there makes it skip exactly its own
+  work.

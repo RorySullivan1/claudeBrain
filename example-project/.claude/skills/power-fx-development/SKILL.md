@@ -157,6 +157,33 @@ are searched server-side and only matching pages come back. If the user truly ne
 ("contains") search, that can't delegate against SharePoint — narrow the set another way first,
 or raise it with `sharepoint-list-architecture` (indexing/redesign), not by cranking the limit.
 
+### An OPTIONAL filter costs one predicate, not a doubled branch tree
+
+`StartsWith(Text, "")` returns **true** (MS Learn, *EndsWith and StartsWith*). So a filter whose
+"off" state is the empty string is a **no-op predicate**, not a separate query:
+
+```powerapps
+Filter( Projects,
+        <the always-on predicates>
+     && StartsWith(project_manager.Email, Coalesce(gLead.Mail, "")) )
+```
+
+Unset → matches every row. Set → filters. **One line, one query.** The `Coalesce` matters: an
+unset global is `Blank()`, not `""`, and `StartsWith(col, Blank())` is not the same no-op.
+
+This is worth reaching for whenever the `Items` already branches. A screen with two optional
+filters written as an `If` tree has four branches; a third makes eight — and each branch must
+carry its own `Sort`, because `Sort(If(…))` does not fold. Turning one filter into a no-op
+predicate keeps the branch count where it was. The alternative idiom above
+(`IsBlank(box.Text) || StartsWith(…)`) also delegates, but it needs an extra `Or` arm per filter
+and reads worse as they multiply.
+
+**Person columns work here too, with a caveat worth knowing.** SharePoint delegates `StartsWith`
+on complex types by deferring to the subfield, and **only `Email` and `DisplayName` are delegable
+on Person**; the exclusion note names Choice and Lookup subfields, not Person. So
+`StartsWith(person_col.Email, …)` delegates — but it is a **prefix** match, not equality, so
+`a@b.com` also matches `a@b.com.au`. Fine for a filter, wrong for an identity check.
+
 ---
 
 ## Forms & Patch — writing back to SharePoint
