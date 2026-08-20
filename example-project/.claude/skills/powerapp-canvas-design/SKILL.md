@@ -95,6 +95,19 @@ So:
 - A wrong position is still fixed **in the formula bar**. Re-pasting is fine too — it does not
   re-freeze anything.
 
+**But the freeze probe only tested one paste scope, and the other behaves differently.** The
+`scrProbe-layout-freeze` experiment pasted CONTROLS onto a blank screen. Pasting a WHOLE SCREEN is
+not the same event: on 2026-08-18 a control's `X` was **lost** in a screen-scope paste while `Y`,
+`Width`, `Height` and every other property came through — and it was lost both as
+`Parent.TemplateWidth - 32` and as a sibling `rowBody.Width + 10`. Pasting that same control on its
+own kept `X`. The mechanism is unexplained; what is established is that **"formulas survive a paste"
+is a control-scope result and must not be assumed at screen scope.**
+
+So for anything that will be re-pasted as a whole screen, **prefer owning no `X` at all.** Make the
+control an auto-layout child and let the container place it (§5) — a child with no `X` has nothing
+to lose, which is why a delete icon can survive a paste that drops its absolutely-positioned
+siblings. Absolute `X` is still fine on a screen you only ever paste control-by-control.
+
 **The one paste hazard that IS real, and is a different mechanism:** if a control lands with a
 suffixed name (`txtSearch_1`), every reference to `txtSearch` in that same paste resolves to
 the old control or to nothing. Deleting a screen before pasting it back avoids this entirely.
