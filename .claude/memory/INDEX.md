@@ -73,6 +73,7 @@
   ledger row; 3 claims stand as experience-settled that a probe would settle.
 
 ## Log              (append-only pointers)
+- 2026-08-20 | Outlook HTML pair: `outlook-html-specifications` skill (Word-engine rendering contract) + `outlook-html-designer` agent (executor w/ parse-validation gate); gated at authoring, ledger 78→83 | sessions/2026-08-20-outlook-html-asset-pair.md
 - 2026-08-15 | taskmaster re-review: freeze reversal + Aug-9 corrections + SVG charts + docs-source brief distilled into 14 assets; bulk-Patch & 8-join disputes settled vs MS Learn | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - 2026-08-15 | xlflow distilled → verification layer (claim-grounding + verify-claims + asset_integrity + git_guards dispatcher + 4 folds); 8-angle review of PR #31 → 19 findings, all fixed | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - 2026-08-05 | powerapp_taskmaster assimilated: cloned public repo (no scope needed); 7 skills + 2 agents + 3 workflows + air-gap brief landed; 2 rules backported upstream | sessions/2026-08-05-0231-powerapp-taskmaster-assimilation.md

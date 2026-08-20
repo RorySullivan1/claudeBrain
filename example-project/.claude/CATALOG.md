@@ -28,6 +28,7 @@
 - graph-api-integration — Expert at Microsoft Graph API integration for SharePoint and Microsoft 365 — authenticating an app … -> skills/graph-api-integration/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - one-pager-builder — Expert at building a single-page document — the execution tier that turns a design spec into a … -> skills/one-pager-builder/SKILL.md
+- outlook-html-specifications — The rendering contract for HTML email in Microsoft Outlook — what classic Outlook's Word-based … -> skills/outlook-html-specifications/SKILL.md
 - pamphlet-builder — Expert at building a multi-page pamphlet or booklet — the execution tier that turns a design spec … -> skills/pamphlet-builder/SKILL.md
 - power-apps-components — Expert at building reusable Power Apps canvas components and UI elements — the … -> skills/power-apps-components/SKILL.md
 - power-apps-editable-table — Expert at building an editable table / spreadsheet-style grid in a canvas Power App — a … -> skills/power-apps-editable-table/SKILL.md
@@ -71,6 +72,7 @@
 - finance-quantitative-developer — Senior Python quantitative-finance engineer for this repo's analytics/tooling layer. Use … -> agents/finance-quantitative-developer.md
 - github-operator — GitHub workflow operator for this repo — opens and formats pull requests, files and triages issues, … -> agents/github-operator.md
 - goal-auditor — Acceptance/goal auditor — judges whether an implemented change actually achieves the goals and … -> agents/goal-auditor.md
+- outlook-html-designer — HTML email designer-builder specialized for Microsoft Outlook — produces complete, Outlook-safe … -> agents/outlook-html-designer.md
 - powerapp-canvas-developer — End-to-end canvas-app developer for a repo that authors canvas-app source offline — designs, … -> agents/powerapp-canvas-developer.md
 - pre-paste-review — Pre-paste auditor for authored canvas-app Power Fx — the last gate before a human pastes YAML into … -> agents/pre-paste-review.md
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
