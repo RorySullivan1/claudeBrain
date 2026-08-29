@@ -25,9 +25,8 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **No open PRs.** #38 (Outlook pair) and #39 (prose discipline) merged; branch `claude/laughing-ride-pyhmzj` restarted from main. Follow-ups after a merge are a NEW PR, never stacked onto merged
-  history.
-- **Issues:** #40 (memory.py fail-safe + prose_budget hardening) and #41 (this INDEX compaction) fixed on the branch this session — **close on merge**.
+- **PR #45 open** (`claude/laughing-ride-pyhmzj` → main): the #40 hardening fixes + #41 INDEX compaction; carries `Closes #40/#41`. Remove this line when it merges.
+- After a merge, follow-ups are a NEW PR, never stacked onto merged history (#34/#38/#39 all followed this).
 - **Issues still open:** #42 (briefs vs skill-wins rule), #43 (live Office host probe for the 8 experience-settled VBA+Outlook claims), #44 (branding contrast bar).
 - verify-claims has run over every family (~390 claims; 83 ledger rows; worst offender VSTO with 22 errors). Ledger is the record; re-argue nothing it already settles.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
