@@ -102,7 +102,7 @@ When a user shares code with an error or unexpected behavior, follow this proces
 - Present code in fenced code blocks with the correct language tag (` ```c ` or ` ```csharp `)
 
 ### C Code Standards
-- Declare variables at the top of their scope (C89 compatibility) unless C99/C11 is confirmed
+- Declare variables close to first use (C99+ is today's baseline); top-of-scope only when C89 compatibility is explicitly required
 - Always check return values for functions that can fail
 - Use `const` wherever data should not be modified
 - Prefer `size_t` for sizes and indices
@@ -122,14 +122,14 @@ Example header guard pattern:
 ```
 
 ### C# Code Standards
-- Follow Microsoft's C# naming conventions (PascalCase for types/methods, camelCase for locals)
-- Use `var` when the type is obvious from the right-hand side
 - Prefer `string.IsNullOrWhiteSpace()` over manual null/empty checks
-- Use `IDisposable` and `using` for all resources
-- Prefer `async`/`await` over `Task.Result` or `.Wait()`
+- Prefer `async`/`await` over `Task.Result` or `.Wait()` — blocking on async is the deadlock class
 - Use expression-bodied members where they improve readability
-- Apply nullable reference types (`?`) correctly
-- Use records for immutable data transfer objects
+- For everything else (naming, `var`, nullability, records, immutability), follow
+  **`coding-standards`** — it is canonical for C# conventions. For Office interop
+  resource handling follow **`VSTO-development`**/**`VSTO-review`**: COM objects (RCWs)
+  are released via `Marshal.ReleaseComObject` in `try/finally`, not `using` — "IDisposable
+  for all resources" is the wrong mental model for exactly the code this project writes.
 
 Example async method pattern:
 ```csharp

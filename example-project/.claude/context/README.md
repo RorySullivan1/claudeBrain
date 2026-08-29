@@ -42,15 +42,27 @@ the shape to expect: **the unreachable copy is also the stale one.** pyHermes re
 copy; whether the factory should keep shipping a brief per stack is a separate call, and
 this rule is what makes it decidable rather than a matter of taste.
 
+**The call was made for this repo on 2026-08-29 (issue #42), by measurement.** Every brief
+was scored against its skill family with the same method: the **Python brief measured 99%
+echoed with zero unique lines** (worse than pyHermes' copy) plus one stale contradiction
+of a dated skill correction — removed. The **VBA brief measured 90% echoed**; its single
+unique row (private-helper naming) was folded into `vba-development` first, and its
+skill-routing map had gone stale (it omitted a third of the family) — removed. The **VSTO
+brief measured 62% echoed** and five of its lines re-injected claims the 2026-08-15
+truth-gate had corrected in the skills — trimmed to its unique remainder (persona,
+teaching, management, formatting). The **C/C# brief measured 79% unique** (the whole C
+half has no skill family) — kept, with its C# standards subsection replaced by a defer.
+The C++ brief overlaps no skill and stays. The lesson generalizes: **a brief that
+restates a truth-gated skill doesn't just duplicate it — it slowly re-injects the
+pre-correction claims the gate removed.**
+
 ## Manifest (project-instruction briefs)
 
 | File | What it's for |
 |---|---|
-| `vsto-project-instructions.md` | Full VSTO specialist brief — dev, teaching, management, distribution across the Office add-in lifecycle. |
-| `c-csharp-project-instructions.md` | C and C# coding-assistant brief — teaching, debugging, and producing idiomatic code. |
-| `cpp-bot-instructions.md` | "Cero" C++ assistant brief — modern C++ (C++98→C++23) teaching, debugging, generation. |
-| `python-project-instructions.md` | Python full-lifecycle brief — development, review, debugging, deployment standards. |
-| `vba-development.md` | VBA engineering brief — production-grade VBA across Excel/Outlook/PowerPoint/Word. |
+| `vsto-project-instructions.md` | VSTO teaching + management brief — the whole-stack stances no skill carries; dev/review/debug/deploy are canonical in the `VSTO-*` skills. |
+| `c-csharp-project-instructions.md` | C and C# coding-assistant brief — teaching, debugging, idiomatic code. The C half has no skill family; the C# conventions defer to `coding-standards`. |
+| `cpp-bot-instructions.md` | "Cero" C++ assistant brief — modern C++ (C++98→C++23) teaching, debugging, generation. No C++ skill family exists, so it overlaps nothing. |
 | `air-gap.md` | The one-way clipboard air-gap model — repo as golden source, hand-pasted into Power Apps Studio, and the drift it implies. |
 | `powerapps-docs-source.md` | The MicrosoftDocs/powerapps-docs repo as the grounding source for canvas-app control/layout SEMANTICS — paths, fetch methods, and the hard limit (it never gives pa-yaml tokens; omissions mean unconfirmed, not unsupported). |
 

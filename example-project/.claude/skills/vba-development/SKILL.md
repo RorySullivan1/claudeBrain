@@ -59,6 +59,7 @@ Option Private Module    ' hides the module's contents from OTHER projects (doc-
 | Public library procedure | `Lib_` | `Acme_GetTimeSeries` |
 | Module-level variable | `m_` | `m_isInitialised` |
 | Module-level constant | `c_` / ALL_CAPS | `c_DefaultTimeout`, `MAX_RETRIES` |
+| Private helper | none — camelCase | `parseDateInternal` |
 
 For add-in code called from other workbooks, prefix public procedures with the
 library name (`Acme_…`) to substitute for true namespacing and avoid collisions.

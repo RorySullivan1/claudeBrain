@@ -61,12 +61,16 @@ Two litmus phrasings that cut fast:
 ## The failure mode: the same guidance in both
 
 The trap this skill exists to prevent: putting the **same** how-to in a context brief
-**and** a skill. This repo has a live example. Compare:
+**and** a skill. This repo *had* a live example — resolved 2026-08-29 exactly as this
+skill prescribes, which makes it the worked case end to end. Compare (the brief now
+lives only in git history, removed in the issue-#42 curation):
 
-- `example-project/.claude/context/vba-development.md` — a context **brief**, and
-- `example-project/.claude/skills/vba-development/SKILL.md` — a **skill**.
+- `example-project/.claude/context/vba-development.md` — a context **brief** (since
+  removed: measured 90% restated by the skills; its one unique row — the private-helper
+  naming rule — was folded into the skill first), and
+- `example-project/.claude/skills/vba-development/SKILL.md` — the **skill**.
 
-They overlap heavily: both carry the naming-prefix table, the `Option Explicit` rule,
+They overlapped heavily: both carried the naming-prefix table, the `Option Explicit` rule,
 the structured-error-handling pattern, the performance wrapper, the late-vs-early
 binding guidance, the UDF discipline. That's the same *behavior* authored twice. Two
 costs: (1) **drift** — fix the error-handling rule in one and the other now lies; (2)

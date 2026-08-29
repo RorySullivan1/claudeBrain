@@ -76,3 +76,43 @@ thread markers folded into the archive. Session logs untouched, per the never-re
 One process note: the State budget counts PHYSICAL lines, so wrapping wide lines to satisfy
 the width cap can push State over its line cap — the fix is condensing, not wrapping. The
 first wrap pass produced State=16; the real fix was rewriting to 8 genuinely short lines.
+
+---
+
+## Addendum 2 — issues #42 and #43 worked
+
+**#42 (briefs vs skill-wins) — executed by measurement, not taste.** Four parallel agents
+audited each brief line-by-line against its skill family (the pyHermes method):
+- **Python: REMOVED.** 99% echoed, 0 unique — worse than pyHermes' 71% copy. Its one
+  non-echo was a stale contradiction (blanket "setup.py deprecated" vs the skill's dated
+  correction). Nothing survived a trim.
+- **VBA: REMOVED after fold.** 90% echoed; the single unique row (private helpers =
+  unprefixed camelCase) folded into vba-development's naming table FIRST; its routing map
+  omitted vba-addin-building/excel-object-model/data-access — actively misdirecting.
+- **VSTO: TRIMMED.** 62% echoed — and the sharp finding: **five lines re-injected
+  pre-correction claims the 2026-08-15 truth-gate fixed in the skills** (the
+  FinalReleaseComObject inversion among them). Survives: persona, Teaching Mode, Response
+  Formatting, Tone, management scraps, stack facts. Everything else → pointer to skills.
+- **C/C#: KEPT, lightly trimmed.** 79% unique — the entire C half has no skill family.
+  C# standards subsection replaced with 3 unique bullets + a defer that fixes the
+  "IDisposable for all resources" error (RCWs aren't IDisposable). C89 default modernized.
+- C++ (no skill overlap) and powerapps-docs-source (authority pointer) untouched.
+
+Cross-references swept: vba-developer agent repointed off the dead brief; add-context's
+exemplar → the trimmed VSTO brief; context-vs-skill's live example updated to record the
+resolution (it now shows the trap AND its ending); CLAUDE.md Reference Docs; manifest.
+The applied measurements are recorded in context/README under the rule, and as ledger row
+84. **Generalized lesson: a brief restating a truth-gated skill re-injects the
+pre-correction claims the gate removed.**
+
+**#43 (live host probe) — advanced to its maximum without a host.** Built the probe kits:
+- `vba-excel-object-model/probes/` — `probe_claims.bas` (controls-first: positive +
+  negative controls gate the run, stop-the-line on failure; per-claim CONFIRMED/REFUTED/
+  UNEXPECTED verdicts printed with the observation; the pivot probe carries its own inner
+  negative control) + PROBES.md (run + ledger-recording procedure).
+- `outlook-html-specifications/probes/` — a perturbation experiment: probe-a-baseline vs
+  probe-b-mitigated, B GENERATED from A (3 deltas, 29 lines, both parse-verified clean),
+  so observed differences attribute to specific mitigations. PROBES.md maps each of the 5
+  claims to a section and observation.
+The issue stays OPEN — the terminal state (claims promoted/refuted) needs a human run on
+Windows/classic Outlook; the kit reduces that to ~10 minutes.

@@ -42,7 +42,9 @@ Create `<target>/.claude/context/<kebab-name>.md` as plain markdown — **no YAM
 frontmatter**. Give it a starter skeleton: a top `# <Title>` heading, then the sections
 the brief warrants (purpose/scope, the stack/architecture, conventions and constraints,
 key workflows, gotchas). Mirror an existing brief like
-`example-project/.claude/context/python-project-instructions.md` for depth and tone.
+`example-project/.claude/context/vsto-project-instructions.md` for depth and tone —
+and note its shape: it carries only what no skill does (persona, teaching, management
+stances) and defers the rest to the skills, per the skill-wins rule in `context/README.md`.
 
 ## 5. Register and verify
 

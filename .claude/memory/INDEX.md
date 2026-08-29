@@ -27,7 +27,10 @@
 ## Threads          (open items; remove when closed)
 - **PR #45 open** (`claude/laughing-ride-pyhmzj` → main): the #40 hardening fixes + #41 INDEX compaction; carries `Closes #40/#41`. Remove this line when it merges.
 - After a merge, follow-ups are a NEW PR, never stacked onto merged history (#34/#38/#39 all followed this).
-- **Issues still open:** #42 (briefs vs skill-wins rule), #43 (live Office host probe for the 8 experience-settled VBA+Outlook claims), #44 (branding contrast bar).
+- **#42 DONE on branch** by measurement: Python brief removed (99% echo), VBA removed (90%,
+  after fold), VSTO trimmed (62% + 5 refuted re-injections), C/C# kept (79% unique) — closes on merge.
+- **#43 kit ready on branch**: probes/ folders in vba-excel-object-model (controls-first .bas) + outlook-html-specifications (A/B perturbation emails). Stays OPEN until someone runs them on Windows/Office.
+- **Issue still open:** #44 (branding contrast bar).
 - verify-claims has run over every family (~390 claims; 83 ledger rows; worst offender VSTO with 22 errors). Ledger is the record; re-argue nothing it already settles.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 
