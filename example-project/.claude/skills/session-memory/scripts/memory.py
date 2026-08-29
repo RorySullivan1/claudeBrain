@@ -185,7 +185,8 @@ def index_findings() -> list[str]:
         if line.startswith("## "):
             if seen:
                 break
-            seen = line.split()[1] == "State"
+            # Slice, not index: a bare "## " header must not crash the SessionStart hook.
+            seen = line.split()[1:2] == ["State"]
         elif seen and line.strip():
             state += 1
     if state > BUDGETS["state_lines"]:
@@ -212,7 +213,9 @@ def index_warning() -> str:
         if not index_path().exists():
             return ""
         findings = index_findings()
-    except OSError:
+    except Exception:
+        # Broad on purpose: this wraps the SessionStart hook, and no measurement
+        # surprise (odd markdown, encoding, anything) may take the session down.
         return ""
     if not findings:
         return ""
@@ -229,7 +232,11 @@ def cmd_check(_args) -> int:
     """Report an over-budget index. Exit 0 regardless — advisory, never a gate."""
     if not memory_dir().is_dir():
         return 0
-    findings = index_findings() if index_path().exists() else []
+    try:
+        findings = index_findings() if index_path().exists() else []
+    except Exception as exc:
+        print(f"INDEX.md could not be measured ({type(exc).__name__}); not a verdict.")
+        return 0
     if findings:
         print("INDEX.md over budget: " + "; ".join(findings))
     else:

@@ -46,3 +46,33 @@ on origin (PR #8 merged it long ago — memory thread was stale, now closed).
 cannot verify (an advisory whose crash path takes down the hook it advises from). And the
 INDEX measurement is a live demonstration of why enforcement beats documentation: the cap
 was written in this very file's header the whole time.
+
+---
+
+## Addendum — issues #40 and #41 worked
+
+**#40 (fail-safe + hardening), all in the canonical example-project copies:**
+- `memory.py`: `line.split()[1:2] == ["State"]` (bare `## ` header no longer crashes the
+  SessionStart hook); `index_warning()` catch widened to `Exception` with a comment saying
+  why broad is correct there; `cmd_check` wrapped so its "exit 0 regardless" docstring is
+  actually true ("could not be measured; not a verdict" on failure).
+- `prose_budget.py`: splitlines hoisted out of the tokenize loop (O(n²) → O(n)) and the dead
+  `text` variable removed; comment runs now keyed `{scope}#{sha1(content)[:8]}` via
+  `_run_slug` (stable across line moves and neighbouring-run insertion — churns only when
+  the comment itself is rewritten; identical runs in one scope share a key, documented as
+  acceptable); attribute keys qualified by enclosing scope (`A.limit` ≠ `B.limit`), module
+  scope keeps the bare name. hooks/README baseline-key sentence updated.
+- Verified by 6 probes: bare-header no-crash + State still counted; cmd_check exit-0;
+  comment-run key identical before/after inserting a run above; class-qualified attribute
+  keys; module bare-name back-compat; self-scan still clean on shipped defaults.
+
+**#41 (INDEX compaction):** 107 lines / 28,624 chars / State 13 / 38 wide → **43 lines /
+5,180 chars / State 8 / 0 wide — `memory.py check`: "INDEX.md is within budget."**
+June-era Decisions (29 lines) and Log entries (23 lines) folded VERBATIM into
+`sessions/ARCHIVE-2026.md` (extracted mechanically, not retyped) with pointer lines left;
+State rewritten to 8 lines that point at CATALOG.md instead of enumerating; DONE/CLOSED
+thread markers folded into the archive. Session logs untouched, per the never-rewrite rule.
+
+One process note: the State budget counts PHYSICAL lines, so wrapping wide lines to satisfy
+the width cap can push State over its line cap — the fix is condensing, not wrapping. The
+first wrap pass produced State=16; the real fix was rewriting to 8 genuinely short lines.
