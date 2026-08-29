@@ -51,10 +51,13 @@
 - [2026-06-11] Adopt the typed `.claude/` layout; empty layers scaffolded, not fabricated — sessions/2026-archive-decisions.md
 
 ## Threads          (open items; remove when closed)
-- **PR #38 open** on `claude/laughing-ride-pyhmzj` → main: the Outlook HTML pair
-  (`outlook-html-specifications` skill + `outlook-html-designer` agent), gated at authoring,
-  ledger 78→83. Remove this line when it merges. (#34 merged 2026-08-15; branch was restarted
-  from main — any follow-up after a merge is a NEW PR, never stacked onto merged history.)
+- **No open PRs.** #38 (Outlook pair) and #39 (prose discipline, ported from pyHermes) both
+  merged; `claude/laughing-ride-pyhmzj` restarted from main. After a merge, follow-ups are a
+  NEW PR — never stacked onto merged history.
+- **Open issues #40–#44** (filed 2026-08-29 from the #39 review + standing gaps): #40 memory.py
+  IndexError fail-safe fix + prose_budget nits; #41 compact THIS INDEX (103 lines/28.4K chars/
+  39 wide — over every #39 budget); #42 decide per-stack briefs vs skill-wins rule; #43 live
+  Office host probe for the experience-settled VBA+Outlook claims; #44 branding contrast bar.
 - `verify-claims` RUN over **22 skills + 2 authored-through-the-gate** (2026-08-15, 21 verifiers, ~390 claims): **78 ledger rows — 46 corrections, 29 experience-settled labels, 2 contested, 1 confirmed-pre-ship**. Pass 1 = Power Platform + VBA; pass 2 = VSTO (worst: 22 errors), coding-standards, Python, quant; pass 3 = light sweep of presentation/docs (3 errors in ~23 claims — thin as predicted); pass 4 = `vba-excel-object-model` + `vba-data-access` gated **at authoring**, which caught 3 defects in the draft. Judgments in `example-project/.claude/skills/claim-grounding/reviews/ledger.jsonl`. **Every skill family is now gated.**
 - **Open gap:** no Windows/Office host here, so `verify-claims` step 4 (live-authority probe)
   has never run. 3 VBA claims stand as experience-settled that a probe would settle —
@@ -62,7 +65,8 @@
   `UsedRange` over-reporting. Recorded as a ledger row so it can't read as coverage.
 - **Open gap:** `branding` tells the reader to verify contrast but never says what passes.
   Filling it means *adding* claims — a human call, deliberately not made unilaterally.
-- PR #7 (first factory-efficiency pass) merged. `claude/optimize-factory-model` re-cut from main for the second efficiency pass (agent-authoring dedup); pushed, no new PR opened yet — open one if wanted.
+- CLOSED: the `claude/optimize-factory-model` thread — PR #8 merged its work; the branch no
+  longer exists on origin. (Was tracked here as awaiting a second-pass PR; stale.)
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 - DONE: `agent-authoring` now carries the verifying-agent posture rule (see Decisions).
 - DONE: VBA family gap closed — `vba-excel-object-model` + `vba-data-access` (grep proved zero
