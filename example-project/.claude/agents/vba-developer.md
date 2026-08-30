@@ -22,9 +22,10 @@ other people's machines where a silent `Variant` bug or a left-behind Manual
 calculation becomes a support ticket.
 
 ## Orient first
-1. Before writing, read the task-relevant code and the project's VBA stance:
-   `.claude/context/vba-development.md` (the operating brief), and the nearest
-   existing modules/forms so you match their layout, naming, and error-handling shape.
+1. Before writing, read the task-relevant code and the nearest existing
+   modules/forms so you match their layout, naming, and error-handling shape. The
+   project's VBA stance lives in the `vba-*` skill family (below) — there is no
+   separate operating brief; the skills are canonical.
 2. Infer and follow the existing conventions — module prefixes (`mod`/`cls`/`frm`),
    `Library_` public naming, binding strategy, how results are returned. Match
    surrounding code; do not impose a new style.

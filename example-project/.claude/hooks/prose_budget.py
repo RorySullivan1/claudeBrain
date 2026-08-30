@@ -22,6 +22,7 @@ See `.claude/hooks/README.md` for the config keys and the baseline format.
 from __future__ import annotations
 
 import ast
+import hashlib
 import io
 import json
 import re
@@ -188,12 +189,12 @@ def _comment_runs(source: str, scopes: list[tuple[str, str, ast.AST]]) -> list[t
     a run of them is not a prose block. `tokenize` is what distinguishes the two — a
     line-based scan cannot, because a `#` inside a string looks identical.
     """
+    lines = source.splitlines()
     own_line: list[int] = []
     for token in tokenize.generate_tokens(io.StringIO(source).readline):
-        if token.type == tokenize.COMMENT and not source.splitlines()[token.start[0] - 1][:token.start[1]].strip():
+        if token.type == tokenize.COMMENT and not lines[token.start[0] - 1][:token.start[1]].strip():
             own_line.append(token.start[0])
 
-    text = source.splitlines()
     runs: list[tuple[str, int, int]] = []
     start = previous = None
 
@@ -212,13 +213,26 @@ def _comment_runs(source: str, scopes: list[tuple[str, str, ast.AST]]) -> list[t
     return runs
 
 
+def _run_slug(source: str, line: int, length: int) -> str:
+    """A short content hash identifying one comment run, for its baseline key.
+
+    Content-derived so the key survives line moves and neighbouring runs being
+    added or removed — it churns only when the comment itself is rewritten, which
+    is when re-baselining is the correct answer anyway. Two byte-identical runs in
+    one scope share a key; a baseline entry then exempts both, which is acceptable
+    for an exemption that names the text it exempts.
+    """
+    block = "\n".join(l.strip() for l in source.splitlines()[line - 1 : line - 1 + length])
+    return hashlib.sha1(block.encode("utf-8")).hexdigest()[:8]
+
+
 def _is_attribute_doc(source: str, line: int, length: int) -> str | None:
     """The name a ``#:`` run documents, or None when it is an ordinary comment block.
 
     ``#:`` before an assignment is Sphinx's way of documenting a module constant —
     API documentation, not inline prose, and measuring it as a comment block would
-    force correct documentation to be deleted. Its name is also a stabler baseline
-    key than an ordinal, for `Finding.location`'s reason.
+    force correct documentation to be deleted. Its name is also a stable baseline
+    key, for `Finding.location`'s reason.
     """
     lines = source.splitlines()
     block = lines[line - 1 : line - 1 + length]
@@ -244,15 +258,15 @@ def scan_python(source: str, path: str, budgets: Budgets) -> list[Finding]:
         if span and span[1] > budgets.cap(scope):
             findings.append(Finding(path, scope, name, span[0], span[1], budgets.cap(scope)))
 
-    ordinals: dict[str, int] = {}
     for enclosing, line, length in _comment_runs(source, scopes):
         attribute = _is_attribute_doc(source, line, length)
         scope = "attribute" if attribute else "comment_run"
         if attribute:
-            name = attribute
+            # Qualified by the enclosing scope: two classes may document
+            # same-named attributes, and their exemptions must not collide.
+            name = attribute if enclosing == "module" else f"{enclosing}.{attribute}"
         else:
-            ordinals[enclosing] = ordinals.get(enclosing, 0) + 1
-            name = f"{enclosing}#{ordinals[enclosing]}"
+            name = f"{enclosing}#{_run_slug(source, line, length)}"
         if length > budgets.cap(scope):
             findings.append(Finding(path, scope, name, line, length, budgets.cap(scope)))
 
