@@ -25,12 +25,12 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **PR #45 open** (`claude/laughing-ride-pyhmzj` → main): the #40 hardening fixes + #41 INDEX compaction; carries `Closes #40/#41`. Remove this line when it merges.
-- After a merge, follow-ups are a NEW PR, never stacked onto merged history (#34/#38/#39 all followed this).
-- **#42 DONE on branch** by measurement: Python brief removed (99% echo), VBA removed (90%,
-  after fold), VSTO trimmed (62% + 5 refuted re-injections), C/C# kept (79% unique) — closes on merge.
-- **#43 kit ready on branch**: probes/ in vba-excel-object-model (controls-first .bas) + outlook-html-specifications (A/B perturbation emails). OPEN until run on Windows/Office (~10 min).
-- **Issue still open:** #44 (branding contrast bar).
+- **No open PRs.** #45 merged (c1b4786), auto-closing issues #40/#41/#42; branch restarted from
+  main. After a merge, follow-ups are a NEW PR, never stacked onto merged history.
+- **Issue #43 open, kit MERGED**: probes/ in vba-excel-object-model (controls-first .bas) +
+  outlook-html-specifications (A/B perturbation emails). Awaits a ~10-min run on Windows/Office;
+  results paste into #43, then PROBES.md turns them into label upgrades/fixes + ledger rows.
+- **Issue #44 open:** branding contrast bar (human decision; ties to the Outlook dark-mode bar).
 - verify-claims has run over every family (~390 claims; 83 ledger rows; worst offender VSTO with 22 errors). Ledger is the record; re-argue nothing it already settles.
 - Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
 
