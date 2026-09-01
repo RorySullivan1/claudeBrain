@@ -32,7 +32,8 @@
   results paste into #43, then PROBES.md turns them into label upgrades/fixes + ledger rows.
 - **Issue #44 open:** branding contrast bar (human decision; ties to the Outlook dark-mode bar).
 - verify-claims has run over every family (~390 claims; 83 ledger rows; worst offender VSTO with 22 errors). Ledger is the record; re-argue nothing it already settles.
-- Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
+- Possible future agent siblings: an orchestrator/coordinator. (The line-level-reviewer idea is
+  partially realized: `prose-auditor` agent + `/prose-review` command own the prose dimension.)
 
 ## Log              (append-only pointers)
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |

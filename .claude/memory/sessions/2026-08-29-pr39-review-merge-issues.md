@@ -153,3 +153,26 @@ family said NOTHING about comments; the "emitted output" scope row had no consum
 - A SKILL.md line-counter — rejected on #39's own principle: a number in a cross-project
   standard is wrong for the next repo; skill-authoring already teaches economy by shape
   and skill-creator owns performance evals.
+
+---
+
+## Addendum 4 — prose-auditor agent + /prose-review command
+
+User asked for a command to call an agent that reviews comments/docstrings against the
+agreed principles. Built the pair in example-project:
+
+- **`prose-auditor` agent** — verifying agent (Read/Grep/Glob/Bash, NO Edit/Write, no
+  plan mode per the standing rule; opus like the other auditors). Two passes: it RUNS
+  the one measurer (`prose_budget` as library — `load_budgets() or Budgets()`, snippet
+  tested from the tree: works, memory.py clean at shipped defaults) then the semantic
+  pass (contract-vs-history, restated-what, misplaced reasoning → move-with-destination,
+  the MISSING FLOOR — the discipline cuts both ways — emitted-output weight, banners).
+  Carries check-the-check (the `#:` lesson) and "deletion without routing is a
+  regression". Dispositions: trim / move→where / add / keep-justified. Never edits.
+- **`/prose-review` command** — resolves scope ($ARGUMENTS paths, else branch-changed
+  files; refuses to silently sweep the whole tree), dispatches the agent, relays.
+  Default is findings-only; `--apply` applies in disposition order with
+  **route-then-trim** ordering and a confirming re-audit.
+
+Registered in commands/README + CATALOG; integrity clean. Also closes half of the old
+"line-level code-reviewer" thread idea (the prose dimension); INDEX thread updated.
