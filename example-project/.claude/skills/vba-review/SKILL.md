@@ -33,7 +33,7 @@ Evaluate in this sequence. Never skip to style while a correctness issue stands:
 6. **Binding consistency** — half-converted late/early binding; references the user must set manually
 7. **Object-reference correctness** — `.Select`/`.Activate`/`ActiveSheet`; unqualified `Sheets(...)`; hardcoded sheet indices; unguarded `DataBodyRange`/`SpecialCells` (see `vba-excel-object-model`)
 8. **Architecture & API surface** — work in sheet/event modules instead of standard modules; oversized public surface
-9. **Style** — naming, dead code, magic numbers
+9. **Style** — naming, dead code, magic numbers; comment scope (banner boxes, change-history headers — git owns history; the per-scope ceiling shape is `coding-standards` § *How much, by scope*)
 
 ## What to Ask For (if absent)
 

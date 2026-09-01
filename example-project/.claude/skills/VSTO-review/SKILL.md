@@ -284,7 +284,9 @@ Only raise style issues after all correctness issues are addressed:
 - Naming: PascalCase for public members, camelCase for locals, `_` prefix for private fields
 - Remove dead/commented-out code
 - `var` is fine for obvious types; avoid for COM interop types (prefer explicit for clarity)
-- XML doc comments on public methods
+- XML doc comments on public methods — and at the scope's budget: the ceiling table is
+  `coding-standards` § *How much, by scope*; flag history-recounting docs and essay comment
+  blocks, and route the displaced reasoning rather than deleting it
 
 ---
 

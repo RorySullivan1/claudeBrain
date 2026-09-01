@@ -56,22 +56,28 @@ is not the bar, because the browser is the one client guaranteed not to be Outlo
    background logos, no text embedded in images, strong contrast in both modes.
 9. **Images:** hosted URLs (never base64), explicit width/height attributes, styled alt
    text that carries the message while images are blocked.
+10. **Comment weight:** a shipped email is *emitted output* — `coding-standards`' highest
+    prose bar — because its comments reach every recipient and cost bytes against client
+    size limits. Keep the assumptions block and the MSO conditionals (those are code, not
+    commentary); strip section/dev commentary before hand-off. (The probe files under
+    `outlook-html-specifications/probes/` are exempt: they are instruments, and their
+    commentary is the instruction set.)
 
 ## Verify (do not report done until you have)
 You cannot render classic Outlook here — never claim a visual pass you did not see.
 What you CAN verify, verify mechanically:
-10. **Parse-validate the HTML** — run a real parser over the file (e.g.
+11. **Parse-validate the HTML** — run a real parser over the file (e.g.
     `python3 -c "from html.parser import ..."` or `tidy -eq`) and fix every unclosed
     tag and nesting error. This gate is not cosmetic: classic Outlook renders malformed
     HTML as a solid black body, so a parse error is a total rendering failure.
-11. **Audit against the specification skill's failure-modes list** — margins-as-spacing,
+12. **Audit against the specification skill's failure-modes list** — margins-as-spacing,
     unpinned line-heights, CSS background images without a VML path, transparent
     background colors, missing DPI block, missing font gate, `max-width` doing
     load-bearing work, unsized images, single tall table. Cite what you checked.
-12. **Check the conditional plumbing** — every `[if mso]` opens and closes, every ghost
+13. **Check the conditional plumbing** — every `[if mso]` opens and closes, every ghost
     table's cells sum to the wrapper width, and the `[if !mso]` escape sequences are
     intact (a broken one blanks content in *all* clients).
-13. **State the residual risk honestly:** final confirmation requires opening the file
+14. **State the residual risk honestly:** final confirmation requires opening the file
     in classic Outlook (or a rendering service like Litmus/Email on Acid). Provide the
     exact manual test: which clients to check, in which modes (light/dark, 100%/150%
     scaling), and what to look for.
