@@ -249,9 +249,11 @@ Three documented traps:
   version constant.
 
 Renaming a data field to the source field's own name raises an error — that is why the
-example sets `.Name = "Total Amount"` rather than `"Amount"`. *(Field-observed; the
-`PivotField.Name` reference doesn't state it. `PivotField.SourceName` is the documented way
-to recover the original name after a rename.)*
+example sets `.Name = "Total Amount"` rather than `"Amount"`. *(Live-probe confirmed
+(Excel 16.0 / Microsoft 365, 2026-09-02): the collision raises 1004 "Unable to set the Name
+property of the PivotField class", while a non-colliding rename succeeds — still absent from
+the `PivotField.Name` reference. `PivotField.SourceName` is the documented way to recover the
+original name after a rename.)*
 
 Refreshing: `pt.RefreshTable` refreshes one table; `pc.Refresh` refreshes every table
 sharing that cache. Two pivots built from one `PivotCaches.Create` call share a cache, and
@@ -301,11 +303,15 @@ indices reshuffle when the source range changes.
 
 ## Finding the data
 
-**`UsedRange` is not the data.** It is Excel's bookkeeping of what has ever been touched,
-including cleared cells and stray formatting, and it does not reliably shrink. Use it for
-an upper bound, never for a row count. *(Field-observed — the reference documents what
-`UsedRange` returns, not that it over-reports; treat the over-report as reliably true in
-practice and never as a contract you can compute against.)*
+**`UsedRange` is not the data.** It is Excel's bookkeeping of the rectangle spanning every
+cell that carries a value *or formatting*. Use it for an upper bound, never for a row count.
+The over-report is driven by **residual formatting, not leftover values**: fill `A1:J50`, put
+values only in `A1:J10`, and `UsedRange` is still `$A$1:$J$50`; a `ClearContents` that leaves
+the fill behind will not shrink it either. *(Live-probe corrected (Excel 16.0 / Microsoft 365,
+2026-09-02): the earlier "does not reliably shrink after cells are cleared" claim was refuted —
+after both `.Clear` and `.ClearContents`, `UsedRange` shrank to the live extent immediately and
+stayed shrunk across save/reopen. It over-reports only while formatting outlives the data; the
+reference documents what `UsedRange` returns, not this inflation.)*
 
 The reliable idioms:
 
@@ -322,9 +328,10 @@ probe a column that can't, or use the table's `DataBodyRange` and sidestep the q
 
 `SpecialCells` is the documented way to narrow a range before operating on it, and
 Microsoft's performance guidance recommends it for exactly that. What the documentation
-does *not* state — but is consistent field behaviour — is that **it raises run-time error
-1004 ("No cells were found") instead of returning an empty range when nothing matches.**
-Treat that as observed behaviour, not a contract, and guard it either way:
+does *not* state — but a live probe confirms (Excel 16.0 / Microsoft 365, 2026-09-02) — is
+that **it raises run-time error 1004 ("No cells were found.") instead of returning an empty
+range when nothing matches.** The behaviour is still absent from the reference, so treat it
+as observed-not-contracted and guard it either way:
 
 ```vba
 Dim vis As Range
