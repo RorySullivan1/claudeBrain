@@ -31,8 +31,9 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **No open PRs.** #45 merged (c1b4786), auto-closing issues #40/#41/#42; branch restarted from
-  main. After a merge, follow-ups are a NEW PR, never stacked onto merged history.
+- **PR #46 open** (`claude/laughing-ride-pyhmzj` → main, 4 commits): WCAG AA bar (#44) + the
+  prose-discipline reach extension + prose-auditor/`/prose-review`. Carries `Closes #44`.
+- After a merge, follow-ups are a NEW PR, never stacked onto merged history.
 - **Issue #43 open, kit MERGED**: probes/ in vba-excel-object-model (controls-first .bas) +
   outlook-html-specifications (A/B perturbation emails). Awaits a ~10-min run on Windows/Office;
   results paste into #43, then PROBES.md turns them into label upgrades/fixes + ledger rows.
