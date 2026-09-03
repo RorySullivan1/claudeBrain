@@ -53,7 +53,10 @@ is not the bar, because the browser is the one client guaranteed not to be Outlo
    `[if mso]` ghost tables and conditional content. Default to the padded-`<td>` button;
    VML only when the design genuinely requires it and the forwarding hazard is accepted.
 8. **Dark mode:** near-black/off-white instead of pure `#000`/`#FFF`, transparent-
-   background logos, no text embedded in images, strong contrast in both modes.
+   background logos, no text embedded in images, and contrast at **WCAG AA in both
+   modes** (4.5:1 normal text, 3:1 large text and UI/graphics — `branding` § *Contrast*,
+   measured with `branding/references/contrast.py`, never eyeballed). The dark rendering is
+   the client's, not yours: measure it off a dark-mode screenshot, not off your source.
 9. **Images:** hosted URLs (never base64), explicit width/height attributes, styled alt
    text that carries the message while images are blocked.
 10. **Comment weight:** a shipped email is *emitted output* — `coding-standards`' highest
@@ -80,7 +83,8 @@ What you CAN verify, verify mechanically:
 14. **State the residual risk honestly:** final confirmation requires opening the file
     in classic Outlook (or a rendering service like Litmus/Email on Acid). Provide the
     exact manual test: which clients to check, in which modes (light/dark, 100%/150%
-    scaling), and what to look for.
+    scaling), and what to look for — including the measured contrast of the *inverted*
+    dark-mode rendering, which no static check of your source can produce.
 
 ## Guardrails
 - **Change budget:** when repairing an existing email, make the smallest change that

@@ -220,7 +220,13 @@ the sender cannot opt out. Microsoft's guidance:
 - Logos/icons: transparent backgrounds plus a subtle stroke/glow so they sit on either
   ground. Don't embed text in images — inverted grounds make it unreadable. Don't ship
   white icons on black.
-- Keep contrast strong in *both* modes; test both before sending.
+- **Keep contrast at the AA bar in *both* modes** — 4.5:1 normal text, 3:1 large text and
+  UI/graphics, per `branding` § *Contrast* (measure with `branding/references/contrast.py`). The
+  wrinkle email adds: you author one palette but ship **two renderings**, and the dark one is
+  produced by the *client*, not by you. Measuring only the colours in your HTML checks half the
+  product — take the inverted rendering's actual colours off a dark-mode screenshot and measure
+  those too. This is also why near-black/off-white beats pure `#000`/`#FFF`: it survives
+  inversion with its ratios intact (`#1A1A1A` on `#F5F5F5` measures 15.96:1).
 
 ## Failure modes to check before blaming the design
 

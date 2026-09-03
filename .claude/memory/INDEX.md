@@ -13,6 +13,12 @@
 ## Decisions        (append-only; supersede, never delete)
 - [2026-08-29] PR #39 (pyHermes prose-discipline port) reviewed mechanically and merged; issues #40–#44 filed from findings + standing gaps. Review record on the PR —
   sessions/2026-08-29-pr39-review-merge-issues.md
+- [2026-09-03] **WCAG 2.2 Level AA is the library's accessibility bar** (issue #44): 4.5:1 normal text,
+  3:1 large text and UI/graphics; AAA named as the stricter tier. `branding` is canonical and ships
+  `references/contrast.py` (boundary-controlled) so the bar is COMPUTED; presentation-design, the
+  Outlook skill and its agent point at it rather than restating. Naming numbers here does NOT
+  contradict #39's "no line counts in a cross-project standard" — an external published standard
+  travels; a per-codebase length cap does not — sessions/2026-09-03-wcag-aa-contrast-bar.md
 - [2026-08-15] **A verifying agent must not carry `permissionMode: plan`** — its value is running the real check; read-only comes from omitting Edit/Write. Codified in agent-authoring; all 12 agents
   swept clean — sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - [2026-08-15] One-way air-gap doctrine wins the freshness conflict: pre-paste-review grounds against the repo's records, never demands a freshness pull; canvas workflows name project state by ROLE
@@ -30,7 +36,8 @@
 - **Issue #43 open, kit MERGED**: probes/ in vba-excel-object-model (controls-first .bas) +
   outlook-html-specifications (A/B perturbation emails). Awaits a ~10-min run on Windows/Office;
   results paste into #43, then PROBES.md turns them into label upgrades/fixes + ledger rows.
-- **Issue #44 open:** branding contrast bar (human decision; ties to the Outlook dark-mode bar).
+- **#44 DONE on branch** — WCAG 2.2 AA adopted as the library bar, grounded against the W3C
+  Recommendation itself + a self-testing checker; closes on merge.
 - verify-claims has run over every family (~390 claims; 83 ledger rows; worst offender VSTO with 22 errors). Ledger is the record; re-argue nothing it already settles.
 - Possible future agent siblings: an orchestrator/coordinator. (The line-level-reviewer idea is
   partially realized: `prose-auditor` agent + `/prose-review` command own the prose dimension.)
