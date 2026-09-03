@@ -1,5 +1,16 @@
 # Live-host probes — vba-excel-object-model (issue #43)
 
+> **Run log — 2026-09-02, Excel 16.0 (Windows 64-bit NT 10.00) / Microsoft 365.**
+> Driven via Excel COM automation (module imported, `RunAllProbes` executed; output sink
+> redirected from the Immediate window to a file, probe logic otherwise verbatim). Both
+> controls PASSed. Results: `SpecialCells`-no-match **CONFIRMED** (raised 1004 "No cells
+> were found."); pivot data-field rename collision **CONFIRMED** (raised 1004 "Unable to set
+> the Name property of the PivotField class"; non-colliding rename succeeded); UsedRange
+> "doesn't shrink after clear" **REFUTED** — it shrank after `.Clear` *and* `.ClearContents`,
+> in-session and across save/reopen; the real over-report driver is residual formatting.
+> Skill labels promoted/corrected; ledger rows updated (2026-09-02). See issue #43.
+
+
 Three claims in `../SKILL.md` are labelled **experience-settled**: consistently observed in
 the field, absent from the Microsoft references the skill cites. Only a run on a real
 Excel/Windows host can promote or refute them. This folder is that run, packaged.
