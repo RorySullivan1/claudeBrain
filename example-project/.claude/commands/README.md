@@ -21,5 +21,7 @@ stateless, instant, one invocation. Invoked as `/<name>`.
 **Defined:**
 - `/reindex` — regenerate `.claude/CATALOG.md` (runs `.claude/hooks/catalog.py`).
 - `/version-set`, `/version-ship` — the version-labeling flow (see `.meta/version`).
+- `/prose-review` — audit comments/docstrings against the prose scope discipline via the
+  `prose-auditor` agent (findings only; `--apply` to also fix, route-then-trim).
 
 Drop a `<name>.md` here to add another.

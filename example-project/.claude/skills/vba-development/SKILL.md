@@ -93,6 +93,16 @@ hot loop needs the speed.
 
 ---
 
+### Comments — VBA has no doc-comment form, so the header line carries the contract
+
+- Every **public** procedure opens with a 1–3 line `'` header: what it does, its
+  parameters/return where non-obvious, and what it raises. That header IS the API doc —
+  VBA has no docstring/XML-doc equivalent for tooling to read.
+- Inline `'` comments are for traps and *why* only (the `Option Private Module` lines
+  above model it). Never banner boxes, never change-history headers — git owns history.
+- The per-scope ceiling shape is `coding-standards` § *How much, by scope*; reasoning
+  that outgrows its procedure gets routed (`knowledge-router`), not inflated in place.
+
 ## Module / Project Structure
 
 Organize even a single workbook into clear modules — don't pile everything into one:

@@ -13,6 +13,12 @@
 ## Decisions        (append-only; supersede, never delete)
 - [2026-08-29] PR #39 (pyHermes prose-discipline port) reviewed mechanically and merged; issues #40–#44 filed from findings + standing gaps. Review record on the PR —
   sessions/2026-08-29-pr39-review-merge-issues.md
+- [2026-09-03] **WCAG 2.2 Level AA is the library's accessibility bar** (issue #44): 4.5:1 normal text,
+  3:1 large text and UI/graphics; AAA named as the stricter tier. `branding` is canonical and ships
+  `references/contrast.py` (boundary-controlled) so the bar is COMPUTED; presentation-design, the
+  Outlook skill and its agent point at it rather than restating. Naming numbers here does NOT
+  contradict #39's "no line counts in a cross-project standard" — an external published standard
+  travels; a per-codebase length cap does not — sessions/2026-09-03-wcag-aa-contrast-bar.md
 - [2026-08-15] **A verifying agent must not carry `permissionMode: plan`** — its value is running the real check; read-only comes from omitting Edit/Write. Codified in agent-authoring; all 12 agents
   swept clean — sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - [2026-08-15] One-way air-gap doctrine wins the freshness conflict: pre-paste-review grounds against the repo's records, never demands a freshness pull; canvas workflows name project state by ROLE
@@ -25,14 +31,17 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **PR #45 open** (`claude/laughing-ride-pyhmzj` → main): the #40 hardening fixes + #41 INDEX compaction; carries `Closes #40/#41`. Remove this line when it merges.
-- After a merge, follow-ups are a NEW PR, never stacked onto merged history (#34/#38/#39 all followed this).
-- **#42 DONE on branch** by measurement: Python brief removed (99% echo), VBA removed (90%,
-  after fold), VSTO trimmed (62% + 5 refuted re-injections), C/C# kept (79% unique) — closes on merge.
-- **#43 kit ready on branch**: probes/ in vba-excel-object-model (controls-first .bas) + outlook-html-specifications (A/B perturbation emails). OPEN until run on Windows/Office (~10 min).
-- **Issue still open:** #44 (branding contrast bar).
+- **PR #46 open** (`claude/laughing-ride-pyhmzj` → main, 4 commits): WCAG AA bar (#44) + the
+  prose-discipline reach extension + prose-auditor/`/prose-review`. Carries `Closes #44`.
+- After a merge, follow-ups are a NEW PR, never stacked onto merged history.
+- **Issue #43 open, kit MERGED**: probes/ in vba-excel-object-model (controls-first .bas) +
+  outlook-html-specifications (A/B perturbation emails). Awaits a ~10-min run on Windows/Office;
+  results paste into #43, then PROBES.md turns them into label upgrades/fixes + ledger rows.
+- **#44 DONE on branch** — WCAG 2.2 AA adopted as the library bar, grounded against the W3C
+  Recommendation itself + a self-testing checker; closes on merge.
 - verify-claims has run over every family (~390 claims; 83 ledger rows; worst offender VSTO with 22 errors). Ledger is the record; re-argue nothing it already settles.
-- Possible future agent siblings: a line-level code-reviewer; an orchestrator/coordinator.
+- Possible future agent siblings: an orchestrator/coordinator. (The line-level-reviewer idea is
+  partially realized: `prose-auditor` agent + `/prose-review` command own the prose dimension.)
 
 ## Log              (append-only pointers)
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |

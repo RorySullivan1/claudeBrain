@@ -76,6 +76,7 @@
 - powerapp-canvas-developer — End-to-end canvas-app developer for a repo that authors canvas-app source offline — designs, … -> agents/powerapp-canvas-developer.md
 - pre-paste-review — Pre-paste auditor for authored canvas-app Power Fx — the last gate before a human pastes YAML into … -> agents/pre-paste-review.md
 - presentation-architect — Objective presentation-flow brain — designs how a communication artifact is structured to land its … -> agents/presentation-architect.md
+- prose-auditor — Comment-and-docstring auditor — reviews code prose against the agreed scope discipline … -> agents/prose-auditor.md
 - python-developer — Senior Python engineer for this repo's general tooling layer (`tools/`). Use proactively when … -> agents/python-developer.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
@@ -83,6 +84,7 @@
 - vsto-developer — Senior C#/.NET VSTO engineer for this repo's Excel add-in (`src/AddIn/`). Use proactively when … -> agents/vsto-developer.md
 
 ## Commands (commands/*.md)
+- prose-review — Audit comments and docstrings against the prose scope discipline — dispatches the prose-auditor … -> commands/prose-review.md
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
 - roadmap-set — Author or update the development map in .meta/roadmap/ — decompose the project objective into … -> commands/roadmap-set.md
 - roadmap-status — Show where the project is on its development map — the cursor version, what's shipped, and what's … -> commands/roadmap-status.md

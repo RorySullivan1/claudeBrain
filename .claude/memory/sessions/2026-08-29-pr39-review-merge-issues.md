@@ -116,3 +116,63 @@ pre-correction claims the gate removed.**
   claims to a section and observation.
 The issue stays OPEN — the terminal state (claims promoted/refuted) needs a human run on
 Windows/classic Outlook; the kit reduces that to ~10 minutes.
+
+---
+
+## Addendum 3 — prose-discipline reach assessment + closing the enforcement gaps
+
+**Request:** assess the restrain-commentary arc (#39→#42) and propose/apply follow-ons.
+
+**Coverage map (measured by grep, not intuition):** the scope table existed only inside
+coding-standards — ZERO other assets referenced it. python-review carried the floor
+("what-not-why") but no ceiling; VSTO-review floor-only; vba-review and the whole VBA
+family said NOTHING about comments; the "emitted output" scope row had no consumer.
+
+**Applied (folds, no new assets):**
+1. python-review / VSTO-review / vba-review — one ceiling bullet each pointing at
+   coding-standards § *How much, by scope* (DRY: pointer, no restatement) + "route
+   displaced reasoning, don't delete it".
+2. vba-development — a Comments subsection: VBA has no doc-comment form, so a 1–3 line
+   `'` header on each public procedure IS the API doc; inline for traps/why only; no
+   banner boxes or change-history headers (git owns history).
+3. outlook-html-designer — build rule 10: a shipped email is *emitted output* (comments
+   reach every recipient, cost bytes); keep assumptions block + MSO conditionals (code,
+   not commentary), strip dev commentary; probes exempt (instruments). Fixed a step-
+   numbering collision this introduced (verify steps renumbered 11–14).
+4. prose_budget.py — opt-in `claude_md` budget (`{"lines": N, "chars": N}`): CLAUDE.md
+   is the OTHER always-loaded prose and had no cap while the memory INDEX now does
+   (pyHermes' 2,045-line CLAUDE.md is #39's own motivating evidence). Whole-file caps
+   only (scope tables are for code); Finding gained a `unit` field so char findings
+   print honestly. 8 probes: silent unadopted / silent without the key / fires with
+   units / small file passes / baseline exempts / scan_tree picks up nested CLAUDE.mds /
+   Python path regression-clean / self-scan clean. hooks/README documents the key.
+
+**Proposed but deliberately NOT built** (the factory's no-fabrication-until-need rule):
+- VBA/C# scanners for `_SCANNERS` — tractable (tokenizers, not regex) but no project
+  currently runs the hook over VBA/C#; the silently-skip design is correct until one does.
+- A SKILL.md line-counter — rejected on #39's own principle: a number in a cross-project
+  standard is wrong for the next repo; skill-authoring already teaches economy by shape
+  and skill-creator owns performance evals.
+
+---
+
+## Addendum 4 — prose-auditor agent + /prose-review command
+
+User asked for a command to call an agent that reviews comments/docstrings against the
+agreed principles. Built the pair in example-project:
+
+- **`prose-auditor` agent** — verifying agent (Read/Grep/Glob/Bash, NO Edit/Write, no
+  plan mode per the standing rule; opus like the other auditors). Two passes: it RUNS
+  the one measurer (`prose_budget` as library — `load_budgets() or Budgets()`, snippet
+  tested from the tree: works, memory.py clean at shipped defaults) then the semantic
+  pass (contract-vs-history, restated-what, misplaced reasoning → move-with-destination,
+  the MISSING FLOOR — the discipline cuts both ways — emitted-output weight, banners).
+  Carries check-the-check (the `#:` lesson) and "deletion without routing is a
+  regression". Dispositions: trim / move→where / add / keep-justified. Never edits.
+- **`/prose-review` command** — resolves scope ($ARGUMENTS paths, else branch-changed
+  files; refuses to silently sweep the whole tree), dispatches the agent, relays.
+  Default is findings-only; `--apply` applies in disposition order with
+  **route-then-trim** ordering and a confirming re-audit.
+
+Registered in commands/README + CATALOG; integrity clean. Also closes half of the old
+"line-level code-reviewer" thread idea (the prose dimension); INDEX thread updated.

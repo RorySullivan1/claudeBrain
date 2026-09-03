@@ -60,6 +60,7 @@ class Finding:
     line: int
     measured: int
     budget: int
+    unit: str = "lines"
 
     @property
     def location(self) -> str:
@@ -67,7 +68,7 @@ class Finding:
 
     def describe(self) -> str:
         return (f"{self.path}:{self.line} {self.scope} {self.name} — "
-                f"{self.measured} lines, budget {self.budget}")
+                f"{self.measured:,} {self.unit}, budget {self.budget:,}")
 
 
 @dataclass(frozen=True)
@@ -85,6 +86,8 @@ class Budgets:
     function: int = DEFAULT_BUDGETS["function"]
     comment_run: int = DEFAULT_BUDGETS["comment_run"]
     attribute: int = DEFAULT_BUDGETS["attribute"]
+    claude_md_lines: int = 0
+    claude_md_chars: int = 0
     baseline: frozenset[str] = frozenset()
     include: tuple[str, ...] = ()
 
@@ -120,6 +123,14 @@ def load_budgets(root: Path | None = None) -> Budgets | None:
         value = raw.get(key)
         if isinstance(value, int) and value > 0:
             budgets = replace(budgets, **{field: value})
+
+    claude_md = raw.get("claude_md")
+    if isinstance(claude_md, dict):
+        lines_cap, chars_cap = claude_md.get("lines"), claude_md.get("chars")
+        if isinstance(lines_cap, int) and lines_cap > 0:
+            budgets = replace(budgets, claude_md_lines=lines_cap)
+        if isinstance(chars_cap, int) and chars_cap > 0:
+            budgets = replace(budgets, claude_md_chars=chars_cap)
 
     baseline: frozenset[str] = frozenset()
     baseline_ref = raw.get("baseline")
@@ -290,6 +301,26 @@ def scan_source(source: str, path: str, budgets: Budgets) -> list[Finding]:
         return []
 
 
+def scan_claude_md(source: str, path: str, budgets: Budgets) -> list[Finding]:
+    """Measure a CLAUDE.md against the always-loaded-file caps. [] unless adopted.
+
+    CLAUDE.md is prose that loads into every session, so its size is a per-session
+    tax — the same argument session-memory's BUDGETS make for the memory index,
+    which has its own check in memory.py. Whole-file caps only: scope tables are
+    for code, and a markdown "scope" would be a guess.
+    """
+    findings: list[Finding] = []
+    name = Path(path).name
+    if budgets.claude_md_lines:
+        measured = len(source.splitlines())
+        if measured > budgets.claude_md_lines:
+            findings.append(Finding(path, "claude_md", name, 1, measured, budgets.claude_md_lines))
+    if budgets.claude_md_chars:
+        if len(source) > budgets.claude_md_chars:
+            findings.append(Finding(path, "claude_md", name, 1, len(source), budgets.claude_md_chars, unit="chars"))
+    return [f for f in findings if f.location not in budgets.baseline]
+
+
 def scan_tree(root: Path | None = None, budgets: Budgets | None = None) -> list[Finding]:
     """Measure every supported file under the configured roots. The CI gate's entry point."""
     root = root or project_root()
@@ -299,6 +330,15 @@ def scan_tree(root: Path | None = None, budgets: Budgets | None = None) -> list[
     bases = [root / p for p in budgets.include] if budgets.include else [root]
     findings: list[Finding] = []
     for base in bases:
+        if budgets.claude_md_lines or budgets.claude_md_chars:
+            for path in sorted(base.rglob("CLAUDE.md")):
+                if SKIP_DIRS & set(path.parts):
+                    continue
+                try:
+                    source = path.read_text(encoding="utf-8")
+                except (OSError, UnicodeDecodeError):
+                    continue
+                findings.extend(scan_claude_md(source, path.relative_to(root).as_posix(), budgets))
         for suffix in _SCANNERS:
             for path in sorted(base.rglob(f"*{suffix}")):
                 if SKIP_DIRS & set(path.parts):
@@ -322,10 +362,13 @@ def main() -> int:
         if budgets is None:
             return 0
         path = Path(file_path)
-        if path.suffix not in _SCANNERS:
-            return 0
         relative = path.relative_to(root).as_posix() if path.is_absolute() else path.as_posix()
-        findings = scan_source(path.read_text(encoding="utf-8"), relative, budgets)
+        if path.name == "CLAUDE.md":
+            findings = scan_claude_md(path.read_text(encoding="utf-8"), relative, budgets)
+        elif path.suffix in _SCANNERS:
+            findings = scan_source(path.read_text(encoding="utf-8"), relative, budgets)
+        else:
+            return 0
     except Exception:
         return 0
 
