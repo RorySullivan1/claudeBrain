@@ -5,7 +5,7 @@
 - Consumer families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub. Meta: *-authoring skills + `add-*` scaffolders.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 90 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 91 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
@@ -24,15 +24,13 @@
   Outlook skill and its agent point at it rather than restating. Naming numbers here does NOT
   contradict #39's "no line counts in a cross-project standard" — an external published standard
   travels; a per-codebase length cap does not — sessions/2026-09-03-wcag-aa-contrast-bar.md
-- [2026-09-10] **Single-cursor state stays; the constraint is stated, not engineered away** (#51).
-  Probed before deciding (`example-project/.claude/hooks/probes/`), 4 controls PASSed, and the
-  filing's own diagnosis was 2/3 wrong: `roadmap_guard` is ALREADY per-version (its `cursor` was
-  dead code — removed), and worktrees have separate checkouts so runtime reads the right file.
-  Collisions happen only at MERGE and are LOUD, with both sides preserved. Also refuted: the
-  append-only sections do NOT merge cleanly — git has no notion of append-only. The real
-  constraint is that the two hunks need OPPOSITE resolutions — append-only: keep both; State:
-  rewrite from both, NEVER take a side. Option A (per-branch cursors) would have reshaped three
-  assets to fix a corruption that does not occur — sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
+- [2026-09-10] **Single-cursor state stays; the constraint is stated, not engineered away** (#51,
+  shipped in PR #53). Probed first (`example-project/.claude/hooks/probes/`, 4 controls PASSed) and the
+  filing was 2/3 wrong: `roadmap_guard` is ALREADY per-version (its `cursor` was dead code — removed),
+  worktrees have their own checkouts, and "append-only sections merge" is false — git has no notion of
+  append-only. Nothing is silently corrupted; collisions are LOUD merges preserving both sides. The real
+  constraint: the two hunks need OPPOSITE resolutions — append-only keep both; State rewrite from both,
+  NEVER take a side — sessions/2026-09-10-1131-epic-48-build.md
 - [2026-08-15] **A verifying agent must not carry `permissionMode: plan`** — its value is running the real check; read-only comes from omitting Edit/Write. Codified in agent-authoring; all 12 agents
   swept clean — sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - [2026-08-15] One-way air-gap doctrine wins the freshness conflict: pre-paste-review grounds against the repo's records, never demands a freshness pull; canvas workflows name project state by ROLE
@@ -45,19 +43,20 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **No open PRs.** #46 and #47 merged; branch restarted from main. After a merge, follow-ups are a
-  NEW PR, never stacked onto merged history. Epic #48's work is committed but unshipped.
-- **Epic #48 — all three children BUILT on this branch, still open on GitHub** (nothing merged or
-  closed): #49 establish-verification + verification-surface.md, #51 single-cursor decision + probe kit,
-  #50 init-project. Deferred: surface check as a hook. `/worktree-start` now unblocked but unbuilt —
-  its first step must be "refuse if another cursor is in flight".
-- **#52 open** — run the Outlook probe kit (5 field-settled claims #43 left unprobed; ledger row 78 stands).
-- verify-claims has run over every family (~390 claims; 90 ledger rows, 7 probe-grounded). The ledger is
+- **No open PRs.** #46, #47 and #53 (Epic #48) merged; branch restarted from main. After a merge,
+  follow-ups are a NEW PR, never stacked onto merged history.
+- **Epic #48 SHIPPED** (PR #53; #48–#51 closed). Two follow-ups deliberately not built: the
+  verification-surface check as a `SessionStart`/`Stop` hook (decide after a real adoption proves the
+  doc's shape), and `/worktree-start` — now unblocked, but its first step must be "refuse if another
+  cursor is in flight".
+- **#52 open** — run the Outlook probe kit; human-gated (needs classic Outlook). Kit parse-verified; row 78 stands.
+- verify-claims has run over every family (~390 claims; 91 ledger rows, 8 probe-grounded). The ledger is
   the record; re-argue nothing it settles.
-- Possible future agent siblings: an orchestrator/coordinator. (The line-level-reviewer idea is
-  partially realized: `prose-auditor` agent + `/prose-review` command own the prose dimension.)
+- Possible future agent sibling: an orchestrator/coordinator. (The line-level reviewer is realized as
+  `prose-auditor` + `/prose-review`.)
 
 ## Log              (append-only pointers)
+- 2026-09-10 | PR #53 merged: Epic #48 shipped, #48–#51 closed; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 built end to end (#49 verification surface, #51 single-cursor probe+decision, #50 init-project); ledger 86→90 | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 (+#49/#50/#51) filed from the reinforcement brief, claims verified against the tree; #47 reconciled (UsedRange REFUTED); #52 for Outlook probes |
   sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
