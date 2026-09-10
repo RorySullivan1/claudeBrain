@@ -99,7 +99,8 @@ outcome.
   `../agents/pre-paste-review.md` (step 7).
 - Workflows: `control-grounding` (step 2); `change-end-to-end` is the smaller single-change
   sibling of this pipeline.
-- Context: `../context/air-gap.md` (why step 8 is a gate).
+- Context: `../context/verification-surface.md` (the row that makes step 8 a gate),
+  `../context/air-gap.md` (the one-way model behind it).
 - State / tools (by role; paths per the project's `CLAUDE.md`): the golden-source schema file
   (e.g. `schema/schema.yaml`), the paste validator (e.g. `tools/validate_pa_yaml.py`), the
   build book (e.g. `BUILD-BOOK.md`), the paste log (e.g. `paste-log.md`).

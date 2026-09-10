@@ -47,6 +47,8 @@ section; the high-value content is append-only and fully traceable.
 - **State** — *rewrite in place.* The only synthesized, lossy part. Keep it to
   ≤ ~10 lines of current truth. This is the part you accept some decay on, which
   is why it's small and everything important also lives append-only below.
+  **State assumes one unit of work in flight** — see *Two branches, one INDEX* below
+  before running parallel sessions on separate branches or worktrees.
 - **Decisions** — *append-only.* One line each: `[YYYY-MM-DD] decision — why — sessions/<file>.md`.
   Never edit or delete a decision. To reverse one, append a new line that
   supersedes it. This keeps your most valuable content decay-proof and makes the
@@ -55,6 +57,22 @@ section; the high-value content is append-only and fully traceable.
 - **Threads** — *mutable list.* Add open items; delete them when closed (the
   detail survives in the relevant log).
 - **Log** — *append-only pointer index:* `YYYY-MM-DD HHMM | topic | sessions/<file>.md`.
+
+### Two branches, one INDEX
+
+Append-only is a *discipline*, not something git understands. Probed 2026-09-10
+(`../../hooks/probes/PROBES.md`): two branches that each rewrite State and append a Log line
+merge into **two conflict hunks**, one per section — and the append-only hunk conflicts too,
+because both appends land on the same insertion point. Nothing is lost: git keeps both sides in
+both hunks. The risk is the **resolution**, and the two hunks need opposite ones.
+
+- **Decisions / Log / Threads hunk → keep both sides**, in date order. Both entries are true and
+  both belong; picking a side deletes a record that was never meant to be lossy.
+- **State hunk → rewrite it from both sides.** Neither branch's State is correct alone — each
+  describes a different unit of work that really is in flight. **Never resolve State by taking a
+  side**; that is the one place in this file where a merge can actually destroy current truth.
+
+Everything else is unaffected: `sessions/*.md` files are per-session and never collide.
 
 Seed `INDEX.md` with exactly this:
 

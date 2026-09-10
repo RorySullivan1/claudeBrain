@@ -118,5 +118,13 @@ commands, and workflows. It is kept fresh by two fragments and the `/reindex` co
 | `post-tool-use-catalog.json` | `PostToolUse` (Edit/Write/MultiEdit) | `catalog.py --on-edit` | Rebuilds `CATALOG.md` when an asset file (`SKILL.md`, an agent/command/workflow `.md`) is edited. |
 | `session-start-catalog-check.json` | `SessionStart` | `catalog.py --warn-if-stale` | Warns at session start if `CATALOG.md` is stale (catches git/IDE changes). It only *warns* — the catalog is on-demand, never printed into every session. |
 
+## probes/
+
+`probes/` holds probe kits for the hooks themselves — a hook is a check, and a check nobody has
+watched fail is not a check. `probe_parallel_state.py` (+ `PROBES.md`) is the controls-first kit
+behind the single-cursor decision: it reproduces what happens when two units of work are in
+flight, and its 2026-09-10 run **refuted** two of the three claims that motivated it. Run it
+before changing `roadmap_guard.py`, `.meta/version`'s shape, or `memory/INDEX.md`'s sections.
+
 `CATALOG.md` is per-tree and **not** symlinked (its content differs per tree, like
 `settings.json`); regenerate it in each tree with `python .claude/hooks/catalog.py` or `/reindex`.

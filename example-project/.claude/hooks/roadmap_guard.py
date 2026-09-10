@@ -11,6 +11,10 @@ Like `version_guard.py` it NEVER blocks: it emits `permissionDecision: allow` pl
 `additionalContext` nudge, so the push proceeds and the model just learns the map needs a
 status update (`/roadmap-status` to reconcile, `/roadmap-set` to re-slice). Fails safe: on
 any unexpected shape or error it prints nothing and the push proceeds.
+
+Parallel work: this guard is per-version and stays correct with a second version in flight in
+another worktree. `.meta/version` and `memory/INDEX.md` are the single-cursor files — see
+`probes/PROBES.md` and the 2026-09-10 decision in `.claude/memory/INDEX.md`.
 """
 import json
 import os
@@ -44,10 +48,14 @@ def current_status(text: str) -> str:
     return ""
 
 
-def parse_index(text: str) -> tuple[dict, str]:
-    """Return ({version: status_text}, cursor_version) from the INDEX versions table."""
+def parse_index(text: str) -> dict:
+    """Return {version: status_text} from the INDEX versions table.
+
+    Deliberately NOT a cursor lookup. Every comparison below is keyed off *this* worktree's
+    own `version:` label, so the guard stays correct with a second version in flight in
+    another worktree (probed 2026-09-10 — `probes/PROBES.md`).
+    """
     statuses: dict[str, str] = {}
-    cursor = ""
     for line in text.splitlines():
         m = ROW_RE.match(line.strip())
         if not m:
@@ -57,9 +65,7 @@ def parse_index(text: str) -> tuple[dict, str]:
         if "version" in low and "status" in low:  # header row leaked through — skip
             continue
         statuses[version] = status
-        if "cursor" in low or "in-progress" in low or "in progress" in low:
-            cursor = cursor or version
-    return statuses, cursor
+    return statuses
 
 
 def check(command: str, root: Path) -> str | None:
@@ -82,7 +88,7 @@ def check(command: str, root: Path) -> str | None:
     if not current:
         return None
     status = current_status(version_text)
-    statuses, _cursor = parse_index(index_text)
+    statuses = parse_index(index_text)
     if not statuses:
         return None  # couldn't parse the table — say nothing rather than guess
 

@@ -30,6 +30,8 @@ command is one shot, a workflow is a whole pipeline.
   clipboard air gap: ground → author → audit → human paste gate → record.
 - `screen-build` — build one canvas screen end to end: ground data + controls, plan
   layout, author, geometry-check, validate, audit, hand off, record.
+- `establish-verification` — answer per surface whether the agent can confirm it or a human
+  must, prove each candidate check can fail, and write `../context/verification-surface.md`.
 - `control-grounding` — ground an unknown control/property/enum token before it is
   authored, then propagate the grounding to every catalogue surface.
 

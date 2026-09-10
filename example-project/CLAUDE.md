@@ -40,6 +40,8 @@ the harness already surfaces each skill/agent by its `description:`.
 ## Reference Docs
 See `.claude/context/README.md` for two tiers of reference: whole-stack operating briefs
 and on-demand reference notes.
+- **Verification surface** — `verification-surface.md`: per surface, the check the agent can run
+  or the reason a human must gate it. Read it before claiming any work is confirmed.
 - VSTO teaching/management brief — `vsto-project-instructions.md` (dev/deploy live in the `VSTO-*` skills)
 - C/C# brief — `c-csharp-project-instructions.md` (the C half has no skill; C# defers to `coding-standards`)
 - C++ brief — `cpp-bot-instructions.md`

@@ -41,6 +41,10 @@ workflows  ▸  commands  ▸  agents  ▸  skills
 - **memory/** — Cross-session state via the `session-memory` skill: an auto-loaded
   `INDEX.md` plus append-only `sessions/*.md` logs (loaded/persisted by the lifecycle
   hooks in `settings.json`). Replaces a static `DECISIONS.md` log.
+  **One unit of work at a time.** `memory/INDEX.md` § State and `.meta/version` both name
+  *the* current work. Runtime is per-worktree and safe; parallel branches collide only at
+  merge, loudly, and State is the one hunk you must never resolve by taking a side. The
+  collision is reproducible — `hooks/probes/probe_parallel_state.py`.
 - **CATALOG.md** — A generated, **on-demand** inventory of every skill, agent, command, and
   workflow with a one-line purpose. `CLAUDE.md` references it by path instead of enumerating
   assets (skills/agents already auto-load by their `description:`). Produced by

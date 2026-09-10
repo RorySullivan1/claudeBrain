@@ -67,8 +67,10 @@ is not the bar, because the browser is the one client guaranteed not to be Outlo
     commentary is the instruction set.)
 
 ## Verify (do not report done until you have)
-You cannot render classic Outlook here — never claim a visual pass you did not see.
-What you CAN verify, verify mechanically:
+You cannot render classic Outlook here — never claim a visual pass you did not see. That split
+is recorded, not improvised: the Outlook structure and contrast rows in
+`.claude/context/verification-surface.md` are `agent-runnable`, the rendering row is
+`human-gated`. What you CAN verify, verify mechanically:
 11. **Parse-validate the HTML** — run a real parser over the file (e.g.
     `python3 -c "from html.parser import ..."` or `tidy -eq`) and fix every unclosed
     tag and nesting error. This gate is not cosmetic: classic Outlook renders malformed
@@ -81,7 +83,8 @@ What you CAN verify, verify mechanically:
     table's cells sum to the wrapper width, and the `[if !mso]` escape sequences are
     intact (a broken one blanks content in *all* clients).
 14. **State the residual risk honestly:** final confirmation requires opening the file
-    in classic Outlook (or a rendering service like Litmus/Email on Acid). Provide the
+    in classic Outlook (or a rendering service like Litmus/Email on Acid) — this is the
+    `human-gated` row, and its report contract is the manual test you hand over. Provide the
     exact manual test: which clients to check, in which modes (light/dark, 100%/150%
     scaling), and what to look for — including the measured contrast of the *inverted*
     dark-mode rendering, which no static check of your source can produce.
