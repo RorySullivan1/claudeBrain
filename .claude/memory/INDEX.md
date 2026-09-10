@@ -2,11 +2,12 @@
 
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain = a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` is the produced consumer. Inventory: its `.claude/CATALOG.md` — never re-list here.
-- Consumer families: Power Platform + canvas authoring, VBA (9), VSTO, Python, quant, docs, branding→presentation tier, Outlook HTML pair, GitHub set. Meta: *-authoring skills + `add-*` scaffolders.
+- Consumer families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub. Meta: *-authoring skills + `add-*` scaffolders.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
-- Hooks: per-hook `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks.
-- Verification: `claim-grounding` + `verify-claims` + evidence ledger (`claim-grounding/reviews/ledger.jsonl`, 86 rows, 3 probe-grounded). Every family gated; new assets gate at authoring.
-- Prose discipline (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in via `prose-budget.json`, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
+- Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
+- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 90 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
+- Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
 - Durable lesson: the recurring defect class is **verification steps that cannot verify** (inverted rules, plan-mode auditors, early-bound probes, crashing advisory wrappers). Check the check.
 
@@ -44,18 +45,20 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **No open PRs.** #46 (WCAG AA + prose reach) and #47 (Excel probe run) merged; branch restarted from
-  main. After a merge, follow-ups are a NEW PR, never stacked onto merged history.
-- **Epic #48 open** — doctrine vs enforced behavior. Children in dependency order: **#49**
-  establish-verification + verification-surface.md → **#50** init-project workflow → **#51** single-cursor
-  state (fix or document; MUST precede any `/worktree-start`). Deferred follow-up: surface check as a hook.
+- **No open PRs.** #46 and #47 merged; branch restarted from main. After a merge, follow-ups are a
+  NEW PR, never stacked onto merged history. Epic #48's work is committed but unshipped.
+- **Epic #48 — all three children BUILT on this branch, still open on GitHub** (nothing merged or
+  closed): #49 establish-verification + verification-surface.md, #51 single-cursor decision + probe kit,
+  #50 init-project. Deferred: surface check as a hook. `/worktree-start` now unblocked but unbuilt —
+  its first step must be "refuse if another cursor is in flight".
 - **#52 open** — run the Outlook probe kit (5 field-settled claims #43 left unprobed; ledger row 78 stands).
-- verify-claims has run over every family (~390 claims; 86 ledger rows, 3 now probe-grounded). Ledger is
-  the record; re-argue nothing it already settles.
+- verify-claims has run over every family (~390 claims; 90 ledger rows, 7 probe-grounded). The ledger is
+  the record; re-argue nothing it settles.
 - Possible future agent siblings: an orchestrator/coordinator. (The line-level-reviewer idea is
   partially realized: `prose-auditor` agent + `/prose-review` command own the prose dimension.)
 
 ## Log              (append-only pointers)
+- 2026-09-10 | Epic #48 built end to end (#49 verification surface, #51 single-cursor probe+decision, #50 init-project); ledger 86→90 | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 (+#49/#50/#51) filed from the reinforcement brief, claims verified against the tree; #47 reconciled (UsedRange REFUTED); #52 for Outlook probes |
   sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
 - 2026-09-03 | WCAG 2.2 AA adopted as contrast bar (#44) + branding/references/contrast.py with boundary control; PR #46 | sessions/2026-09-03-wcag-aa-contrast-bar.md
