@@ -67,6 +67,7 @@ formula that has to paste.
 | Outlook HTML — contrast | `skills/branding/references/contrast.py "#FG on #BG"` — **read the verdict line; it exits 0 either way** | `agent-runnable` | WCAG AA is computable from the colour values | 2026-09-10 — self-test PASS (incl. #767676/#777777 boundary); discriminates 4.54 vs 4.48 |
 | Outlook HTML — rendering | open in the Word-engine client and look | `human-gated` | No Outlook renderer is reachable from a session (five claims unprobed, #52) | — |
 | Asset shape (`.claude/`) | `asset_integrity.py` fed a git-commit hook payload — **advisory: reports, never vetoes** | `agent-runnable` | Pure file-shape analysis | 2026-09-10 — silent on the real tree; caught a deliberate `name:`/folder mismatch |
+| Parallel-state model (`.meta/`, `memory/`) | `python3 .claude/hooks/probes/probe_parallel_state.py` | `agent-runnable` | Reproduces the two-worktree collision locally with git; four controls gate the run | 2026-09-10 — controls PASSed; 2 of 3 claims REFUTED |
 | Docs (`docs/`) | none | `unverified` | No link-check or build step exists. Owner: docs maintainer; next: add a link checker | — |
 
 **Reading `—` in *last-run*.** It means the tier is **claimed, not proved** — nobody has yet

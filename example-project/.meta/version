@@ -1,6 +1,12 @@
 <!-- SHOWCASE SAMPLE — illustrative current-version state, not a live unit of work. Shows
      what /version-set writes and what /version-ship + the version_guard hook read. A real
      consumer replaces this with their own version and removes this banner. -->
+<!-- ONE CURSOR. This file names the single unit of work in flight. Each git worktree has its
+     own checkout, so the guards always read the right one at runtime — but two branches that
+     both set a version conflict here on merge (probed: .claude/hooks/probes/PROBES.md).
+     That conflict is correct and load-bearing: resolve it to the version that is actually
+     current on the target branch. Before adding a worktree command, read the 2026-09-10
+     decision in .claude/memory/INDEX.md. -->
 # version: v0.3.0
 status: shipped
 started: 2026-06-12

@@ -23,6 +23,15 @@
   Outlook skill and its agent point at it rather than restating. Naming numbers here does NOT
   contradict #39's "no line counts in a cross-project standard" — an external published standard
   travels; a per-codebase length cap does not — sessions/2026-09-03-wcag-aa-contrast-bar.md
+- [2026-09-10] **Single-cursor state stays; the constraint is stated, not engineered away** (#51).
+  Probed before deciding (`example-project/.claude/hooks/probes/`), 4 controls PASSed, and the
+  filing's own diagnosis was 2/3 wrong: `roadmap_guard` is ALREADY per-version (its `cursor` was
+  dead code — removed), and worktrees have separate checkouts so runtime reads the right file.
+  Collisions happen only at MERGE and are LOUD, with both sides preserved. Also refuted: the
+  append-only sections do NOT merge cleanly — git has no notion of append-only. The real
+  constraint is that the two hunks need OPPOSITE resolutions — append-only: keep both; State:
+  rewrite from both, NEVER take a side. Option A (per-branch cursors) would have reshaped three
+  assets to fix a corruption that does not occur — sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
 - [2026-08-15] **A verifying agent must not carry `permissionMode: plan`** — its value is running the real check; read-only comes from omitting Edit/Write. Codified in agent-authoring; all 12 agents
   swept clean — sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - [2026-08-15] One-way air-gap doctrine wins the freshness conflict: pre-paste-review grounds against the repo's records, never demands a freshness pull; canvas workflows name project state by ROLE
