@@ -17,6 +17,13 @@ symlinked operational ones.)
 - `ship-version` — **(built, operational/symlinked)** label a unit of work as a semver
   version with its goals in `.meta/version`, then name and ship the PR from those goals
   (via `/version-set` + `/version-ship`).
+- `init-project` — **(built)** the adoption path: brief → objective, build `.claude/` by
+  selection from the portable core, choose skill families from `CATALOG.md` (recording the
+  exclusions), run `establish-verification`, seed `.meta/roadmap/` and one `.meta/version`
+  cursor, then green the tree.
+- `establish-verification` — **(built, operational/symlinked)** answer per surface whether the
+  agent can confirm it or a human must, prove each candidate check can fail, and write
+  `context/verification-surface.md`.
 - `verify-claims` — **(built, operational/symlinked)** the truth gate for an asset that
   asserts facts about an external system: extract the claims, tier each by what would
   settle it, ground them against docs or a local probe, and label what stayed unverified.
@@ -33,5 +40,6 @@ stop conditions.
 
 ## Status
 
-**`author-asset` and `ship-version` built** (`ship-version` is operational, symlinked from
-example-project). `author-skill` and `harvest-context` remain planned.
+**`author-asset`, `init-project`, `ship-version`, `verify-claims` and `establish-verification`
+built** (the last three are operational, symlinked from example-project). `author-skill` and
+`harvest-context` remain planned.
