@@ -47,7 +47,8 @@
   partially realized: `prose-auditor` agent + `/prose-review` command own the prose dimension.)
 
 ## Log              (append-only pointers)
-- 2026-09-10 | Epic #48 (+#49/#50/#51) filed from the reinforcement brief, claims verified against the tree; #47's Excel probe run reconciled (UsedRange REFUTED); #52 for Outlook probes | sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
+- 2026-09-10 | Epic #48 (+#49/#50/#51) filed from the reinforcement brief, claims verified against the tree; #47 reconciled (UsedRange REFUTED); #52 for Outlook probes |
+  sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
 - 2026-09-03 | WCAG 2.2 AA adopted as contrast bar (#44) + branding/references/contrast.py with boundary control; PR #46 | sessions/2026-09-03-wcag-aa-contrast-bar.md
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |
   sessions/2026-08-29-pr39-review-merge-issues.md
