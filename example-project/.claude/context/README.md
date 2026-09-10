@@ -63,6 +63,7 @@ pre-correction claims the gate removed.**
 | `vsto-project-instructions.md` | VSTO teaching + management brief — the whole-stack stances no skill carries; dev/review/debug/deploy are canonical in the `VSTO-*` skills. |
 | `c-csharp-project-instructions.md` | C and C# coding-assistant brief — teaching, debugging, idiomatic code. The C half has no skill family; the C# conventions defer to `coding-standards`. |
 | `cpp-bot-instructions.md` | "Cero" C++ assistant brief — modern C++ (C++98→C++23) teaching, debugging, generation. No C++ skill family exists, so it overlaps nothing. |
+| `verification-surface.md` | Who can confirm each surface worked — the per-surface `agent-runnable` / `human-gated` / `unverified` table, written by the `establish-verification` workflow. |
 | `air-gap.md` | The one-way clipboard air-gap model — repo as golden source, hand-pasted into Power Apps Studio, and the drift it implies. |
 | `powerapps-docs-source.md` | The MicrosoftDocs/powerapps-docs repo as the grounding source for canvas-app control/layout SEMANTICS — paths, fetch methods, and the hard limit (it never gives pa-yaml tokens; omissions mean unconfirmed, not unsupported). |
 

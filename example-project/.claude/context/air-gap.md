@@ -7,6 +7,10 @@ between them is permitted. When that describes the setup, this brief is the sing
 load-bearing fact about how the repo relates to the running app, and it governs every authoring
 and hand-off decision.
 
+This brief is the canvas **instance** of one row in `verification-surface.md`: the tier is
+`human-gated`, and this is what living behind that gate costs. The surface doc records *that*
+the gate exists and why; this brief records how work is done under it.
+
 This brief records *what is true* under the model. The *how-to* of actually crossing the gap
 (code view, the App-object formula-bar exception, rename-and-log after paste, paste-dialect
 shape) is the **`studio-transfer`** skill — not repeated here.
@@ -66,6 +70,7 @@ run — **only the clipboard, moved by a human, and it runs ONE WAY: repo → St
 
 ## See also
 
+- **`verification-surface.md`** — the project-wide table this brief is the canvas row of.
 - **`studio-transfer`** skill — the mechanics of every crossing.
 - **`change-end-to-end`** workflow — the authored → audited → landed orchestration.
 - **`pre-paste-review`** agent — the paste / do-not-paste verdict before a human is asked to act.

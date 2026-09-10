@@ -43,9 +43,10 @@ that. You **determine what is wrong; you never edit.**
    answer* against the first 500/2000 rows.
 
 ## Method
-1. **Ground against the repo's records — do not hunt for "freshness".** Under the one-way gap
-   (see the air-gap context brief) the repo is the authoritative source and there is no pull to
-   be stale against, so absence of a landed-state confirmation is the *normal* condition, never
+1. **Ground against the repo's records — do not hunt for "freshness".** Your reach is the
+   `agent-runnable` canvas row in `.claude/context/verification-surface.md`; landing is the
+   `human-gated` row next to it. Under the one-way gap (see the air-gap context brief) the repo
+   is the authoritative source and there is no pull to be stale against, so absence of a landed-state confirmation is the *normal* condition, never
    a verdict by itself. What you check is **internal consistency with the repo's own records**:
    the change resolves against the schema snapshot, and it doesn't build on something the paste
    log says was authored but never landed (or landed under a suffixed rename). A contradiction

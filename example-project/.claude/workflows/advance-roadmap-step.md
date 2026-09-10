@@ -28,7 +28,10 @@ approval gate; on approval, an open PR (via `ship-version`) and an advanced curs
    bar. Keep the diff scoped to this version.
 
 4. **Review & reiterate (the loop).** Run review on the commits — the `code-review` skill or
-   the stack's `*-review` skill. If it finds must-fix issues, send them back to the executor
+   the stack's `*-review` skill. Read `../context/verification-surface.md` first for which of
+   this version's surfaces the loop can actually close: an `agent-runnable` row is a check to
+   run, a `human-gated` row is a gate to raise at step 6, and neither may be reported as passed
+   on the strength of the other. If it finds must-fix issues, send them back to the executor
    and re-review. **Repeat until review is clean** or no progress is being made (then stop
    and report the blocker). This loop is the "reiterative" core — don't skip it.
 
@@ -74,4 +77,5 @@ approval gate; on approval, an open PR (via `ship-version`) and an advanced curs
 - Workflow: `ship-version` is the shipping spine this reuses.
 - Hooks: `../hooks/roadmap_status.py` (SessionStart "you are here"), `../hooks/roadmap_guard.py`
   (PreToolUse·Bash; advisory at push time when the cursor drifts from the map).
+- Context: `../context/verification-surface.md` (what step 4 can close and what step 6 must gate).
 - State: `.meta/roadmap/` (the map), `.meta/version` (the cursor).

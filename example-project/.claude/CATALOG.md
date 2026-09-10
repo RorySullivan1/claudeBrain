@@ -95,6 +95,7 @@
 - advance-roadmap-step — advance-roadmap-step -> workflows/advance-roadmap-step.md
 - change-end-to-end — change-end-to-end -> workflows/change-end-to-end.md
 - control-grounding — control-grounding -> workflows/control-grounding.md
+- establish-verification — establish-verification -> workflows/establish-verification.md
 - screen-build — screen-build -> workflows/screen-build.md
 - ship-version — ship-version -> workflows/ship-version.md
 - verify-claims — verify-claims -> workflows/verify-claims.md

@@ -73,6 +73,7 @@ log, or **stopped** before a wasted paste — with the reason and the next step.
   `sharepoint-list-architecture` (when the change needs a schema decision), `session-memory`.
 - Agents: `../agents/pre-paste-review.md`, `../agents/powerapp-canvas-developer.md`.
 - Workflows: `control-grounding` (step 1), `screen-build` (when the unit is a whole screen).
-- Context: `../context/air-gap.md` (the one-way transfer model).
+- Context: `../context/verification-surface.md` (the canvas rows this workflow's gates come
+  from), `../context/air-gap.md` (the one-way transfer model behind them).
 - State (by role; paths per the project's `CLAUDE.md`): the golden-source schema file (e.g.
   `schema/schema.yaml`), the paste log (e.g. `paste-log.md`).
