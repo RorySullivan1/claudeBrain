@@ -64,3 +64,14 @@ Moved verbatim during index compactions; the session logs named in each line rem
 
 - `claude/optimize-factory-model`: PR #8 merged its work; branch deleted on origin. Thread had gone stale claiming a second-pass PR was awaited.
 - DONE markers folded: the verifying-agent posture rule (in agent-authoring, see Decisions) and the VBA family gap closure (vba-excel-object-model + vba-data-access, gated at authoring, ledger 69→78; detail in sessions/2026-08-15-0100-* addendum 6).
+
+## Decisions relocated from INDEX.md on 2026-09-15 (budget pressure; all still binding)
+
+- [2026-08-15] **A verifying agent must not carry `permissionMode: plan`** — its value is running the real check; read-only comes from omitting Edit/Write. Codified in agent-authoring; all 12 agents
+  swept clean — sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
+- [2026-08-15] One-way air-gap doctrine wins the freshness conflict: pre-paste-review grounds against the repo's records, never demands a freshness pull; canvas workflows name project state by ROLE
+  — sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
+- [2026-08-05] powerapp_taskmaster assimilated via plain clone (public repo; no scope needed). Most of its `.claude/` was claudeBrain's own output; only self-grown assets were net-new (7 skills, 2
+  agents, 3 workflows, air-gap brief) — sessions/2026-08-05-0231-powerapp-taskmaster-assimilation.md
+- [2026-07-24] 8-skill Power Platform family, clustered for a future per-use-case plugin split; reference tables as in-folder sidecars for portability; authored by 8 parallel agents + independent
+  doc-verification — sessions/2026-07-24-1338-power-platform-skill-family.md

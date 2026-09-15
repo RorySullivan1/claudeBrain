@@ -1,0 +1,134 @@
+{
+  "product": {
+    "name": "Volatility Carry Index",
+    "identifier": "QISVCI1 Index",
+    "currency": "USD",
+    "inception_date": "2019-03-29",
+    "rebalance": "Monthly"
+  },
+  "as_of_date": "2026-08-31",
+  "audience_label": "Professional investors only \u2014 not for retail distribution",
+  "strategy": {
+    "description": "The index provides systematic exposure to the volatility risk premium by selling short-dated variance on a liquid equity underlying and holding the position to expiry, with exposure scaled by a realised-volatility target and a drawdown-sensitive de-risking overlay."
+  },
+  "key_facts": [
+    {
+      "label": "Asset class",
+      "value": "Equity volatility"
+    },
+    {
+      "label": "Underlying",
+      "value": "S&P 500"
+    },
+    {
+      "label": "Volatility target",
+      "value": "8%"
+    },
+    {
+      "label": "Rebalance",
+      "value": "Monthly, third Friday"
+    },
+    {
+      "label": "Calculation agent",
+      "value": "Index sponsor"
+    },
+    {
+      "label": "Bloomberg",
+      "value": "QISVCI1 Index"
+    }
+  ],
+  "performance": {
+    "chart_path": "probes/sample-performance.svg",
+    "chart_caption": "Index level, rebased to 100 at inception. Simulated prior to 2019-03-29.",
+    "periods": [
+      {
+        "period": "1M",
+        "return_pct": 0.84,
+        "as_of": "2026-08-31"
+      },
+      {
+        "period": "3M",
+        "return_pct": 2.41,
+        "as_of": "2026-08-31"
+      },
+      {
+        "period": "YTD",
+        "return_pct": 6.12,
+        "as_of": "2026-08-31"
+      },
+      {
+        "period": "1Y",
+        "return_pct": 9.37,
+        "as_of": "2026-08-31"
+      },
+      {
+        "period": "3Y",
+        "return_pct": 24.85,
+        "as_of": "2026-08-31"
+      },
+      {
+        "period": "SI",
+        "return_pct": 61.4,
+        "as_of": "2026-08-31"
+      }
+    ]
+  },
+  "risk_stats": [
+    {
+      "label": "Realised volatility",
+      "value": "7.8%",
+      "period": "1Y",
+      "as_of": "2026-08-31"
+    },
+    {
+      "label": "Sharpe ratio",
+      "value": "1.12",
+      "period": "3Y",
+      "as_of": "2026-08-31"
+    },
+    {
+      "label": "Maximum drawdown",
+      "value": "-11.4%",
+      "period": "SI",
+      "as_of": "2026-08-31"
+    },
+    {
+      "label": "Skewness",
+      "value": "-0.63",
+      "period": "3Y",
+      "as_of": "2026-08-31"
+    }
+  ],
+  "methodology": [
+    "Exposure is set monthly from a 20-day realised-volatility estimate, targeting 8% annualised index volatility and capped at 200% notional.",
+    "A de-risking overlay reduces exposure linearly once the trailing peak-to-trough decline exceeds 5%, reaching zero at 15%.",
+    "Index levels prior to the inception date are simulated using the same rules applied to historical data and are not the result of actual trading."
+  ],
+  "composition": [
+    {
+      "name": "Short variance, 1M",
+      "weight_pct": 46.0
+    },
+    {
+      "name": "Short variance, 2M",
+      "weight_pct": 28.5
+    },
+    {
+      "name": "Cash and collateral",
+      "weight_pct": 19.5
+    },
+    {
+      "name": "De-risking reserve",
+      "weight_pct": 6.0
+    }
+  ],
+  "disclaimer_blocks": [
+    "general-disclaimer.txt",
+    "past-performance.txt",
+    "index-provider.txt"
+  ],
+  "footnotes": [
+    "Returns are gross of any fees, costs and taxes applicable to an investment linked to the index.",
+    "SI = since inception."
+  ]
+}

@@ -20,6 +20,7 @@
 - coding-standards — Baseline cross-project coding conventions — descriptive naming, readability, immutability, error … -> skills/coding-standards/SKILL.md
 - deck-builder — Expert at assembling a real slide deck in a concrete tool — the execution tier that turns a design … -> skills/deck-builder/SKILL.md
 - development-mapping — Expert at turning a whole-project objective into a **development map** — an ordered plan of stages … -> skills/development-mapping/SKILL.md
+- factsheet-template — Building a branded, standardized product factsheet as a PDF — the layout, the brand tokens, the … -> skills/factsheet-template/SKILL.md
 - financial-timeseries-analysis — Financial time-series hygiene in pandas/numpy — returns vs prices, resampling/alignment, market … -> skills/financial-timeseries-analysis/SKILL.md
 - github-comments — Expert at commenting on GitHub well — PR reviews, inline code comments, issue comments, and replies … -> skills/github-comments/SKILL.md
 - github-issues — Expert at handling GitHub issues — writing, triaging, organizing, and closing them well. Use this … -> skills/github-issues/SKILL.md
@@ -66,6 +67,7 @@
 - vba-maintenance — Expert VBA maintenance, debugging, and modernization specialist for existing … -> skills/vba-maintenance/SKILL.md
 - vba-review — Expert VBA code reviewer for Excel/Word/Outlook/PowerPoint macros and add-ins. Use this skill … -> skills/vba-review/SKILL.md
 - vba-userforms — Expert on building VBA UserForms — the dialog/GUI layer of Excel/Word/Outlook/ PowerPoint macros. … -> skills/vba-userforms/SKILL.md
+- weasyprint-print-html — Authoring HTML and CSS that is rendered to PDF by WeasyPrint — print-first markup, paged-media CSS, … -> skills/weasyprint-print-html/SKILL.md
 
 ## Agents (agents/*.md)
 - data-analyst — Objective data-analysis brain — frames a question against a dataset, plans the exploration, … -> agents/data-analyst.md
