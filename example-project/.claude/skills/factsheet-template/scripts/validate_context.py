@@ -119,11 +119,22 @@ def check_numeric(row, key, where, problems):
 # bypassed assets/compliance/, which is the one place approved copy may come from.
 DERIVED_FIELDS = ("disclaimer_text",)
 
+# A fixture marks itself with `_sample`. The validator refuses to stay quiet about it, so
+# synthetic figures cannot reach a distributed factsheet by being forgotten about.
+SAMPLE_MARKER = "_sample"
+
 
 def validate(data, template_dir):
     problems = []
     if not isinstance(data, dict):
         return [Problem("error", "<root>", "context must be a JSON object")]
+
+    if data.get(SAMPLE_MARKER):
+        problems.append(Problem(
+            "warning", SAMPLE_MARKER,
+            f"this context is marked SAMPLE DATA ({data[SAMPLE_MARKER]}). It exists to "
+            f"regression-test the layout; every figure in it is synthetic. Never render it "
+            f"as a real factsheet"))
 
     for field in DERIVED_FIELDS:
         if field in data:

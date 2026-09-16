@@ -66,6 +66,23 @@ with it.
 - **A4 default, Letter by override.** Confirmed with the user. `size` is restated rather than
   variable-driven because WeasyPrint resolves `@page` descriptors before custom properties.
 
+## The fixture is an instrument, not a sample
+
+- **[2026-09-16] The chart fixture is a geometric stand-in, and the figures are round.** The
+  first build shipped a 58KB matplotlib render of a synthetic price series plus a context of
+  realistic-looking returns — "+61.40% since inception", "Sharpe 1.12". That is a *product
+  sample*, and invented performance figures riding inside a factsheet template into an internal
+  repository is the same hazard the compliance placeholders exist to prevent. The fixture now
+  uses round numbers (1, 2, 5, 10, 20, 50), an "Example Systematic Index" identity, and a
+  `_sample` marker the validator always reports.
+- **The stand-in keeps the same footprint** (510×184pt = 180mm×65mm), so pagination is still
+  regression-tested against real geometry — the fixture lost its realism, not its job.
+- **Building the realistic sample was still worth it.** It is what exposed three defects the
+  small fixtures missed: the linter firing E003 as an *error* on a correct template (it followed
+  `<link>` but not `@import`), W004 reading `var(--family-display)` as a font name, and page 1
+  overflowing to three pages. The lesson is about what gets *committed*, not what gets built: a
+  realistic render is a good scratch artifact and a poor repository fixture.
+
 ## Placement
 
 This bundle ships with **placeholder compliance copy and no font files**, which is what makes

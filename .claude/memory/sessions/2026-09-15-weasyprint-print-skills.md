@@ -72,6 +72,27 @@ Verified live: 2-page factsheet with the running footer on both pages; lint clea
 contract defects each caught; 33-row CSS table with both controls passing and no drift; repeating
 `<thead>` across a 59-row table split 27/32.
 
+## Addendum — 2026-09-16, fixture trimmed after review
+
+The user challenged the sample: these are assets, not a product. Correct on the part that
+mattered. The linter's controls (3.8KB of fixtures) are instruments and match the repo's
+existing probe-kit convention, but the factsheet sample had drifted into a *product sample* —
+a 58KB matplotlib render plus realistic invented returns ("+61.40% since inception", "Sharpe
+1.12") inside a compliance-sensitive template bound for an internal repo. That is the hazard
+the compliance placeholders exist to prevent, arriving through the numbers instead.
+
+Trimmed rather than deleted: the chart is now a 1.6KB shapes-only stand-in with the **same
+footprint** (510×184pt = 180mm×65mm), so pagination is still regression-tested against real
+geometry; figures are round (1/2/5/10/20/50); identity is "Example Systematic Index"; and a
+new `_sample` marker makes the validator always say the data is synthetic. Re-verified: lint
+clean, 2 pages, same section split, footer on both pages, all engine controls unchanged.
+Factsheet bundle 172K → 120K.
+
+**The generalizable lesson is about what gets committed, not what gets built.** The realistic
+render earned its keep — it is what exposed the @import/E003 false positive, the `var()` W004
+false positive, and the 3-page overflow, none of which the small fixtures caught. A realistic
+render is a good scratch artifact and a poor repository fixture.
+
 ## Open threads
 
 - **No page image has ever been looked at.** poppler is absent here, so `snapshot.py`'s

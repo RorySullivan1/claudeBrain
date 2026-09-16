@@ -13,13 +13,14 @@
 
 ## Decisions        (append-only; supersede, never delete)
 - [2026-09-15] **Print-to-PDF pair built** (`weasyprint-print-html` + `factsheet-template`): engine
-  skill + branded layer, split because engine rules move with WeasyPrint and brand/compliance with
-  the business. Renderer SWAPPABLE — `render_worker.py` is the only file importing WeasyPrint. Two
-  lessons generalize: (1) **a doc that IS a rule set must be probe-backed and drift-checked** —
-  css-support.md is the linter's table, so a probe re-measures 33 rows and reports drift; (2) **a
-  security flag that only warns is not a gate** — `--strict-fetch` contained the fetch but the render
-  still finished, so `--fail-on-fetch-error` was added. `print-qa` agent deliberately NOT built
-  (phase 2) — sessions/2026-09-15-weasyprint-print-skills.md
+  skill + branded layer, split by change cadence. Renderer SWAPPABLE — `render_worker.py` is the only
+  file importing WeasyPrint. Three lessons generalize: (1) **a doc that IS a rule set must be
+  probe-backed and drift-checked**; (2) **a security flag that only warns is not a gate** —
+  `--strict-fetch` contained the fetch but the render finished, so `--fail-on-fetch-error` was added;
+  (3) **a realistic render is a good SCRATCH artifact and a poor repo fixture** — it found 3 defects
+  the small fixtures missed, but invented returns inside a factsheet template are the hazard the
+  compliance slots exist to prevent; trimmed 2026-09-16 to a same-footprint stand-in, round figures,
+  `_sample` marker. `print-qa` NOT built (phase 2) — sessions/2026-09-15-weasyprint-print-skills.md
 - [2026-08-29] PR #39 (prose-discipline port) merged; issues #40–#44 filed from findings —
   sessions/2026-08-29-pr39-review-merge-issues.md
 - [2026-09-02] **First live-probe REFUTATION** (PR #47, #43's Excel kit): `UsedRange` DOES shrink after
@@ -55,10 +56,8 @@
   doc's shape), and `/worktree-start` — now unblocked, but its first step must be "refuse if another
   cursor is in flight".
 - **#52 open** — run the Outlook probe kit; human-gated (needs classic Outlook). Kit parse-verified; row 78 stands.
-- verify-claims has run over every family (~390 claims; 91 ledger rows, 8 probe-grounded). The ledger is
-  the record; re-argue nothing it settles.
-- Possible future agent sibling: an orchestrator/coordinator. (The line-level reviewer is realized as
-  `prose-auditor` + `/prose-review`.)
+- verify-claims has run over every family (~390 claims; 96 ledger rows). The ledger is the record.
+- Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
 - 2026-09-15 | WeasyPrint print-HTML + factsheet skills built and probed live (2-page render, 6 fail-closed cases, 33-row CSS table); ledger 91→96 | sessions/2026-09-15-weasyprint-print-skills.md
