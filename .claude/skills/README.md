@@ -53,6 +53,10 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
   topology → delegate, keeping verbose work out of the main context. Engine:
   `scripts/agents.py` (`list`/`search`/`show` over `.claude/agents/` + the built-ins).
   **(built)**
+- `github-issues` — the house standard for issues, plus the machinery `/epic` and `/issue`
+  run on: fill-in templates (epic/task/bug/feature), `scripts/issue_body.py` (render + gate),
+  and `assets/epic-autoclose.yml` (probed; closes an epic when its last sub-issue closes).
+  **(built)**
 - `knowledge-router` — the front door for capturing durable knowledge: classifies an item
   and routes it to the right home (skill / `session-memory` / `CLAUDE.md` / a reference
   note), defaulting to *drop*. Owns the `.claude/context/` reference-notes tier (an
