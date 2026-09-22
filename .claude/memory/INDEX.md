@@ -46,8 +46,8 @@
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
-- **No open PRs.** #46, #47 and #53 (Epic #48) merged; branch restarted from main. After a merge,
-  follow-ups are a NEW PR, never stacked onto merged history.
+- **PR #54 open**: /epic + /issue + epic-autoclose (live on merge) + the WeasyPrint pair. After a
+  merge, follow-ups are a NEW PR, never stacked onto merged history.
 - **Epic #48 SHIPPED** (PR #53; #48–#51 closed). Two follow-ups deliberately not built: the
   verification-surface check as a `SessionStart`/`Stop` hook (decide after a real adoption proves the
   doc's shape), and `/worktree-start` — now unblocked, but its first step must be "refuse if another
