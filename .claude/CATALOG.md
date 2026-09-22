@@ -13,6 +13,7 @@
 - claim-grounding — Establish whether a factual claim is actually true, and record the judgment so it isn't … -> skills/claim-grounding/SKILL.md
 - context-vs-skill — Decide WHERE a piece of durable knowledge belongs: a triggered skill, a passive context doc, … -> skills/context-vs-skill/SKILL.md
 - developer-agent-authoring — Expert guidance for designing **developer agents** — Claude Code subagents specialized at writing … -> skills/developer-agent-authoring/SKILL.md
+- github-issues — Expert at handling GitHub issues — writing, triaging, organizing, and closing them well. Use this … -> skills/github-issues/SKILL.md
 - knowledge-agent-authoring — Expert guidance for designing **knowledge agents** — Claude Code subagents focused on maintaining … -> skills/knowledge-agent-authoring/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - product-manager-agent-authoring — Expert guidance for designing **product-manager agents** — Claude Code subagents that review and … -> skills/product-manager-agent-authoring/SKILL.md
@@ -32,6 +33,8 @@
 - add-hook — Scaffold a new lifecycle hook script and wire it into settings.json. -> commands/add-hook.md
 - add-skill — Scaffold a new skill bundle (.claude/skills/<name>/SKILL.md) with correct frontmatter and structure. -> commands/add-skill.md
 - add-workflow — Scaffold a new multi-step workflow (.claude/workflows/<name>.md). -> commands/add-workflow.md
+- epic — Plan a body of work WITHOUT writing code and file it on the git remote as an epic with ordered, … -> commands/epic.md
+- issue — File one templated GitHub issue (task, bug, or feature) on the git remote, optionally as a … -> commands/issue.md
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
 - version-set — Define or update the current version in .meta/version — a semver label plus the goals/objectives of … -> commands/version-set.md
 - version-ship — Name and ship the PR from .meta/version — branch, commit, push, and open the PR with a title/body … -> commands/version-ship.md

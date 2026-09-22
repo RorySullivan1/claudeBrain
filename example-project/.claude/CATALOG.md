@@ -86,6 +86,8 @@
 - vsto-developer — Senior C#/.NET VSTO engineer for this repo's Excel add-in (`src/AddIn/`). Use proactively when … -> agents/vsto-developer.md
 
 ## Commands (commands/*.md)
+- epic — Plan a body of work WITHOUT writing code and file it on the git remote as an epic with ordered, … -> commands/epic.md
+- issue — File one templated GitHub issue (task, bug, or feature) on the git remote, optionally as a … -> commands/issue.md
 - prose-review — Audit comments and docstrings against the prose scope discipline — dispatches the prose-auditor … -> commands/prose-review.md
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
 - roadmap-set — Author or update the development map in .meta/roadmap/ — decompose the project objective into … -> commands/roadmap-set.md

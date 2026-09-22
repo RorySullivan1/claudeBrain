@@ -29,6 +29,10 @@ consumers lift are **symlinked** from `example-project/.claude/commands/` (edit 
   the PR with a title/body derived from the goals). **(built, operational/symlinked)**
 - `/reindex` — regenerate `.claude/CATALOG.md`, the on-demand inventory of this tree's
   skills/agents/commands/workflows (runs `hooks/catalog.py`). **(built, operational/symlinked)**
+- `/epic`, `/issue` — no-code planning filed on the remote: an epic with ordered, templated
+  sub-issues, or one templated issue. They drive the `github-issues` skill (also symlinked,
+  for its templates, `issue_body.py` gate, and `epic-autoclose` workflow).
+  **(built, operational/symlinked)**
 
 ## Format
 

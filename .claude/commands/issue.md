@@ -1,0 +1,1 @@
+../../example-project/.claude/commands/issue.md

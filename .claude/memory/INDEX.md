@@ -3,9 +3,10 @@
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain = a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` is the produced consumer. Inventory: its `.claude/CATALOG.md` — never re-list here.
 - Consumer families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub, print-PDF pair. Meta: *-authoring + `add-*`.
+- Remote planning: `/epic` + `/issue` (symlinked) drive `github-issues`' templates + `issue_body.py` gate; epics stay SEPARATE from `.meta/roadmap/`.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 96 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 100 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
@@ -21,17 +22,10 @@
   the small fixtures missed, but invented returns inside a factsheet template are the hazard the
   compliance slots exist to prevent; trimmed 2026-09-16 to a same-footprint stand-in, round figures,
   `_sample` marker. `print-qa` NOT built (phase 2) — sessions/2026-09-15-weasyprint-print-skills.md
+- [2026-09-22] **Epics stay separate from the roadmap** (user); a roadmap→epic link waits until it's a chore.
+  Epics close from their CHILDREN (`epic-autoclose`), never a PR keyword — sessions/2026-09-22-1850-epic-issue-commands.md
 - [2026-08-29] PR #39 (prose-discipline port) merged; issues #40–#44 filed from findings —
   sessions/2026-08-29-pr39-review-merge-issues.md
-- [2026-09-02] **First live-probe REFUTATION** (PR #47, #43's Excel kit): `UsedRange` DOES shrink after
-  `.Clear`/`.ClearContents`, incl. across save/reopen — it over-reports only while FORMATTING outlives
-  data. Fixed at source. Proof the probe discipline yields corrections, not just confirmations —
-  sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
-- [2026-09-03] **WCAG 2.2 Level AA is the library's accessibility bar** (#44): 4.5:1 normal, 3:1 large
-  and UI/graphics; AAA is the stricter tier. `branding` is canonical and ships boundary-controlled
-  `references/contrast.py`, so the bar is COMPUTED and consumers point at it. Naming numbers here does
-  not contradict #39's "no line counts in a standard" — a published external standard travels, a
-  per-codebase cap does not — sessions/2026-09-03-wcag-aa-contrast-bar.md
 - [2026-09-10] **Single-cursor state stays; the constraint is stated, not engineered away** (#51,
   shipped in PR #53). Probed first (`example-project/.claude/hooks/probes/`, 4 controls PASSed) and the
   filing was 2/3 wrong: `roadmap_guard` is ALREADY per-version (its `cursor` was dead code — removed),
@@ -39,6 +33,8 @@
   append-only. Nothing is silently corrupted; collisions are LOUD merges preserving both sides. The real
   constraint: the two hunks need OPPOSITE resolutions — append-only keep both; State rewrite from both,
   NEVER take a side — sessions/2026-09-10-1131-epic-48-build.md
+- [2026-09-02, 09-03] Archived: UsedRange REFUTED by live probe (#47); WCAG 2.2 AA is the contrast bar,
+  computed by `branding/references/contrast.py` (#44). Both binding — sessions/ARCHIVE-2026.md
 - [2026-07-24 → 2026-08-15] Archived: verifying-agent posture (no `permissionMode: plan`),
   one-way air-gap doctrine, taskmaster assimilation, the 8-skill Power Platform family. All four
   still binding — full text in sessions/ARCHIVE-2026.md
@@ -46,6 +42,7 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
+- **/epic + /issue never run live**; `epic-autoclose.yml` not installed here (offered).
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
@@ -60,6 +57,7 @@
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
+- 2026-09-22 | /epic + /issue commands, github-issues templates + issue_body.py gate + epic-autoclose workflow (probe 14/14); ledger 96→100 | sessions/2026-09-22-1850-epic-issue-commands.md
 - 2026-09-15 | WeasyPrint print-HTML + factsheet skills built and probed live (2-page render, 6 fail-closed cases, 33-row CSS table); ledger 91→96 | sessions/2026-09-15-weasyprint-print-skills.md
 - 2026-09-10 | PR #53 merged: Epic #48 shipped, #48–#51 closed; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 built end to end (#49 verification surface, #51 single-cursor probe+decision, #50 init-project); ledger 86→90 | sessions/2026-09-10-1131-epic-48-build.md
