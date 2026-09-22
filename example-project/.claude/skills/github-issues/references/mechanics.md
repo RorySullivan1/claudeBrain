@@ -74,5 +74,8 @@ numbers, and stop. Don't retry blind: a retried create is a duplicate issue.
   `.github/workflows/epic-autoclose.yml`. It closes the parent when the last child closes,
   reopens it when a child reopens, and cascades through nested epics in one run (events
   caused by `GITHUB_TOKEN` don't start new runs). Probed: `../probes/PROBES.md`.
+  **It goes live only once it is on the default branch.** `issues` events run only workflow
+  files that exist there, so a copy sitting on a feature branch does nothing yet. Install it as a
+  byte-identical copy: the probe fails if the installed copy drifts from `../assets/`.
 - Never put the epic's number in a child's closing line. That would close the epic on the
   first child's merge.

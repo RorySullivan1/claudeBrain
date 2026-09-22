@@ -47,5 +47,7 @@
 
 ## Open threads
 - First real `/epic` run is the live test: body pipeline + parented creates + read-back.
-- `epic-autoclose.yml` is NOT installed in this repo's `.github/workflows/`. Offered, not done.
-  Its first live close is the confirming event (check the Actions log).
+- `epic-autoclose.yml` is INSTALLED at `.github/workflows/` (user said yes), as a byte-identical
+  copy with a drift check in the probe. `issues` events only run default-branch workflows, so it goes
+  live when this PR merges. Its first live close is the confirming event (check the Actions log).
+- The PR for this branch also carries the WeasyPrint pair commits (f44eed1, 5450370) and b818ab7.

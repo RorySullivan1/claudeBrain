@@ -76,7 +76,7 @@ blind, because a retried create makes a duplicate.
 If the repo lacks `.github/workflows/epic-autoclose.yml`, offer to install it from
 `.claude/skills/github-issues/assets/epic-autoclose.yml`. It closes the epic when its last
 sub-issue closes. It is a CI change, so it needs its own yes and goes through the normal
-branch/PR flow. Remind the user that each child's PR must carry that child's `Closes #n`
+branch/PR flow. It goes live only after it merges into the default branch. Remind the user that each child's PR must carry that child's `Closes #n`
 line and **never the epic's number**.
 
 ## Report

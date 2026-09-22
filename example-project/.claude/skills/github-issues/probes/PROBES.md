@@ -32,6 +32,11 @@ Whether live GitHub fires `issues.closed` for a sub-issue closed by a merged PR'
 is not in doubt. What has never been seen is a live run, so the first real epic that closes
 is the confirming event. Check the Actions log for the "Closed #N as …" line.
 
+**Installed-copy drift check.** If the repo has `.github/workflows/epic-autoclose.yml`, the probe
+first requires it to be byte-identical to `../assets/epic-autoclose.yml` (a copy, because
+workflow symlinks were not relied on). This was checked by appending one line: the probe failed
+with the re-copy command, exit 1.
+
 ## `../scripts/issue_body.py`: template render and gate
 
 Checked by hand when it was built. `render` refuses missing keys. `check --allow-self` passes a
