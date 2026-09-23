@@ -76,6 +76,7 @@ numbers, and stop. Don't retry blind: a retried create is a duplicate issue.
   caused by `GITHUB_TOKEN` don't start new runs). Probed: `../probes/PROBES.md`.
   **It goes live only once it is on the default branch.** `issues` events run only workflow
   files that exist there, so a copy sitting on a feature branch does nothing yet. Install it as a
-  byte-identical copy: the probe fails if the installed copy drifts from `../assets/`.
+  byte-identical copy. `../installs.json` declares the target, and the `asset_integrity` hook
+  flags drift at every commit.
 - Never put the epic's number in a child's closing line. That would close the epic on the
   first child's merge.

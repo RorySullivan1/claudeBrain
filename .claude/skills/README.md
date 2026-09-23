@@ -57,6 +57,9 @@ consumer lifts, so there is one source of truth and no drift. **Edit them in
   run on: fill-in templates (epic/task/bug/feature), `scripts/issue_body.py` (render + gate),
   and `assets/epic-autoclose.yml` (probed; closes an epic when its last sub-issue closes).
   **(built)**
+- `github-pull-requests` — the house PR standard. It also holds the PR template
+  (`references/templates/pull_request.md`), which is installed at
+  `.github/pull_request_template.md` and filled by `/version-ship`. **(built)**
 - `knowledge-router` — the front door for capturing durable knowledge: classifies an item
   and routes it to the right home (skill / `session-memory` / `CLAUDE.md` / a reference
   note), defaulting to *drop*. Owns the `.claude/context/` reference-notes tier (an

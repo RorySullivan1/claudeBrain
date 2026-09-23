@@ -14,6 +14,7 @@
 - context-vs-skill — Decide WHERE a piece of durable knowledge belongs: a triggered skill, a passive context doc, … -> skills/context-vs-skill/SKILL.md
 - developer-agent-authoring — Expert guidance for designing **developer agents** — Claude Code subagents specialized at writing … -> skills/developer-agent-authoring/SKILL.md
 - github-issues — Expert at handling GitHub issues — writing, triaging, organizing, and closing them well. Use this … -> skills/github-issues/SKILL.md
+- github-pull-requests — Expert at opening and formatting GitHub pull requests well — turning a finished branch into a … -> skills/github-pull-requests/SKILL.md
 - knowledge-agent-authoring — Expert guidance for designing **knowledge agents** — Claude Code subagents focused on maintaining … -> skills/knowledge-agent-authoring/SKILL.md
 - knowledge-router — When durable, reusable knowledge surfaces in a conversation — a concept, a key fact, a domain or … -> skills/knowledge-router/SKILL.md
 - product-manager-agent-authoring — Expert guidance for designing **product-manager agents** — Claude Code subagents that review and … -> skills/product-manager-agent-authoring/SKILL.md

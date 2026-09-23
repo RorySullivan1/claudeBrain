@@ -8,9 +8,6 @@ one event, and asserts the exit code and the exact writes. The negative controls
 write expected) guard against a script that "passes" by closing everything.
 
     python3 probe_epic_autoclose.py        # exit 0 = every case passed
-
-If the repo has installed the workflow (`.github/workflows/epic-autoclose.yml`), the probe
-first requires it to be byte-identical to the canonical asset, so a drifted copy fails too.
 """
 from __future__ import annotations
 
@@ -148,22 +145,7 @@ FAULTS = [
 ]
 
 
-def installed_copy() -> Path | None:
-    """The repo's `.github/workflows/epic-autoclose.yml`, if this repo has installed one."""
-    for d in WORKFLOW.parents:
-        if (d / ".git").exists():
-            path = d / ".github" / "workflows" / WORKFLOW.name
-            return path if path.is_file() else None
-    return None
-
-
 def main() -> int:
-    installed = installed_copy()
-    if installed and installed.read_bytes() != WORKFLOW.read_bytes():
-        print(f"FAIL  installed copy has drifted from the canonical asset: {installed}")
-        print(f"      re-copy it: cp {WORKFLOW} {installed}")
-        return 1
-    print(f"installed copy: {installed or 'none in this repo'}{' (identical)' if installed else ''}")
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     Fake.base = f"http://127.0.0.1:{server.server_address[1]}"
     threading.Thread(target=server.serve_forever, daemon=True).start()
