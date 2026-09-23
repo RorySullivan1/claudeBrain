@@ -113,8 +113,8 @@ copies there rather than symlinks, because the host may not follow a link. A ski
 each one in `installs.json` (`{skill-relative source: project-relative target}`). At every
 `git commit`/`push`, `asset_integrity.py` compares every target that exists against its
 source and reports drift. It stays silent when the target isn't installed. Today these are
-`.github/workflows/epic-autoclose.yml` (`github-issues`) and
-`.github/pull_request_template.md` (`github-pull-requests`).
+`.github/workflows/epic-autoclose.yml` and `.github/ISSUE_TEMPLATE/{epic,task,bug,feature}.md`
+(`github-issues`), and `.github/pull_request_template.md` (`github-pull-requests`).
 
 ## Status
 

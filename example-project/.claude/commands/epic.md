@@ -25,8 +25,8 @@ The request: $ARGUMENTS
   already covers this, stop and propose extending it (`/issue --parent #N`) instead.
 - Read the taxonomy: labels (is there an `epic` label?), issue types
   (`list_issue_types`; empty or an error means none), milestones, and
-  `.github/ISSUE_TEMPLATE/`. The repo's own templates win: map this content onto their
-  headings.
+  `.github/ISSUE_TEMPLATE/`. Installed copies of this skill's templates are the same form. A
+  template that isn't ours wins, so map this content onto its headings.
 - **Epic marker:** use an `Epic` issue type if one exists, otherwise an `epic` label. If
   neither exists, title it `Epic: …` and ask once whether to create the label. Never invent
   labels silently.

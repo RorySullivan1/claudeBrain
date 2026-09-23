@@ -3,10 +3,10 @@
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain = a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` is the produced consumer. Inventory: its `.claude/CATALOG.md` — never re-list here.
 - Consumer families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub, print-PDF pair. Meta: *-authoring + `add-*`.
-- GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR template installed at `.github/`; `installs.json` copies drift-checked.
+- GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates installed at `.github/`; `installs.json` copies drift-checked.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 103 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 104 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
@@ -56,7 +56,7 @@
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
-- 2026-09-23 | PR template (template, not a skill) + installs.json drift check in asset_integrity; /version-ship fills it; ledger 101→103 | sessions/2026-09-23-1159-pr-template.md
+- 2026-09-23 | PR + issue templates in .github/ (issue ones = the skill's, slot format); installs.json drift check; ledger 101→104 | sessions/2026-09-23-1159-pr-template.md
 - 2026-09-22 | /epic + /issue commands, github-issues templates + issue_body.py gate + epic-autoclose workflow (probe 14/14); ledger 96→100 | sessions/2026-09-22-1850-epic-issue-commands.md
 - 2026-09-15 | WeasyPrint print-HTML + factsheet skills built and probed live (2-page render, 6 fail-closed cases, 33-row CSS table); ledger 91→96 | sessions/2026-09-15-weasyprint-print-skills.md
 - 2026-09-10 | PR #53 merged: Epic #48 shipped, #48–#51 closed; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md

@@ -37,8 +37,23 @@ target, and the `asset_integrity` hook compares the two on every `git commit`/`p
 
 ## `../scripts/issue_body.py`: template render and gate
 
-Checked by hand when it was built. `render` refuses missing keys. `check --allow-self` passes a
-freshly rendered body. A plain `check` fails until `fill-self` has numbered the closing line.
-The closing-keyword check reads only the fenced line under **Done when**, because the
-footnote's example keywords (`Closes #1, closes #2`) would otherwise satisfy it vacuously.
-That failure mode was found by testing the check, and is fixed.
+```
+python3 probe_issue_body.py      # stdlib only
+```
+
+38 cases. Every kind renders, passes the pre-filing check, **fails** the post-filing check
+until `fill-self` numbers its closing line (a control), then passes. Optional slots drop the
+right thing: "Part of" drops as a line, and Risks drops as a section while Closing is kept.
+`lint-templates` confirms each template is a valid GitHub markdown issue template (`name:`
+over 3 characters, `about:`, slots, no `{{`).
+
+Negatives, each injected and caught: a missing field, a misspelled field, an unknown
+template, a leftover slot, an empty section, frontmatter left in a body, and a broken
+template (both kinds of lint failure). The closing check reads only the fenced line under
+**Done when**, because the footnote's example keywords (`Closes #1, closes #2`) would
+otherwise satisfy it vacuously. That failure mode was found by testing the check.
+
+**The probe was checked against four deliberate breaks**, and every one turned cases red:
+leftover slots ignored, an optional slot dropping its line instead of its section, the
+closing check reading the whole section, and frontmatter not stripped. First recorded run:
+38/38 passed (2026-09-23).
