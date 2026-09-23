@@ -13,8 +13,9 @@ issue is. This page says *which call* makes it, including the traps.
 | Issue types | `list_issue_types` (owner, repo). If the result is empty or an error, the repo has none. Use a label instead. | `gh api orgs/O/issue-types`. This endpoint is organization-scoped. For a personal account's repo, use a label. |
 | Repo's own templates | `.github/ISSUE_TEMPLATE/` on disk | same |
 
-A repo's own issue templates **win over** the skill's templates. Map the skill's content
-onto their headings.
+If `.github/ISSUE_TEMPLATE/` holds this skill's installed copies (listed in `../installs.json`
+and kept identical by `asset_integrity`), they're the same form. Render as usual. A
+template that **isn't ours** wins over the skill's, so map the content onto its headings.
 
 ## Creating, parented in one call
 
@@ -42,12 +43,14 @@ python3 $S render <kind> values.json --out body.md   # fails on any missing valu
 python3 $S check body.md --allow-self                # pre-filing gate
 # create the issue with body.md, then take its number N:
 python3 $S fill-self body.md N --out body.md
-python3 $S check body.md                              # post-filing gate: no placeholders left
+python3 $S check body.md                              # post-filing gate: closing line numbered
 # update the issue body with the numbered version
 ```
 
-`{{self}}` exists because an issue's own number is only known after creation, and the
-**Done when** line (`Closes #N`) must be copy-paste ready for whoever opens the PR.
+The **Done when** line is `Closes #N` until `fill-self` replaces the N. An issue's own number
+is only known after creation, and the line must be copy-paste ready for whoever opens the
+PR. `values.json` keys are the slot names in the template (`<!-- goal: … -->` → `"goal"`).
+A misspelled key is refused, not ignored.
 The epic template has no Done-when section, because an epic is closed by its children (below).
 
 ## Order of writes for an epic
@@ -76,6 +79,7 @@ numbers, and stop. Don't retry blind: a retried create is a duplicate issue.
   caused by `GITHUB_TOKEN` don't start new runs). Probed: `../probes/PROBES.md`.
   **It goes live only once it is on the default branch.** `issues` events run only workflow
   files that exist there, so a copy sitting on a feature branch does nothing yet. Install it as a
-  byte-identical copy: the probe fails if the installed copy drifts from `../assets/`.
+  byte-identical copy. `../installs.json` declares the target, and the `asset_integrity` hook
+  flags drift at every commit.
 - Never put the epic's number in a child's closing line. That would close the epic on the
   first child's merge.

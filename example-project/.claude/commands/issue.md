@@ -24,7 +24,8 @@ The request: $ARGUMENTS
   against the tree. For a `bug`, reproduce it if you can. Never invent reproduction steps.
 - Search open **and** closed issues on the key terms and error text. If a duplicate is
   open, stop and point to it. If it's closed, propose reopening it rather than filing again.
-- Read labels, issue types, and `.github/ISSUE_TEMPLATE/`. The repo's own templates win.
+- Read labels, issue types, and `.github/ISSUE_TEMPLATE/`. Installed copies of this skill's
+  templates are the same form. A template that isn't ours wins.
   Pick labels from the existing set only.
 
 ## 3. Render and gate

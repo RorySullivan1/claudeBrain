@@ -106,6 +106,16 @@ skills, agents, commands, and workflows — and is kept fresh the same way `sett
 factory tree lists its meta-skills; `example-project` lists its domain assets). Regenerate with
 `/reindex` or `python .claude/hooks/catalog.py`.
 
+## Installed copies (drift-checked by `asset_integrity.py`)
+
+Some produced assets must live where a host reads them, such as GitHub's `.github/`. They are
+copies there rather than symlinks, because the host may not follow a link. A skill declares
+each one in `installs.json` (`{skill-relative source: project-relative target}`). At every
+`git commit`/`push`, `asset_integrity.py` compares every target that exists against its
+source and reports drift. It stays silent when the target isn't installed. Today these are
+`.github/workflows/epic-autoclose.yml` and `.github/ISSUE_TEMPLATE/{epic,task,bug,feature}.md`
+(`github-issues`), and `.github/pull_request_template.md` (`github-pull-requests`).
+
 ## Status
 
 **Memory lifecycle hooks are wired** (the four fragments above), compiled into

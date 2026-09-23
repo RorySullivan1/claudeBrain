@@ -4,16 +4,23 @@
     issue_body.py render <kind> <values.json> [--out FILE]
     issue_body.py check  <file> [--allow-self]
     issue_body.py fill-self <file> <number> [--out FILE]
+    issue_body.py lint-templates
 
-<kind> is a template name under ../references/templates/ (epic, task, bug, feature).
-values.json maps each placeholder to its markdown. Two keys are special:
+<kind> is a template under ../references/templates/ (epic, task, bug, feature). The same
+files are installed verbatim as GitHub issue templates (`../installs.json`), so each one
+is written for both readers:
 
-- `parent`: omit it or set it to null to drop the "Part of #…" line.
-- An OPTIONAL section (see OPTIONAL) whose value is null is removed, heading included.
+- YAML frontmatter (`name:`, `about:`, optional `title:`) drives GitHub's template
+  chooser. `render` strips it.
+- A slot is a guidance comment that names its field: `<!-- problem: guidance -->`. A human
+  sees the guidance in the editor. `render` replaces the slot with values.json["problem"].
+  A trailing `?` (`<!-- risks?: ... -->`) marks it optional: null or absent removes the
+  slot's whole section, or its line if it shares the line with text ("Part of #...").
+- The Done-when fence holds `Closes #N`. The issue's own number exists only after
+  creation, so `fill-self` replaces the N afterwards. `check --allow-self` is the
+  pre-filing gate, and plain `check` is the post-filing one.
 
-`{{self}}` is never rendered. The issue's own number exists only after creation, so
-`fill-self` patches it in afterwards. `check --allow-self` is the pre-filing gate and
-plain `check` is the post-filing one. Exit status: 0 = clean, 2 = defects, listed on stderr.
+Exit status: 0 = clean, 2 = defects, listed on stderr.
 """
 from __future__ import annotations
 
@@ -24,11 +31,12 @@ import sys
 from pathlib import Path
 
 TEMPLATES = Path(__file__).resolve().parent.parent / "references" / "templates"
-PLACEHOLDER = re.compile(r"\{\{\s*([a-z_]+)\s*\}\}")
-GUIDE = re.compile(r"<!--\s*guide:.*?-->\n?", re.S)
+FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n", re.S)
+SLOT = re.compile(r"<!--\s*([a-z_]+)(\?)?:.*?-->", re.S)
 HEADING = re.compile(r"^## (.+)$", re.M)
+FENCE = re.compile(r"```\n(.*?)\n```", re.S)
 CLOSING = re.compile(r"\b(close[sd]?|fix(e[sd])?|resolve[sd]?) #\d+\b", re.I)
-OPTIONAL = {"risks": "Risks and open questions"}
+UNNUMBERED = re.compile(r"(\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?) #)N\b", re.I)
 
 
 def _fail(defects: list[str]) -> int:
@@ -37,8 +45,17 @@ def _fail(defects: list[str]) -> int:
     return 2
 
 
-def _drop_section(text: str, heading: str) -> str:
-    return re.sub(rf"^## {re.escape(heading)}\n.*?(?=^## |\Z)", "", text, flags=re.M | re.S)
+def _sections(text: str) -> dict[str, str]:
+    parts = HEADING.split(text)
+    return dict(zip(parts[1::2], parts[2::2]))
+
+
+def _drop_optional(text: str, key: str) -> str:
+    """Remove an optional slot's section if the slot is all it holds, else its line."""
+    whole = re.compile(rf"^## [^\n]*\n\s*<!--\s*{key}\?:.*?-->\s*?\n(?=\s*(## |---|\Z))", re.M | re.S)
+    if whole.search(text):
+        return whole.sub("", text, count=1)
+    return re.sub(rf"^[^\n]*<!--\s*{key}\?:.*?-->[^\n]*\n?", "", text, count=1, flags=re.M | re.S)
 
 
 def render(kind: str, values: dict) -> tuple[str, list[str]]:
@@ -46,43 +63,66 @@ def render(kind: str, values: dict) -> tuple[str, list[str]]:
     if not path.is_file():
         known = sorted(p.stem for p in TEMPLATES.glob("*.md"))
         return "", [f"unknown template {kind!r}; known: {', '.join(known)}"]
-    text = GUIDE.sub("", path.read_text(encoding="utf-8"))
+    text = FRONTMATTER.sub("", path.read_text(encoding="utf-8"), count=1)
 
-    if values.get("parent") in (None, ""):
-        text = re.sub(r"^Part of #\{\{parent\}\}\n\n?", "", text, flags=re.M)
-    for key, heading in OPTIONAL.items():
-        if key in values and values[key] is None:
-            text = _drop_section(text, heading)
-
-    wanted = {m for m in PLACEHOLDER.findall(text)} - {"self"}
-    missing = sorted(k for k in wanted if values.get(k) in (None, ""))
+    slots = {key: bool(opt) for key, opt in SLOT.findall(text)}
+    unknown = sorted(set(values) - set(slots))
+    missing = sorted(k for k, opt in slots.items() if not opt and values.get(k) in (None, ""))
+    defects = [f"unknown key(s) for {kind}: {', '.join(unknown)}"] if unknown else []
     if missing:
-        return "", [f"missing value for: {', '.join(missing)}"]
+        defects.append(f"missing value for: {', '.join(missing)}")
+    if defects:
+        return "", defects
 
-    def sub(m: re.Match) -> str:
-        key = m.group(1)
-        return m.group(0) if key == "self" else str(values[key]).strip()
-
-    text = PLACEHOLDER.sub(sub, text)
+    for key, opt in slots.items():
+        if opt and values.get(key) in (None, ""):
+            text = _drop_optional(text, key)
+    text = SLOT.sub(lambda m: str(values[m.group(1)]).strip(), text)
     return re.sub(r"\n{3,}", "\n\n", text).strip() + "\n", []
 
 
 def check(text: str, allow_self: bool) -> list[str]:
     defects = []
-    for key in PLACEHOLDER.findall(text):
-        if not (allow_self and key == "self"):
-            defects.append(f"unfilled placeholder {{{{{key}}}}}")
-    if "<!-- guide:" in text:
-        defects.append("template guidance comment left in the body")
-    parts = HEADING.split(text)
-    sections = dict(zip(parts[1::2], parts[2::2]))
+    if FRONTMATTER.match(text):
+        defects.append("template frontmatter left in the body")
+    for key, _ in SLOT.findall(text):
+        defects.append(f"unfilled slot: {key}")
+    if "{{" in text:
+        defects.append("a {{placeholder}} is left in the body")
+    sections = _sections(text)
     for heading, body in sections.items():
         if not body.strip():
             defects.append(f"empty section: ## {heading}")
-    # Search the fenced line only: the footnote's own example keywords must not satisfy this.
-    done = re.search(r"```\n(.*?)\n```", sections.get("Done when", ""), re.S)
-    if "Done when" in sections and not allow_self and not (done and CLOSING.search(done.group(1))):
-        defects.append("'Done when' has no numbered closing keyword (run fill-self)")
+    if "Done when" in sections:
+        # Only the fenced line counts: the footnote's example keywords must not satisfy this.
+        fence = FENCE.search(sections["Done when"])
+        line = fence.group(1) if fence else ""
+        if not (CLOSING.search(line) or (allow_self and UNNUMBERED.search(line))):
+            defects.append("'Done when' has no numbered closing keyword (run fill-self)")
+    return defects
+
+
+def lint_templates() -> list[str]:
+    """Each template must work as a GitHub markdown issue template AND as a render source."""
+    defects = []
+    for path in sorted(TEMPLATES.glob("*.md")):
+        text = path.read_text(encoding="utf-8")
+        fm = FRONTMATTER.match(text)
+        if not fm:
+            defects.append(f"{path.name}: no YAML frontmatter (GitHub needs name: and about:)")
+            continue
+        keys = dict(re.findall(r"^([a-z_]+):\s*(.*)$", fm.group(1), re.M))
+        if len(keys.get("name", "").strip("\"'")) <= 3:
+            defects.append(f"{path.name}: `name:` missing or not more than 3 characters")
+        if not keys.get("about", "").strip("\"'"):
+            defects.append(f"{path.name}: `about:` missing")
+        body = text[fm.end():]
+        if not SLOT.search(body):
+            defects.append(f"{path.name}: no slots, so render has nothing to fill")
+        if "{{" in body:
+            defects.append(f"{path.name}: a {{{{placeholder}}}} would show literally on GitHub")
+        if "Done when" in _sections(body) and not UNNUMBERED.search(_sections(body)["Done when"]):
+            defects.append(f"{path.name}: 'Done when' lacks a `Closes #N`-style line for fill-self")
     return defects
 
 
@@ -100,25 +140,36 @@ def main(argv: list[str] | None = None) -> int:
     f.add_argument("file")
     f.add_argument("number", type=int)
     f.add_argument("--out")
+    sub.add_parser("lint-templates")
     args = ap.parse_args(argv)
 
+    if args.cmd == "lint-templates":
+        defects = lint_templates()
+        if defects:
+            return _fail(defects)
+        print("issue_body: templates clean")
+        return 0
+    if args.cmd == "check":
+        defects = check(Path(args.file).read_text(encoding="utf-8"), args.allow_self)
+        if defects:
+            return _fail(defects)
+        print("issue_body: clean")
+        return 0
     if args.cmd == "render":
         values = json.loads(Path(args.values).read_text(encoding="utf-8"))
         text, defects = render(args.kind, values)
         defects = defects or check(text, allow_self=True)
         if defects:
             return _fail(defects)
-    elif args.cmd == "check":
-        defects = check(Path(args.file).read_text(encoding="utf-8"), args.allow_self)
-        if defects:
-            return _fail(defects)
-        print("issue_body: clean")
-        return 0
     else:
         text = Path(args.file).read_text(encoding="utf-8")
-        if "{{self}}" not in text:
-            return _fail(["no {{self}} placeholder to fill"])
-        text = text.replace("{{self}}", str(args.number))
+        sections = _sections(text)
+        fence = FENCE.search(sections.get("Done when", ""))
+        if not fence or not UNNUMBERED.search(fence.group(1)):
+            return _fail(["no `Closes #N` line under 'Done when' to number"])
+        numbered = UNNUMBERED.sub(rf"\g<1>{args.number}", fence.group(1))
+        text = text.replace(fence.group(0), f"```\n{numbered}\n```", 1)
+        text = text.replace(", where N is this issue's number:", ":", 1)
 
     if args.out:
         Path(args.out).write_text(text, encoding="utf-8")

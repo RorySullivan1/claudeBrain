@@ -30,13 +30,20 @@ discussion and annoy maintainers. If you find one, comment/upvote there (see
 github-comments) instead of filing again; if filing a genuine near-duplicate, link it
 ("Related to #45").
 
-## Templates — the repo's first, then these
-Check `.github/ISSUE_TEMPLATE/` for forms (`*.yml`) or markdown templates and fill the
-matching one (bug vs. feature vs. question). If the repo uses **issue types** or a
-required-fields config, set them. A template's headings are the maintainer's expected
-shape — match them.
+## Templates — one source for GitHub and for Claude
+This skill's templates in `references/templates/` are **also valid GitHub markdown issue
+templates**. `installs.json` installs them verbatim at `.github/ISSUE_TEMPLATE/`, so a
+human clicking "New issue" and Claude filing through the API produce the same shape. The
+`asset_integrity` hook flags an installed copy that drifts.
 
-Where the repo has none, use this skill's own, in `references/templates/`:
+Check `.github/ISSUE_TEMPLATE/` first:
+- **Our installed copies** (identical to `references/templates/`): they're the same form, so
+  render from the skill's copy as usual.
+- **A template that isn't ours**, a YAML form (`*.yml`) or a markdown template: the repo's
+  wins. Fill it, matching its headings, because they're the maintainer's expected shape.
+- **None:** use the skill's own.
+
+If the repo uses **issue types** or a required-fields config, set them.
 
 | Kind | Template | Use for |
 |---|---|---|
@@ -45,10 +52,14 @@ Where the repo has none, use this skill's own, in `references/templates/`:
 | `bug` | `bug.md` | What happened, Steps, Expected, Environment, Evidence, regression Acceptance |
 | `feature` | `feature.md` | Problem before Proposal, Acceptance, Non-goals |
 
-Every non-epic template ends in **Done when** with a ready-to-paste `Closes #N` line.
-Fill templates through `scripts/issue_body.py` (`render` → `check --allow-self` → file
-→ `fill-self` → `check`), never by hand: the script refuses missing values, leftover
-`{{placeholders}}`, guidance comments, and empty sections. Call order, the `gh`
+Each section holds a **slot**, a guidance comment that names its field
+(`<!-- goal: … -->`). A human sees the guidance in GitHub's editor, and the script fills
+the field. Every non-epic template ends in **Done when** with a `Closes #N` line that becomes
+the real number after filing. Fill templates through `scripts/issue_body.py`
+(`render` → `check --allow-self` → file → `fill-self` → `check`), never by hand. The
+script refuses missing or misspelled fields, leftover slots, left-in frontmatter, and
+empty sections. `lint-templates` confirms that every template still works as a GitHub
+template. Call order, the `gh`
 fallback, and the traps are in `references/mechanics.md`.
 
 ## Writing a bug report

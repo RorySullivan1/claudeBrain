@@ -3,10 +3,10 @@
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
 - claudeBrain = a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` is the produced consumer. Inventory: its `.claude/CATALOG.md` — never re-list here.
 - Consumer families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub, print-PDF pair. Meta: *-authoring + `add-*`.
-- Remote planning: `/epic` + `/issue` (symlinked) drive `github-issues`' templates + `issue_body.py` gate; epics stay SEPARATE from `.meta/roadmap/`.
+- GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates installed at `.github/`; `installs.json` copies drift-checked.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 101 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 104 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
@@ -42,27 +42,26 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **/epic + /issue never run live**; `epic-autoclose.yml` installed in `.github/workflows/` (live once merged to main).
+- **/epic + /issue never run live**; epic-autoclose is live on main — first real close confirms it.
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
-- **PR #54 open**: /epic + /issue + epic-autoclose (live on merge) + the WeasyPrint pair. After a
-  merge, follow-ups are a NEW PR, never stacked onto merged history.
+- **PR #54 merged**; the PR-template PR is the follow-up (fresh branch from main).
 - **Epic #48 SHIPPED** (PR #53; #48–#51 closed). Two follow-ups deliberately not built: the
   verification-surface check as a `SessionStart`/`Stop` hook (decide after a real adoption proves the
   doc's shape), and `/worktree-start` — now unblocked, but its first step must be "refuse if another
   cursor is in flight".
 - **#52 open** — run the Outlook probe kit; human-gated (needs classic Outlook). Kit parse-verified; row 78 stands.
-- verify-claims has run over every family (~390 claims; 96 ledger rows). The ledger is the record.
+- verify-claims has covered every family (~390 claims); the ledger is the record.
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
+- 2026-09-23 | PR + issue templates in .github/ (issue ones = the skill's, slot format); installs.json drift check; ledger 101→104 | sessions/2026-09-23-1159-pr-template.md
 - 2026-09-22 | /epic + /issue commands, github-issues templates + issue_body.py gate + epic-autoclose workflow (probe 14/14); ledger 96→100 | sessions/2026-09-22-1850-epic-issue-commands.md
 - 2026-09-15 | WeasyPrint print-HTML + factsheet skills built and probed live (2-page render, 6 fail-closed cases, 33-row CSS table); ledger 91→96 | sessions/2026-09-15-weasyprint-print-skills.md
 - 2026-09-10 | PR #53 merged: Epic #48 shipped, #48–#51 closed; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 built end to end (#49 verification surface, #51 single-cursor probe+decision, #50 init-project); ledger 86→90 | sessions/2026-09-10-1131-epic-48-build.md
-- 2026-09-10 | Epic #48 (+#49/#50/#51) filed from the reinforcement brief, claims verified against the tree; #47 reconciled (UsedRange REFUTED); #52 for Outlook probes |
-  sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
+- 2026-09-10 | Epic #48 (+#49–#52) filed, claims verified; #47 UsedRange REFUTED | sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
 - 2026-09-03 | WCAG 2.2 AA adopted as contrast bar (#44) + branding/references/contrast.py with boundary control; PR #46 | sessions/2026-09-03-wcag-aa-contrast-bar.md
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |
   sessions/2026-08-29-pr39-review-merge-issues.md
