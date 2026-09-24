@@ -29,7 +29,10 @@ HERE = Path(__file__).resolve()
 HOOKS = HERE.parent.parent
 GUARD = HOOKS / "roadmap_guard.py"
 # The real INDEX is the fixture on purpose: section distance is one of the variables.
-REAL_INDEX = HERE.parents[4] / ".claude" / "memory" / "INDEX.md"
+# Resolve it from the running project, falling back to the project that owns this
+# `.claude/` (probes/ -> hooks/ -> .claude/ -> project), so a vendored copy works at any depth.
+PROJECT = Path(os.environ.get("CLAUDE_PROJECT_DIR") or HERE.parents[3])
+REAL_INDEX = PROJECT / ".claude" / "memory" / "INDEX.md"
 
 INDEX_TMPL = "# ROADMAP\n\n| Version | Stage | Goal | Status |\n|---|---|---|---|\n{rows}\n"
 

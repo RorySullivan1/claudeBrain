@@ -11,6 +11,7 @@ To add a git-triggered guard: give it a `check(command: str, root: Path) -> str 
 and add it to GUARDS. Do not wire it as its own fragment — that re-introduces the
 per-Bash-call spawn this dispatcher exists to remove.
 """
+from __future__ import annotations
 import json
 import os
 import sys
@@ -49,8 +50,8 @@ def main() -> int:
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Advisory git guards",
+            # Advisory only: no permissionDecision. "allow" would skip the user's permission
+            # prompt for the whole Bash command (e.g. a chained `git push --force`).
             "additionalContext": "\n\n".join(messages),
         }
     }))

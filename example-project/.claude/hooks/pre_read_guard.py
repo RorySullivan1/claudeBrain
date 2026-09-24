@@ -78,8 +78,8 @@ def main() -> int:
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Large-file read capped to protect context",
+            # No permissionDecision: the capped read still goes through the normal permission
+            # flow. "allow" would auto-approve reads (e.g. of files outside the project).
             "updatedInput": new_input,
             "additionalContext": msg,
         }

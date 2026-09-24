@@ -5,11 +5,13 @@ Opt-in BY PRESENCE: if the project has no `.meta/version`, this is silent (it ha
 the version-labeling flow — e.g. the factory itself). It only speaks up when the file EXISTS
 but is incomplete (no `version:` label, or no goals) and the command being run is a `git push`.
 
-It never blocks — it emits `permissionDecision: allow` plus an `additionalContext` warning, so
+It never blocks — it emits only an `additionalContext` warning (no
+`permissionDecision`, so the normal permission prompt still applies), so
 a push is never vetoed; the model just learns the version isn't fully labeled. Fails safe: on
-any unexpected shape or error it prints nothing and the push proceeds. Flip the decision to
-`deny` if you want hard enforcement.
+any unexpected shape or error it prints nothing and the push proceeds. Add
+`permissionDecision: deny` if you want hard enforcement.
 """
+from __future__ import annotations
 import json
 import os
 import re
@@ -84,8 +86,6 @@ def main() -> int:
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Version label incomplete (advisory)",
             "additionalContext": msg,
         }
     }))
