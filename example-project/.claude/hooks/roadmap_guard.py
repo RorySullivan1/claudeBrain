@@ -7,8 +7,9 @@ adopted the development-map flow) and a `.meta/version` with a label. It only sp
 disagree — e.g. shipping a version the roadmap doesn't list, one the INDEX still marks
 `planned` while it's in progress, or one the version marks `shipped` but the INDEX does not.
 
-Like `version_guard.py` it NEVER blocks: it emits `permissionDecision: allow` plus an
-`additionalContext` nudge, so the push proceeds and the model just learns the map needs a
+Like `version_guard.py` it NEVER blocks: it emits only an `additionalContext` nudge (no
+`permissionDecision`, so the normal permission prompt still applies), so the push proceeds
+and the model just learns the map needs a
 status update (`/roadmap-status` to reconcile, `/roadmap-set` to re-slice). Fails safe: on
 any unexpected shape or error it prints nothing and the push proceeds.
 
@@ -16,6 +17,7 @@ Parallel work: this guard is per-version and stays correct with a second version
 another worktree. `.meta/version` and `memory/INDEX.md` are the single-cursor files — see
 `probes/PROBES.md` and the 2026-09-10 decision in `.claude/memory/INDEX.md`.
 """
+from __future__ import annotations
 import json
 import os
 import re
@@ -123,8 +125,6 @@ def main() -> int:
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Roadmap cursor drift (advisory)",
             "additionalContext": msg,
         }
     }))

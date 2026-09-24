@@ -11,6 +11,7 @@ Fails safe: if the tool_response shape is unexpected or anything errors, it emit
 Claude Code version — verify with `claude --debug` if truncation isn't firing; the
 extraction below handles a plain string or a dict with stdout/stderr/output/content.
 """
+from __future__ import annotations
 import json
 import re
 import sys
@@ -59,15 +60,32 @@ def main() -> int:
                 "hookEventName": "PostToolUse", "updatedToolOutput": cleaned}}))
         return 0
 
-    head = lines[:HEAD]
-    tail = lines[-TAIL:]
-    elided = len(lines) - HEAD - TAIL
-    marker = (f"... [{elided} lines elided to save context — full output ran in the "
-              f"tool; re-run narrowed (grep/tail/--quiet) if you need the middle] ...")
-    out = "\n".join([*head, "", marker, "", *tail])
     print(json.dumps({"hookSpecificOutput": {
-        "hookEventName": "PostToolUse", "updatedToolOutput": out}}))
+        "hookEventName": "PostToolUse", "updatedToolOutput": shorten(cleaned, lines)}}))
     return 0
+
+
+def shorten(cleaned: str, lines: list[str]) -> str:
+    """Elide the middle by lines, then by characters, so the result is always smaller.
+
+    Line elision alone can't bound size: with few-but-wide lines (or one minified line) the
+    head and tail windows overlap, and joining them would repeat the output. So lines are
+    only elided when there are more than HEAD + TAIL of them, and whatever remains is then
+    capped at MAX_CHARS by keeping its first and last characters.
+    """
+    out = cleaned
+    if len(lines) > HEAD + TAIL:
+        elided = len(lines) - HEAD - TAIL
+        marker = (f"... [{elided} lines elided to save context — full output ran in the "
+                  f"tool; re-run narrowed (grep/tail/--quiet) if you need the middle] ...")
+        out = "\n".join([*lines[:HEAD], "", marker, "", *lines[-TAIL:]])
+    if len(out) > MAX_CHARS:
+        keep_head, keep_tail = MAX_CHARS * 2 // 3, MAX_CHARS // 3
+        cut = len(out) - keep_head - keep_tail
+        marker = (f"... [{cut} characters elided to save context — full output ran in the "
+                  f"tool; re-run narrowed (grep/cut/--quiet) if you need the middle] ...")
+        out = f"{out[:keep_head]}\n\n{marker}\n\n{out[-keep_tail:]}"
+    return out
 
 
 if __name__ == "__main__":

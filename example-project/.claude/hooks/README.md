@@ -21,9 +21,11 @@ is worse than no guard.
 (a `.meta/version`, a `.claude/skills/`) and stay silent when it hasn't, so a fragment
 copied downstream doesn't nag about a convention that project never took up.
 
-**Prefer advisory to veto.** Emit `permissionDecision: allow` plus `additionalContext` so
-the model learns what's wrong without the action being blocked. Reserve a `deny` (or a
-non-zero exit on `PreToolUse`, which vetoes the call) for things that must be stopped.
+**Prefer advisory to veto.** Emit only `additionalContext`, with no `permissionDecision`, so
+the model learns what's wrong without the action being blocked. Never emit `"allow"` from an
+advisory hook: it skips the user's permission prompt for the whole tool call (a chained
+`git push --force` included). Reserve a `deny` (or exit code 2 on `PreToolUse`, which
+vetoes the call) for things that must be stopped.
 
 **Cap the output.** Hook output lands in context every time it fires. Truncate lists and
 say how many were omitted.

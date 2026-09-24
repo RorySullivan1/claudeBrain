@@ -16,12 +16,13 @@ renaming, no "helpful" fixes. A hook that edits files during a commit turns a re
 moving target, and the diff you approved is not the diff you push. If something is wrong,
 a human or the model fixes it deliberately.
 
-It never blocks: the dispatcher (`git_guards.py`) emits `permissionDecision: allow` plus an
+It never blocks: the dispatcher (`git_guards.py`) emits only an
 `additionalContext` warning, so a commit is never vetoed — the model just learns what's
 broken. Fails safe: on any unexpected shape or error it reports nothing and the command
 proceeds. Runs under `git_guards.py` (one interpreter for all git guards); `main()` keeps
 it standalone-runnable.
 """
+from __future__ import annotations
 import json
 import os
 import re
@@ -202,8 +203,6 @@ def main() -> int:
     print(json.dumps({
         "hookSpecificOutput": {
             "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Asset integrity issues (advisory)",
             "additionalContext": msg,
         }
     }))
