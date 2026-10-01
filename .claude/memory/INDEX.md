@@ -42,11 +42,12 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **/epic + /issue never run live**; epic-autoclose is live on main — first real close confirms it.
+- **AI-spend epics filed** (first live /epic): #57 measure → #62 review → #66 optimize; next = #58 (probe sources first).
+  No `epic` label exists — user's call. epic-autoclose's first real close still unconfirmed.
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
-- **PR #54 merged**; the PR-template PR is the follow-up (fresh branch from main).
+- **PR #55 open** (PR + issue templates in `.github/`).
 - **Epic #48 SHIPPED** (PR #53; #48–#51 closed). Two follow-ups deliberately not built: the
   verification-surface check as a `SessionStart`/`Stop` hook (decide after a real adoption proves the
   doc's shape), and `/worktree-start` — now unblocked, but its first step must be "refuse if another
@@ -56,6 +57,7 @@
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
+- 2026-10-01 | Spend-audit proposal refined + filed as epics #57/#62/#66 (13 issues); usage-log traps verified | sessions/2026-10-01-1458-spend-epics.md
 - 2026-09-23 | PR + issue templates in .github/ (issue ones = the skill's, slot format); installs.json drift check; ledger 101→104 | sessions/2026-09-23-1159-pr-template.md
 - 2026-09-22 | /epic + /issue commands, github-issues templates + issue_body.py gate + epic-autoclose workflow (probe 14/14); ledger 96→100 | sessions/2026-09-22-1850-epic-issue-commands.md
 - 2026-09-15 | WeasyPrint print-HTML + factsheet skills built and probed live (2-page render, 6 fail-closed cases, 33-row CSS table); ledger 91→96 | sessions/2026-09-15-weasyprint-print-skills.md
@@ -66,8 +68,5 @@
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |
   sessions/2026-08-29-pr39-review-merge-issues.md
 - 2026-08-20 | Outlook HTML pair: outlook-html-specifications skill + outlook-html-designer agent; gated at authoring, ledger 78→83 | sessions/2026-08-20-outlook-html-asset-pair.md
-- 2026-08-15 | taskmaster re-review distilled into 14 assets; disputes settled vs MS Learn | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
-- 2026-08-15 | xlflow → verification layer (claim-grounding + verify-claims + integrity/git-guard hooks); 8-angle review of PR #31, 19 findings fixed |
-  sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
-- 2026-08-05 | powerapp_taskmaster assimilation | sessions/2026-08-05-0231-powerapp-taskmaster-assimilation.md
+- 2026-08-05 → 08-15 | taskmaster assimilation + re-review; xlflow → verification layer (PR #31) | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - ≤2026-06-21 | June build-out (memory adoption, hooks/catalog systems, token economy, agent family, presentation pipeline, quant layer) + pre-June history | sessions/ARCHIVE-2026.md
