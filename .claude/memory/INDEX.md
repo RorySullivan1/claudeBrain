@@ -43,8 +43,7 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **AI-spend epics** #57 → #62 → #66: #57 BUILT (#59–#61, PR open): `usage.py` + `pricing.json` (= harness costUSD) +
-  `spend_record` hook. Next = #62. Gaps: `SessionEnd` on reclaim; Opus 5/Fable unreconciled. No `epic` label (user's call).
+- **AI-spend epics**: #57 done (PR #73). Next #62, then #66. Gaps: SessionEnd on reclaim; Opus 5/Fable unreconciled. No `epic` label (user's call).
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
@@ -58,7 +57,8 @@
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
-- 2026-10-07 | Epic #57 built: usage.py (#59), pricing + reconcile (#60), spend_record hook (#61); ledger 112→133 | sessions/2026-10-07-1845-epic-57-spend.md
+- 2026-10-07 | PR #73 merged; epic #57 closed by epic-autoclose (1st real close) | sessions/2026-10-07-1845-epic-57-spend.md
+- 2026-10-07 | Epic #57 built (#59–#61: usage.py, pricing, spend hook); ledger 112→133 | sessions/2026-10-07-1845-epic-57-spend.md
 - 2026-10-07 | #58: usage sources settled by probe; main-log output final, subagent-log output placeholder | sessions/2026-10-07-1803-issue-58-usage-sources.md
 - 2026-10-07 | #70: xlVizer fixes ported probe-first (17/17, 47/47); `**Routes to:**` check; tracker refs qualified | sessions/2026-10-07-1737-issue-70-xlvizer-fixes.md
 - 2026-10-01 | Spend-audit proposal refined + filed as epics #57/#62/#66 (13 issues); usage-log traps verified | sessions/2026-10-01-1458-spend-epics.md
