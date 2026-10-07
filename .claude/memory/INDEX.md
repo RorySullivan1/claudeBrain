@@ -70,6 +70,6 @@
 - 2026-09-03 | WCAG 2.2 AA contrast bar (#44, PR #46) | sessions/2026-09-03-wcag-aa-contrast-bar.md
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |
   sessions/2026-08-29-pr39-review-merge-issues.md
-- 2026-08-20 | Outlook HTML pair: outlook-html-specifications skill + outlook-html-designer agent; gated at authoring, ledger 78→83 | sessions/2026-08-20-outlook-html-asset-pair.md
+- 2026-08-20 | Outlook HTML skill + designer agent; ledger 78→83 | sessions/2026-08-20-outlook-html-asset-pair.md
 - 2026-08-05 → 08-15 | taskmaster assimilation + re-review; xlflow → verification layer (PR #31) | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - ≤2026-06-21 | June build-out (memory adoption, hooks/catalog systems, token economy, agent family, presentation pipeline, quant layer) + pre-June history | sessions/ARCHIVE-2026.md
