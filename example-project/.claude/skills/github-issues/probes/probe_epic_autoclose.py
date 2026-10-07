@@ -31,6 +31,8 @@ class Fake:
     writes: list[tuple] = []
     fail: set[str] = set()
     base = ""
+    comments: dict[int, list[dict]] = {}
+    next_id = 100
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -51,9 +53,13 @@ class Handler(BaseHTTPRequestHandler):
                 "repository_url": f"{Fake.base}/repos/{i.get('repo', REPO)}"}
 
     def _route(self, method: str):
-        path = self.path.split("?")[0]
+        path, _, query = self.path.partition("?")
         if path in Fake.fail:
             return self._send(500, {"message": "injected failure"})
+        d = re.fullmatch(r"/repos/Owner/Repo/issues/comments/(\d+)", path)
+        if d and method == "DELETE":
+            Fake.writes.append(("DELETE", int(d.group(1))))
+            return self._send(204, {})
         m = re.fullmatch(r"/repos/Owner/Repo/issues/(\d+)(/parent|/sub_issues|/comments)?", path)
         if not m or int(m.group(1)) not in Fake.issues:
             return self._send(404, {"message": "Not Found"})
@@ -72,7 +78,13 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, self._issue_json(n))
         if method == "POST" and tail == "/comments":
             Fake.writes.append(("COMMENT", n))
-            return self._send(201, {"body": body["body"]})
+            Fake.next_id += 1
+            c = {"id": Fake.next_id, "body": body["body"], "updated_at": "2099-01-01T00:00:00Z"}
+            Fake.comments.setdefault(n, []).append(c)
+            return self._send(201, c)
+        if method == "GET" and tail == "/comments":
+            since = dict(q.split("=", 1) for q in query.split("&") if "=" in q).get("since", "")
+            return self._send(200, [c for c in Fake.comments.get(n, []) if c["updated_at"] >= since])
         return self._send(405, {"message": "unexpected call"})
 
     def do_GET(self):
@@ -84,14 +96,17 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         self._route("POST")
 
+    def do_DELETE(self):
+        self._route("DELETE")
+
 
 def extract_script() -> str:
     wf = yaml.safe_load(WORKFLOW.read_text(encoding="utf-8"))
     return wf["jobs"]["sync-parent"]["steps"][0]["run"]
 
 
-def fire(script: str, issue: int, action: str) -> subprocess.CompletedProcess:
-    env = dict(os.environ, GH_TOKEN="fake", API=Fake.base, REPO=REPO, ISSUE=str(issue), ACTION=action)
+def fire(script: str, issue: int, action: str, api: str = "") -> subprocess.CompletedProcess:
+    env = dict(os.environ, GH_TOKEN="fake", API=api or Fake.base, REPO=REPO, ISSUE=str(issue), ACTION=action)
     for var in ("HTTPS_PROXY", "HTTP_PROXY", "https_proxy", "http_proxy"):
         env.pop(var, None)  # the fake API is local; a sandbox proxy would intercept it
     return subprocess.run(["bash", "-c", script], env=env, capture_output=True, text=True, timeout=30)
@@ -145,6 +160,21 @@ FAULTS = [
 ]
 
 
+RACER = "Closed automatically (completed): all 2 sub-issues are closed; the last was #2."
+# (name, table, event issue, existing comments on #1, expected writes). Two runs can both
+# pass the "parent is open" check; each posts, then all but the lowest-id comment go.
+RACES = [
+    ("racing run already commented -> own duplicate deleted",
+     {1: I(), 2: I("closed", 1, "completed"), 3: I("closed", 1, "completed")}, 3,
+     [{"id": 50, "body": RACER, "updated_at": "2099-01-01T00:00:00Z"}],
+     [("PATCH", 1, "closed", "completed"), ("COMMENT", 1), ("DELETE", 101)]),
+    ("old auto-close comment from an earlier cycle -> kept, no delete [control]",
+     {1: I(), 2: I("closed", 1, "completed"), 3: I("closed", 1, "completed")}, 3,
+     [{"id": 50, "body": RACER, "updated_at": "2001-01-01T00:00:00Z"}],
+     [("PATCH", 1, "closed", "completed"), ("COMMENT", 1)]),
+]
+
+
 def main() -> int:
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     Fake.base = f"http://127.0.0.1:{server.server_address[1]}"
@@ -154,6 +184,7 @@ def main() -> int:
 
     for name, table, issue, action, want_rc, want_writes in CASES:
         Fake.issues, Fake.writes, Fake.fail = {k: dict(v) for k, v in table.items()}, [], set()
+        Fake.comments, Fake.next_id = {}, 100
         r = fire(script, issue, action)
         ok = r.returncode == want_rc and Fake.writes == want_writes
         failed += not ok
@@ -161,8 +192,29 @@ def main() -> int:
         if not ok:
             print(f"      rc={r.returncode} writes={Fake.writes}\n      stdout={r.stdout!r}\n      stderr={r.stderr!r}")
 
+    for name, table, issue, existing, want_writes in RACES:
+        Fake.issues, Fake.writes, Fake.fail = {k: dict(v) for k, v in table.items()}, [], set()
+        Fake.comments, Fake.next_id = {1: [dict(c) for c in existing]}, 100
+        r = fire(script, issue, "closed")
+        ok = r.returncode == 0 and Fake.writes == want_writes
+        failed += not ok
+        print(f"{'PASS' if ok else 'FAIL'}  {name}")
+        if not ok:
+            print(f"      rc={r.returncode} writes={Fake.writes}\n      stdout={r.stdout!r}\n      stderr={r.stderr!r}")
+
+    # Transport failure (nothing listening): curl itself fails, and the run must still
+    # fail with an ::error:: annotation rather than dying silently under `set -e`.
+    Fake.issues, Fake.writes, Fake.fail = {1: I(), 2: I("closed", 1, "completed")}, [], set()
+    r = fire(script, 2, "closed", api="http://127.0.0.1:9")
+    ok = r.returncode != 0 and "::error::" in r.stdout
+    failed += not ok
+    print(f"{'PASS' if ok else 'FAIL'}  transport failure -> fails loudly with ::error::")
+    if not ok:
+        print(f"      rc={r.returncode}\n      stdout={r.stdout!r}\n      stderr={r.stderr!r}")
+
     for name, table, issue, path in FAULTS:
         Fake.issues, Fake.writes, Fake.fail = {k: dict(v) for k, v in table.items()}, [], {path}
+        Fake.comments, Fake.next_id = {}, 100
         r = fire(script, issue, "closed")
         ok = r.returncode != 0 and not any(w[0] == "PATCH" for w in Fake.writes) and "::error::" in r.stdout
         failed += not ok
@@ -171,7 +223,7 @@ def main() -> int:
             print(f"      rc={r.returncode} writes={Fake.writes}\n      stdout={r.stdout!r}\n      stderr={r.stderr!r}")
 
     server.shutdown()
-    total = len(CASES) + len(FAULTS)
+    total = len(CASES) + len(RACES) + 1 + len(FAULTS)
     print(f"\n{total - failed}/{total} passed")
     return 1 if failed else 0
 

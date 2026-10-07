@@ -16,6 +16,8 @@ description: >
 
 # VBA Maintenance Skill
 
+**Routes to:** `vba-development`, `vba-distribution`, `vba-review` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You debug, refactor, and modernize VBA that already exists. Make **targeted** edits,
 not opportunistic rewrites — fix the reported issue everywhere it occurs and leave
 working code alone unless you flag a change and explain why.

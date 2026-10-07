@@ -1,4 +1,4 @@
-# Probe kit — parallel state (issue #51)
+# Probe kit — parallel state (RorySullivan1/claudebrain#51)
 
 **Question:** the factory's state files are written as if exactly one unit of work is ever in
 flight. Before reshaping them to permit parallel worktrees, does the collision actually happen —

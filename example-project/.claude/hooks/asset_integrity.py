@@ -7,7 +7,10 @@ a skill folder that no longer matches its `name:` frontmatter, an asset missing 
 symlinks (this repo single-sources some assets, so a moved canonical file silently breaks
 the link), and an installed copy that has drifted from its skill's source. A skill declares
 those copies in `installs.json`, as {skill-relative source: project-relative target}. Only
-targets that exist are compared: a copy that isn't installed is not a defect.
+targets that exist are compared: a copy that isn't installed is not a defect. A skill whose
+SKILL.md carries a `**Routes to:**` line declares the sibling skills it hands work to; each
+declared skill must be installed (a partial pull learns what else to take), and every installed
+skill the body names must be declared (the line can't drift from the text).
 
 Opt-in BY PRESENCE: silent in a project with no `.claude/skills` or `.claude/agents`.
 
@@ -120,7 +123,25 @@ def check_installs(folder: Path, rel: str, root: Path, out: list[str]) -> None:
             out.append(f"{dst} has drifted from {rel}/{src}; re-copy it from the source")
 
 
-def check_skill(folder: Path, rel: str, out: list[str], root: Path) -> None:
+ROUTES_RE = re.compile(r"^\*\*Routes to:\*\*(.*)$", re.M)
+
+
+def check_routes(text: str, folder: Path, rel: str, installed: set[str], out: list[str]) -> None:
+    """Opt-in by presence: only a SKILL.md with a **Routes to:** line is checked."""
+    m = ROUTES_RE.search(text)
+    if m is None:
+        return
+    declared = set(re.findall(r"`([A-Za-z0-9][A-Za-z0-9-]*)`", m.group(1)))
+    for name in sorted(declared - installed):
+        out.append(f"{rel}/SKILL.md routes to `{name}`, which isn't installed here: "
+                   "pull it too, or that guidance has nowhere to go")
+    rest = ROUTES_RE.sub("", text)  # description boundaries count: they hand work off too
+    for name in sorted(installed - declared - {folder.name}):
+        if re.search(rf"(?<![\w-]){re.escape(name)}(?![\w-])", rest):
+            out.append(f"{rel}/SKILL.md names `{name}` but its **Routes to:** line doesn't declare it")
+
+
+def check_skill(folder: Path, rel: str, out: list[str], root: Path, installed: set[str]) -> None:
     skill = folder / "SKILL.md"
     if not skill.is_file():
         out.append(f"{rel}/ has no SKILL.md")
@@ -133,6 +154,7 @@ def check_skill(folder: Path, rel: str, out: list[str], root: Path) -> None:
         if not (folder / ref).exists():
             out.append(f"{rel}/SKILL.md cites `{ref}` but that file does not exist")
     check_installs(folder, rel, root, out)
+    check_routes(text, folder, rel, installed, out)
 
 
 def scan(root: Path, dirs: list[Path]) -> list[str]:
@@ -149,6 +171,8 @@ def scan(root: Path, dirs: list[Path]) -> list[str]:
         seen.add(canonical)
         return True
 
+    installed = {f.name for c in dirs if (c / "skills").is_dir()
+                 for f in (c / "skills").iterdir() if f.is_dir()}
     for cdir in dirs:
         # Broken symlinks: the single-sourcing convention links at the layer level, so
         # layer roots plus one level below cover it without an rglob over session logs.
@@ -159,7 +183,7 @@ def scan(root: Path, dirs: list[Path]) -> list[str]:
         if skills.is_dir():
             for folder in sorted(skills.iterdir()):
                 if folder.is_dir() and first_visit(folder):
-                    check_skill(folder, str(folder.relative_to(root)), out, root)
+                    check_skill(folder, str(folder.relative_to(root)), out, root, installed)
         agents = cdir / "agents"
         if agents.is_dir():
             for path in sorted(agents.glob("*.md")):

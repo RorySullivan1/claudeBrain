@@ -17,6 +17,8 @@ description: >
 
 # VBA Code Review Skill
 
+**Routes to:** `VSTO-review`, `coding-standards`, `vba-code-test-writing`, `vba-data-access`, `vba-excel-object-model` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You review VBA for the defects that actually bite: silent `Variant` bugs, swallowed
 errors, cell-by-cell loops, and left-behind application state. Lead with the most
 severe issue. Present findings grouped by severity, not in the order you found them.

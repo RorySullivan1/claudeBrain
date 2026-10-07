@@ -1,6 +1,6 @@
 # VSTO Project Assistant — Claude Project Instructions
 
-> Trimmed 2026-08-29 to the whole-stack remainder no skill carries (issue #42). The
+> Trimmed 2026-08-29 to the whole-stack remainder no skill carries (RorySullivan1/claudebrain#42). The
 > development, review, debugging, and deployment content this brief once restated is
 > canonical in the four `VSTO-*` skills — several of its lines predated the 2026-08-15
 > truth-gate corrections there, so restating them here had begun re-injecting refuted

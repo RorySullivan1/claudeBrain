@@ -37,6 +37,8 @@ HEADING = re.compile(r"^## (.+)$", re.M)
 FENCE = re.compile(r"```\n(.*?)\n```", re.S)
 CLOSING = re.compile(r"\b(close[sd]?|fix(e[sd])?|resolve[sd]?) #\d+\b", re.I)
 UNNUMBERED = re.compile(r"(\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?) #)N\b", re.I)
+# Fenced blocks and inline code are user evidence; template residue never sits inside them.
+CODE = re.compile(r"^(```|~~~)[^\n]*\n.*?^\1[ \t]*$|`[^`\n]+`", re.M | re.S)
 
 
 def _fail(defects: list[str]) -> int:
@@ -52,7 +54,9 @@ def _sections(text: str) -> dict[str, str]:
 
 def _drop_optional(text: str, key: str) -> str:
     """Remove an optional slot's section if the slot is all it holds, else its line."""
-    whole = re.compile(rf"^## [^\n]*\n\s*<!--\s*{key}\?:.*?-->\s*?\n(?=\s*(## |---|\Z))", re.M | re.S)
+    # (?:(?!-->).)* stops at the slot's own close; a lazy .*? would run on to a later
+    # `-->` and delete the sections in between.
+    whole = re.compile(rf"^## [^\n]*\n\s*<!--\s*{key}\?:(?:(?!-->).)*-->\s*?\n(?=\s*(## |---|\Z))", re.M | re.S)
     if whole.search(text):
         return whole.sub("", text, count=1)
     return re.sub(rf"^[^\n]*<!--\s*{key}\?:.*?-->[^\n]*\n?", "", text, count=1, flags=re.M | re.S)
@@ -85,10 +89,11 @@ def check(text: str, allow_self: bool) -> list[str]:
     defects = []
     if FRONTMATTER.match(text):
         defects.append("template frontmatter left in the body")
-    for key, _ in SLOT.findall(text):
+    prose = CODE.sub("", text)
+    for key, _ in SLOT.findall(prose):
         defects.append(f"unfilled slot: {key}")
-    if "{{" in text:
-        defects.append("a {{placeholder}} is left in the body")
+    if "{{" in prose:
+        defects.append("a {{placeholder}} is left in the body (wrap literal braces in code)")
     sections = _sections(text)
     for heading, body in sections.items():
         if not body.strip():

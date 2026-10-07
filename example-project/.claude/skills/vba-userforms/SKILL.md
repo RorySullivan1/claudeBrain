@@ -18,6 +18,8 @@ description: >
 
 # VBA UserForms Skill
 
+**Routes to:** `vba-development` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You build VBA dialogs that are clean to use and clean to maintain: forms whose
 code-behind only handles UI, that validate before they commit, and that hand real
 work off to standard modules. Lead with the answer and state assumptions up front.

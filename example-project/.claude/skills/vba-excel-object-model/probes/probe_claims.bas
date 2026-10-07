@@ -2,7 +2,7 @@ Attribute VB_Name = "probe_claims"
 Option Explicit
 ' ============================================================================
 ' Probe kit for the three EXPERIENCE-SETTLED claims in vba-excel-object-model
-' (claudeBrain issue #43). Run on a THROWAWAY workbook in Excel's VBE: import
+' (RorySullivan1/claudebrain#43). Run on a THROWAWAY workbook in Excel's VBE: import
 ' this module (or paste it into a standard module) and run RunAllProbes (F5).
 ' All output goes to the Immediate window (Ctrl+G) — copy the whole block back
 ' into the issue verbatim.
@@ -28,7 +28,7 @@ Public Sub RunAllProbes()
     ProbeSpecialCellsNoMatch
     ProbePivotDataFieldRename
     ProbeUsedRangeAfterClear
-    Debug.Print "=== done — paste this whole Immediate-window block into issue #43 ==="
+    Debug.Print "=== done — paste this whole Immediate-window block into RorySullivan1/claudebrain#43 ==="
 End Sub
 
 ' ---------------------------------------------------------------------------

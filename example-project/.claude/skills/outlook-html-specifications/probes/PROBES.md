@@ -1,4 +1,4 @@
-# Live-host probes — outlook-html-specifications (issue #43)
+# Live-host probes — outlook-html-specifications (RorySullivan1/claudebrain#43; the run is tracked in RorySullivan1/claudebrain#52)
 
 Five claims in `../SKILL.md` are labelled **field-settled**: consistently observed across
 the email-dev field, absent from the Microsoft pages the skill cites. Only a render in
@@ -59,4 +59,4 @@ stated behavior must match the observation). Either way add ledger rows
 `../../claim-grounding/references/ledger-schema.md`) with
 `grounded_by: "probe:outlook-html-specifications/probes"`, and replace the standing
 "no live host" coverage-gap row with one recording this run. Paste the observation notes
-into issue #43 verbatim — observations first, verdicts after.
+into RorySullivan1/claudebrain#52 verbatim (the skill's source repo, not your own) — observations first, verdicts after.

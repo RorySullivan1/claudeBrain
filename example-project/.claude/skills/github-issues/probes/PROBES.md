@@ -20,6 +20,8 @@ event, and asserts the exit code and the **exact list of writes**.
 | Controls that must NOT write: open sibling, open parent on reopen, no parent, parent closed by hand | 4 |
 | Cross-repo parent is left alone. Repo names compare case-insensitively | 2 |
 | Faults fail loudly: a 500 on the parent lookup or the sub-issue list exits non-zero with `::error::` and closes nothing | 2 |
+| Racing runs: when two sibling closes both pass the "parent open" check, the later comment deletes itself. Control: an old auto-close comment from an earlier cycle is kept | 2 |
+| Transport failure (nothing listening): curl writes `000`, and the run fails with `::error::` instead of dying silently under `set -e` | 1 |
 
 **The probe was checked against five deliberate breaks, and every one turned at least one
 case red:** errors read as "no parent", no cascade, open siblings ignored, the close
@@ -31,6 +33,10 @@ endpoint, `sub_issues` capped at 100 per parent, and `repository_url` on issue o
 Whether live GitHub fires `issues.closed` for a sub-issue closed by a merged PR's keyword
 is not in doubt. What has never been seen is a live run, so the first real epic that closes
 is the confirming event. Check the Actions log for the "Closed #N as …" line.
+
+**17/17 since 2026-10-07**, when the race, old-comment control and transport cases were ported from
+xlVizer (RorySullivan1/claudebrain#70). The race and transport cases were seen failing against the
+previous workflow first.
 
 **Installed-copy drift** is not this probe's job. `../installs.json` declares the install
 target, and the `asset_integrity` hook compares the two on every `git commit`/`push`.
@@ -57,3 +63,14 @@ otherwise satisfy it vacuously. That failure mode was found by testing the check
 leftover slots ignored, an optional slot dropping its line instead of its section, the
 closing check reading the whole section, and frontmatter not stripped. First recorded run:
 38/38 passed (2026-09-23).
+
+**2026-10-07: 47 cases** (RorySullivan1/claudebrain#70). Added, and each seen failing first against the old
+script:
+- fenced and inline code holding `${{ }}` or `<!-- word: -->` is user evidence, not template residue;
+- an optional slot that shares its section with text drops only its line and never eats the
+  sections after it.
+
+Added controls: a bare `{{x}}` in prose is still caught. The probe now also byte-compares every
+installed copy in `../installs.json` against its source, checking both beside `.claude/` and at
+the git root, for projects that don't run the `asset_integrity` hook. Its first run here found the
+three stale `ISSUE_TEMPLATE` copies.

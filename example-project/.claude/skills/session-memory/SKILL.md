@@ -61,7 +61,7 @@ section; the high-value content is append-only and fully traceable.
 ### Two branches, one INDEX
 
 Append-only is a *discipline*, not something git understands. Probed 2026-09-10
-(`../../hooks/probes/PROBES.md`): two branches that each rewrite State and append a Log line
+(`../../hooks/probes/PROBES.md` in the source repo; a copy may not carry it): two branches that each rewrite State and append a Log line
 merge into **two conflict hunks**, one per section — and the append-only hunk conflicts too,
 because both appends land on the same insertion point. Nothing is lost: git keeps both sides in
 both hunks. The risk is the **resolution**, and the two hunks need opposite ones.
@@ -158,6 +158,16 @@ for a mature project: Decisions is append-only by design, so the file grows even
 every entry is disciplined. 8,000 is twice what a compacted index measures in
 practice, which is the number a cap should be set at — above a good example, below
 the tail.
+
+## Copying this skill
+
+`SKILL.md` and `scripts/memory.py` are one unit: copy the folder whole, never the doc alone.
+To check you have a matching pair, `python scripts/memory.py --help` must list every
+subcommand this doc uses: `init`, `new`, `search`, `list`, `check`, `index`,
+`precompact-hook`, `stop-hook` and `prompt-hook`. If one is missing, the script is older than
+the doc, so re-copy the folder. References below to `.claude/hooks/` (its README, its probes,
+`settings.json` wiring) describe the source repo's hook layer. A project without that layer
+can skip them: the memory files and `memory.py` work on their own.
 
 ## Setup (one-time)
 

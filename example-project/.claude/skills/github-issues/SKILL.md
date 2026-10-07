@@ -34,7 +34,8 @@ github-comments) instead of filing again; if filing a genuine near-duplicate, li
 This skill's templates in `references/templates/` are **also valid GitHub markdown issue
 templates**. `installs.json` installs them verbatim at `.github/ISSUE_TEMPLATE/`, so a
 human clicking "New issue" and Claude filing through the API produce the same shape. The
-`asset_integrity` hook flags an installed copy that drifts.
+`asset_integrity` hook flags an installed copy that drifts. In a project without that hook,
+`probes/probe_issue_body.py` runs the same byte-compare on whatever is installed.
 
 Check `.github/ISSUE_TEMPLATE/` first:
 - **Our installed copies** (identical to `references/templates/`): they're the same form, so

@@ -54,7 +54,11 @@ Show, in one message:
 - the epic's title, marker, labels, and full body;
 - a table of the children in order: title, kind, labels, and depends-on;
 - one child body in full, as a sample;
-- whether `.github/workflows/epic-autoclose.yml` exists in the repo.
+- whether `.github/workflows/epic-autoclose.yml` is **live**: it must be on the default
+  branch, because GitHub runs `issues`-event workflows only from there. Check that branch,
+  not the checkout (`git fetch origin <default>` then
+  `git cat-file -e origin/<default>:.github/workflows/epic-autoclose.yml`). A copy that
+  exists only on a feature or release branch is not live; say so.
 
 **Filing is public and notifies people. Do not file anything until the user explicitly
 approves.** Apply requested edits and re-preview.
@@ -73,7 +77,8 @@ If any write fails, **stop and report exactly what was filed**, with numbers. Do
 blind, because a retried create makes a duplicate.
 
 ## 7. Auto-close
-If the repo lacks `.github/workflows/epic-autoclose.yml`, offer to install it from
+If the default branch lacks `.github/workflows/epic-autoclose.yml` (checked as in step 5),
+offer to install it from
 `.claude/skills/github-issues/assets/epic-autoclose.yml`. It closes the epic when its last
 sub-issue closes. It is a CI change, so it needs its own yes and goes through the normal
 branch/PR flow. It goes live only after it merges into the default branch. Remind the user that each child's PR must carry that child's `Closes #n`
@@ -81,4 +86,5 @@ line and **never the epic's number**.
 
 ## Report
 Give the epic URL, the children as `#n title` in order, what was verified, and whether
-auto-close is installed.
+auto-close is live on the default branch. Children closed by a PR into a non-default
+branch must be closed by hand; the epic cascade starts from that manual close.

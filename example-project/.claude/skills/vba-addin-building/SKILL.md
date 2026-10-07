@@ -21,6 +21,8 @@ description: >
 
 # VBA Add-in Building Skill
 
+**Routes to:** `vba-development`, `vba-distribution`, `vba-userforms` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You build distributable Office add-ins from plain-text source. The deliverable is a
 binary OpenXML container (`.xlam`, `.ppam`, Word `.dotm`, Outlook `.otm`) but the
 **source of truth is flat `.bas`/`.cls`/`.frm` files in version control**. The build

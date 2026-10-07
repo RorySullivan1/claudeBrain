@@ -21,8 +21,21 @@ A release is a promise about compatibility and a summary of value. Get the **ver
 number** right (it tells users how risky the upgrade is) and the **notes** right (they
 tell users whether to bother). Everything else is mechanics.
 
+## First, find the version's source of truth
+Tags and releases are not always where a project's version lives. Before choosing anything,
+look for a **version constant** and the **policy** that governs it:
+- the constant: `package.json` `version`, `pyproject.toml`, `__version__`, an
+  `APP_VERSION`-style constant, `AssemblyVersion`, `.meta/version`;
+- the policy: `CLAUDE.md`, `CONTRIBUTING`, or a release doc. For example, "bumped only on
+  explicit request", or "tags must match `APP_VERSION`".
+
+If a constant exists, **the tag follows it**: tag the version it already says. Never tag a
+version you derived yourself over it. If the constant hasn't been bumped and the policy says
+bumps need an explicit ask, stop and confirm the version with the user before tagging. Use the
+semver rules below only to *propose* a bump, never to apply one on your own.
+
 ## Pick the version — semantic versioning
-Given the current version (check `get_latest_release` / `list_tags`), choose the bump by
+Given the current version (the constant above, else `get_latest_release` / `list_tags`), propose the bump by
 the *nature* of the change, not its size:
 
 | Bump | When | Example |
