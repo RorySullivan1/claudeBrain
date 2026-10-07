@@ -1,18 +1,19 @@
 # MEMORY INDEX  ·  keep ≤ ~80 lines, ≤ ~200 chars per line
 
 ## State            (rewrite in place — current truth only, ≤ ~10 lines)
-- claudeBrain = a **factory** for Claude Code assets: `.claude/` authors meta-tooling; `example-project/` is the produced consumer. Inventory: its `.claude/CATALOG.md` — never re-list here.
-- Consumer families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub, print-PDF pair. Meta: *-authoring + `add-*`.
-- GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates installed at `.github/`; `installs.json` copies drift-checked.
-- Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
+- claudeBrain = a **factory**: `.claude/` authors meta-tooling; `example-project/` is the produced consumer. Inventory: its `CATALOG.md`, never here.
+- Families: Power Platform + canvas, VBA (9), VSTO, Python, quant, docs, branding→presentation, Outlook HTML, GitHub, print-PDF pair. Meta: *-authoring + `add-*`.
+- GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates in `.github/`; `installs.json` copies drift-checked.
+- Single-sourcing: operational assets canonical in `example-project/.claude/`; factory holds symlinks. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
 - Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 133 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
-- Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
-- Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
-- Durable lesson: the recurring defect class is **verification steps that cannot verify** (inverted rules, plan-mode auditors, early-bound probes, crashing advisory wrappers). Check the check.
+- Prose (#39): coding-standards scope table; `prose_budget.py` (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
+- Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Versions: `.meta/version` + `/version-set`/`/version-ship`; roadmap `.meta/roadmap/`.
+- Durable lesson: recurring defect = **verification steps that cannot verify** (inverted rules, plan-mode auditors, early-bound probes, fail-safes hiding failure). Check the check.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-10-07] **Factory records its spend** (#61): `.claude/spend/log.jsonl`, upserted per `Stop` — sessions/2026-10-07-1845-epic-57-spend.md
 - [2026-09-15] **Print-to-PDF pair built** (`weasyprint-print-html` + `factsheet-template`): engine
   skill + branded layer, split by change cadence. Renderer SWAPPABLE — `render_worker.py` is the only
   file importing WeasyPrint. Three lessons generalize: (1) **a doc that IS a rule set must be
@@ -43,7 +44,7 @@
 
 ## Threads          (open items; remove when closed)
 - **AI-spend epics** #57 → #62 → #66: #57 BUILT (#59–#61, PR open): `usage.py` + `pricing.json` (= harness costUSD) +
-  `spend_record` hook (factory opted in). Next = #62. Gaps: `SessionEnd` on cloud reclaim; Opus 5/Fable unreconciled. No `epic` label (user's call).
+  `spend_record` hook. Next = #62. Gaps: `SessionEnd` on reclaim; Opus 5/Fable unreconciled. No `epic` label (user's call).
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
