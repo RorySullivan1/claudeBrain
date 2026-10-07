@@ -111,6 +111,8 @@ def main() -> int:
         hook(root, stop(tmp, "SessionEnd", reason="other"))
         after = log_lines(root)
         events = lambda ls: [json.loads(x).get("event") for x in ls]
+        checks["the spend directory gains only log.jsonl (no lock or temp files)"] = (
+            sorted(x.name for x in (root / ".claude" / "spend").iterdir()) == ["log.jsonl"])
         checks["SubagentStop rewrites only its own run; SessionEnd upserts both"] = (
             keys(mid) == keys(after) == keys(first)
             and events(mid) == ["Stop", "SubagentStop"] and events(after) == ["SessionEnd", "SessionEnd"])

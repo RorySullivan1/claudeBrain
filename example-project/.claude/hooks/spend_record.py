@@ -19,6 +19,7 @@ goes idle, after `Stop`, so `harness_usd_at_last_idle` lags by one turn.
 """
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import os
@@ -72,13 +73,15 @@ def upsert(log: Path, records: list) -> None:
             os.unlink(tmp)
 
 
-def locked(path: Path):
-    """An exclusive lock where the platform has one: parallel subagents stop concurrently."""
+def locked(log: Path):
+    """An exclusive lock where the platform has one: parallel subagents stop concurrently.
+    The lock file lives in the temp dir, keyed by the log's path, so the repo gains no file."""
     try:
         import fcntl
     except ImportError:
         return None
-    fh = open(path, "a")
+    key = hashlib.sha1(str(log.resolve()).encode()).hexdigest()[:16]
+    fh = open(Path(tempfile.gettempdir()) / f"spend-record-{key}.lock", "a")
     fcntl.flock(fh, fcntl.LOCK_EX)
     return fh
 
@@ -103,7 +106,7 @@ def record(data: dict, root: Path) -> None:
         records = [r for r in records if r["kind"] == "subagent" and r["id"] == data.get("agent_id")]
     if not records:
         return
-    lock = locked(spend / ".lock")
+    lock = locked(spend / "log.jsonl")
     try:
         upsert(spend / "log.jsonl", records)
     finally:
