@@ -23,7 +23,10 @@ nudge**: the `post-tool-use-plan-nudge` fragment runs the `skill-distiller` skil
 skill bundle, not here). And a **version-label guard**: `version_guard.py`
 (PreToolUse·Bash) warns at `git push` time if a project's `.meta/version` exists but lacks a
 label or goals — opt-in by presence, so it's silent for projects (the factory included) that
-don't use the version-labeling flow. These are not authoring guardrails, but they live here because
+don't use the version-labeling flow. And a **spend record**: `spend_record.py`
+(`Stop`/`SubagentStop`/`SessionEnd`) upserts one line per session and per subagent run into
+`.claude/spend/log.jsonl`, opt-in by presence. The factory opts in (`.claude/spend/` exists), so
+its own spend history is committed with the work. These are not authoring guardrails, but they live here because
 they are the other thing the harness must run *for us* while we work in this repo. (Like
 the scripts, these hook files are symlinks to the canonical copies in
 `example-project/.claude/hooks/`.)

@@ -50,15 +50,35 @@ fan-out and tell each worker what to return.
 
 ## Measuring what a session actually spent
 
-`tokens.py` *estimates* tokens before work runs. To measure afterwards, read the session logs,
-but follow `references/usage-sources.md`, because the obvious reading is wrong in four ways:
-- one call spans several lines, so deduplicate by `message.id`;
-- a continued session's file repeats its predecessor's calls, so attribute by `sessionId`;
-- subagent usage lives only under `subagents/`, and its output counts are placeholders;
-- background requests appear in no log at all.
+`tokens.py` *estimates* tokens before work runs. For "how much did this cost?", run `usage.py`
+afterwards. Don't hand-sum the logs:
 
-`probes/probe_usage_sources.py` re-checks those rules against your own logs. Run it after a
-Claude Code upgrade.
+```bash
+python .claude/skills/token-optimizer/scripts/usage.py report            # all sessions
+python .claude/skills/token-optimizer/scripts/usage.py report --price --last 5
+python .claude/skills/token-optimizer/scripts/usage.py report --command /goal --json
+python .claude/skills/token-optimizer/scripts/usage.py reconcile         # check against the harness
+```
+
+It reports tokens by model, session, command, subagent type and prompt, plus the cache-read
+share and the largest tool results that fed the context. It follows
+`references/usage-sources.md`, because the obvious reading is wrong in four ways:
+- one call spans several lines, so it deduplicates by `message.id`;
+- a continued session's file repeats its predecessor's calls, so it attributes by `sessionId`;
+- subagent usage lives only under `subagents/`, and its output counts are placeholders;
+- background requests appear in no log, so it reports them as harness minus log.
+
+Lead with tokens. `--price` adds dollars from `references/pricing.json` (sourced and dated),
+labelled "estimate (API list price)". On a subscription the real limit is usage, not dollars,
+and billing truth is the Console. An unknown model shows as UNPRICED, never as $0.
+`reconcile` checks that the price table reproduces the harness's own `costUSD`, and that the
+log never exceeds the harness.
+
+If the project keeps a `.claude/spend/` directory, the `spend_record` hook writes one line per
+session and per subagent run to `.claude/spend/log.jsonl`, so the history outlives the container.
+
+Re-check the rules after a Claude Code upgrade: `probes/probe_usage_sources.py` against your
+logs, and `probes/probe_usage.py --selftest` / `--real` for the parser and the prices.
 
 ## Search economy: narrow semantically, confirm exactly
 
