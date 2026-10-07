@@ -48,6 +48,18 @@ The return contract is the catch with delegation: every agent's *summary* lands 
 main, so a wide parallel fan-out of detailed returns can cost more than it saved. Cap the
 fan-out and tell each worker what to return.
 
+## Measuring what a session actually spent
+
+`tokens.py` *estimates* tokens before work runs. To measure afterwards, read the session logs,
+but follow `references/usage-sources.md`, because the obvious reading is wrong in four ways:
+- one call spans several lines, so deduplicate by `message.id`;
+- a continued session's file repeats its predecessor's calls, so attribute by `sessionId`;
+- subagent usage lives only under `subagents/`, and its output counts are placeholders;
+- background requests appear in no log at all.
+
+`probes/probe_usage_sources.py` re-checks those rules against your own logs. Run it after a
+Claude Code upgrade.
+
 ## Search economy: narrow semantically, confirm exactly
 
 Search is where context quietly bleeds — a broad grep returns a large candidate set, and
