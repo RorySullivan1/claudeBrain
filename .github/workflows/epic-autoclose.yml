@@ -32,19 +32,37 @@ jobs:
         run: |
           set -euo pipefail
           tmp=$(mktemp -d)
+          since=$(date -u -d '-2 minutes' +%Y-%m-%dT%H:%M:%SZ)  # racing runs start within seconds
 
           # api METHOD PATH [JSON] -> response body in $tmp/body, HTTP status on stdout.
+          # A transport failure (DNS, TLS, reset) reports status 000 instead of aborting
+          # under `set -e`, so callers annotate it like any other non-2xx.
           api() {
             local args=(-sS -o "$tmp/body" -w '%{http_code}' -X "$1"
               -H "Authorization: Bearer $GH_TOKEN"
               -H "Accept: application/vnd.github+json"
               -H "X-GitHub-Api-Version: 2022-11-28")
             [ $# -ge 3 ] && args+=(-H "Content-Type: application/json" -d "$3")
-            curl "${args[@]}" "$API/$2"
+            : > "$tmp/body"
+            curl "${args[@]}" "$API/$2" || :
           }
           must() {  # like api, but any non-2xx status fails the run loudly
             local status; status=$(api "$@")
             case "$status" in 2??) ;; *) echo "::error::$1 $2 -> HTTP $status: $(cat "$tmp/body")"; exit 1 ;; esac
+          }
+          # comment_once ISSUE PREFIX BODY. Two runs can both pass the open/closed check
+          # (siblings closing together). The PATCH is idempotent; for the comment, every
+          # racer posts, then each deletes its own unless it holds the lowest id.
+          comment_once() {
+            local mine first
+            must POST "repos/$REPO/issues/$1/comments" "$(jq -n --arg b "$3" '{body:$b}')"
+            mine=$(jq -r .id "$tmp/body")
+            must GET "repos/$REPO/issues/$1/comments?since=$since&per_page=100"
+            first=$(jq --arg p "$2" '[.[] | select(.body | startswith($p)) | .id] | min' "$tmp/body")
+            if [ "$first" != null ] && [ "$first" -lt "$mine" ]; then
+              must DELETE "repos/$REPO/issues/comments/$mine"
+              echo "#$1: a concurrent run already commented; removed duplicate."
+            fi
           }
 
           child=$ISSUE
@@ -64,8 +82,8 @@ jobs:
             if [ "$ACTION" = reopened ]; then
               if [ "$pstate" = open ]; then echo "Parent #$parent is already open; done."; exit 0; fi
               must PATCH "repos/$REPO/issues/$parent" '{"state":"open"}'
-              must POST "repos/$REPO/issues/$parent/comments" \
-                "$(jq -n --arg b "Reopened automatically: sub-issue #$child was reopened." '{body:$b}')"
+              comment_once "$parent" "Reopened automatically" \
+                "Reopened automatically: sub-issue #$child was reopened."
               echo "Reopened #$parent."
               child=$parent; continue
             fi
@@ -79,8 +97,8 @@ jobs:
 
             reason=not_planned; [ "$completed" -gt 0 ] && reason=completed
             must PATCH "repos/$REPO/issues/$parent" "{\"state\":\"closed\",\"state_reason\":\"$reason\"}"
-            must POST "repos/$REPO/issues/$parent/comments" \
-              "$(jq -n --arg b "Closed automatically ($reason): all $total sub-issues are closed; the last was #$child." '{body:$b}')"
+            comment_once "$parent" "Closed automatically" \
+              "Closed automatically ($reason): all $total sub-issues are closed; the last was #$child."
             echo "Closed #$parent as $reason."
             child=$parent
           done

@@ -16,6 +16,8 @@ description: >
 
 # VBA Distribution Skill
 
+**Routes to:** `VSTO-distribution` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You get VBA off the developer's machine and running on everyone else's — reliably,
 signed, and trusted. Never recommend a method without knowing the environment.
 **Always test on a machine other than the development one before declaring done** —

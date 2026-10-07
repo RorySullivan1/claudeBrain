@@ -1,4 +1,4 @@
-# Live-host probes — vba-excel-object-model (issue #43)
+# Live-host probes — vba-excel-object-model (RorySullivan1/claudebrain#43)
 
 > **Run log — 2026-09-02, Excel 16.0 (Windows 64-bit NT 10.00) / Microsoft 365.**
 > Driven via Excel COM automation (module imported, `RunAllProbes` executed; output sink
@@ -8,7 +8,7 @@
 > the Name property of the PivotField class"; non-colliding rename succeeded); UsedRange
 > "doesn't shrink after clear" **REFUTED** — it shrank after `.Clear` *and* `.ClearContents`,
 > in-session and across save/reopen; the real over-report driver is residual formatting.
-> Skill labels promoted/corrected; ledger rows updated (2026-09-02). See issue #43.
+> Skill labels promoted/corrected; ledger rows updated (2026-09-02). See RorySullivan1/claudebrain#43.
 
 
 Three claims in `../SKILL.md` are labelled **experience-settled**: consistently observed in
@@ -28,7 +28,8 @@ Excel/Windows host can promote or refute them. This folder is that run, packaged
 2. Alt+F11 → File → Import File… → `probe_claims.bas` (or paste into a new standard
    module). Macros must be enabled (a blank unsaved workbook is fine).
 3. Open the Immediate window (Ctrl+G), click inside `RunAllProbes`, press **F5**.
-4. Copy the entire Immediate-window block into issue #43, verbatim — including the
+4. Copy the entire Immediate-window block into RorySullivan1/claudebrain#43, verbatim (that's the skill's source
+   repo; in a vendored copy, not your own repo's #43) — including the
    header line with the Excel version. Do the optional `UsedRange` stage 2 (save,
    reopen, re-check) if you have another minute.
 
@@ -45,6 +46,10 @@ Excel/Windows host can promote or refute them. This folder is that run, packaged
   the host, not about the claim.
 
 ## After the run — closing the loop
+
+> **Upstream-only.** `claim-grounding` and its ledger live in claudeBrain, the skill's
+> source. In a vendored copy, do these steps there and re-copy the skill; don't relabel
+> claims in the copy.
 
 Per the `claim-grounding` skill (deliberate promotion, never silent):
 

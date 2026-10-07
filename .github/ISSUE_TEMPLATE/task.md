@@ -27,10 +27,10 @@ Part of #<!-- parent?: The epic's number. Delete this line for a standalone task
 
 ## Done when
 
-A PR into the default branch merges with this line in its description, where N is this issue's number:
+The PR that delivers this merges with this line in its description, where N is this issue's number:
 
 ```
 Closes #N
 ```
 
-<sub>GitHub closing keywords work only from a PR description or a commit message, and only when the PR targets the default branch. Use one keyword per issue, e.g. `Closes #1, closes #2`.</sub>
+<sub>GitHub closing keywords work only from a PR description or a commit message, and only when the PR targets the default branch. If this repo's PRs target another branch (a release branch, say), the keyword does nothing: close this issue by hand (reason: completed) once that PR merges. Use one keyword per issue, e.g. `Closes #1, closes #2`.</sub>

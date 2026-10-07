@@ -6,7 +6,7 @@ The factory's state files are written as if exactly one unit of work exists at a
 `roadmap_guard.py` reads a cursor. Before anything is reshaped to allow parallel worktrees,
 the collision has to be REPRODUCED — otherwise the fix is aimed at a guess.
 
-Claims under test (issue #51, as filed):
+Claims under test (RorySullivan1/claudebrain#51, as filed):
   C1  roadmap_guard.py "extracts a single cursor" and cannot see a second in-flight version.
   C2  `.meta/version` collides: two worktrees read/write the same cursor and the guard
       validates the wrong one.

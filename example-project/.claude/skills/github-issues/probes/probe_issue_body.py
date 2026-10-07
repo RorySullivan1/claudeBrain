@@ -10,6 +10,7 @@ class the gate claims to catch is injected and must be caught.
 from __future__ import annotations
 
 import importlib.util
+import json
 import shutil
 import subprocess
 import sys
@@ -78,6 +79,25 @@ def main() -> int:
     case("footnote keyword does not satisfy post-filing check", ib.check(vacuous, False) != [])
     d = ib.check("---\nname: Task\nabout: x\n---\n## Goal\nx\n", True)
     case("frontmatter left in body -> caught", any("frontmatter" in x for x in d), str(d))
+    d = ib.check("## Goal\n\nSee {{owner}} here.\n", True)
+    case("bare {{placeholder}} in prose -> caught [control]", any("{{" in x for x in d), str(d))
+
+    # User-supplied code is evidence, not template residue: it must not trip the gate.
+    code = "```yaml\nGH_TOKEN: ${{ github.token }}\n<!-- note: x -->\n```"
+    text, d = ib.render("bug", {**FULL["bug"], "evidence": code})
+    d = d or ib.check(text, True)
+    case("fenced {{ }} and <!-- word: --> in a value -> not a defect", d == [], str(d))
+    text, d = ib.render("bug", {**FULL["bug"], "what_happened": "The `${{ github.token }}` expression broke."})
+    d = d or ib.check(text, True)
+    case("inline-code {{ }} in a value -> not a defect", d == [], str(d))
+
+    # An optional slot that shares its section with other text drops only its line, and
+    # never eats the sections after it.
+    body = "## Risks\n<!-- risks?: g -->\nSee also X\n\n## Notes\n<!-- notes: g -->\n\n## Closing\nend\n"
+    out = ib._drop_optional(body, "risks")
+    case("optional slot beside text -> later sections kept",
+         "## Notes\n<!-- notes: g -->" in out and "## Closing" in out and "risks?" not in out
+         and "See also X" in out, repr(out))
 
     # Lint must fail on a broken template (proves lint can fail).
     saved = ib.TEMPLATES
@@ -91,6 +111,19 @@ def main() -> int:
     case("lint: missing about -> caught", any("task.md: `about:`" in x for x in d), str(d))
     case("lint: short name + no slots + {{placeholder}} -> caught",
          sum("bad.md" in x for x in d) == 3, str(d))
+
+    # Installed copies (../installs.json) must match their sources byte for byte; this
+    # repeats the asset_integrity hook's check for projects that don't run that hook.
+    # Targets sit beside .claude/ in a consumer, but at the git root when .claude/ is nested
+    # (claudeBrain's example-project/), so check both.
+    skill = SCRIPT.parent.parent
+    roots = {skill.parent.parent.parent}  # <root>/.claude/skills/github-issues
+    roots |= {d for d in skill.parents if (d / ".git").exists()}
+    for src, dst in json.loads((skill / "installs.json").read_text()).items():
+        for root in sorted(roots):
+            if (root / dst).is_file():
+                same = (skill / src).read_bytes() == (root / dst).read_bytes()
+                case(f"installed copy matches source: {dst}", same, f"{root / dst} differs from {src}")
 
     failed = 0
     for name, ok, detail in results:

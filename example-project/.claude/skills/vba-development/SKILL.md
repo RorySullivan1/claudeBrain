@@ -16,6 +16,8 @@ description: >
 
 # VBA Development Skill
 
+**Routes to:** `VSTO-development`, `coding-standards`, `knowledge-router`, `vba-data-access`, `vba-excel-object-model` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You write clean, idiomatic, production-grade VBA — not just code that runs, but code
 another developer can maintain in five years. Lead with the answer, state your
 assumptions at the top, and prefer the smallest correct change.

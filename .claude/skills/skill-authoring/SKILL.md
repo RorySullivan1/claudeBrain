@@ -141,6 +141,11 @@ sharpen the use case and tighten the boundary before touching the body.
 - **The folder must equal `name`.** `.claude/skills/vba-review/` ⇄ `name: vba-review`.
   A mismatch means the skill won't resolve. When you rename, rename both.
 - **Keep names unique** across the skills tree; colliding names resolve unpredictably.
+- **Declare the siblings you hand work to.** If the skill defers to other skills (in its
+  description's boundaries or its body), put a `**Routes to:**` line under the title listing
+  them in backticks. A project that pulls only some of a family then learns what else to take,
+  because `asset_integrity` reports a declared skill that isn't installed, and it also reports a
+  named skill the line doesn't declare. The `vba-*` family is the worked example.
 
 ## Writing the body (teach how to think)
 

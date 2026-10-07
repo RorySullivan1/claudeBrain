@@ -72,6 +72,8 @@ numbers, and stop. Don't retry blind: a retried create is a duplicate issue.
   *description*. Keywords are `close(s|d)`, `fix(es|ed)`, `resolve(s|d)`, one per issue,
   and they fire **only when the PR targets the default branch**. A commit message works too,
   but then the PR isn't listed as the linked PR. Cross-repo form: `Closes owner/repo#N`.
+  In a repo whose PRs target a release branch, the keyword does nothing. Close the child by
+  hand (reason: completed) when its PR merges, and the epic cascade starts from that close.
 - **Epic closes from its children.** GitHub's docs don't say that a parent closes when its
   sub-issues do, so don't rely on it. Install `../assets/epic-autoclose.yml` as
   `.github/workflows/epic-autoclose.yml`. It closes the parent when the last child closes,
@@ -80,6 +82,8 @@ numbers, and stop. Don't retry blind: a retried create is a duplicate issue.
   **It goes live only once it is on the default branch.** `issues` events run only workflow
   files that exist there, so a copy sitting on a feature branch does nothing yet. Install it as a
   byte-identical copy. `../installs.json` declares the target, and the `asset_integrity` hook
-  flags drift at every commit.
+  flags drift at every commit. Without that hook, `../probes/probe_issue_body.py` does the same
+  compare. To check it's live, look at the **default branch**, not the checkout:
+  `git cat-file -e origin/<default>:.github/workflows/epic-autoclose.yml`.
 - Never put the epic's number in a child's closing line. That would close the epic on the
   first child's merge.

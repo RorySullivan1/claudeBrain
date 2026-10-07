@@ -37,7 +37,8 @@ than improvising:
 
 ## Orient first
 1. Read what you're operating on before acting: the actual diff for a PR, the existing
-   issue/label taxonomy before filing, the current latest release/tags before versioning,
+   issue/label taxonomy before filing, the project's version constant and bump policy (then
+   the latest release/tags) before versioning, confirming the version before tagging,
    the thread before replying.
 2. Infer the repo's conventions and match them — Conventional-Commit prefixes, tag format
    (`v`-prefix?), template structure, label names. Consistency with what exists beats any

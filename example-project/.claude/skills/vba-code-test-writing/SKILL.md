@@ -17,6 +17,8 @@ description: >
 
 # VBA Test-Writing Skill
 
+**Routes to:** `vba-addin-building`, `vba-development`, `vba-distribution`, `vba-review` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 VBA testing is unusual: **the test runner is the host Office application itself.** There
 is no `pytest`, no headless CI you can trust, and no compile step outside the VBE. That
 single fact drives every decision here. Your job is to make VBA code *provable* anyway —

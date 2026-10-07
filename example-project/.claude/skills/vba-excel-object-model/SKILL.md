@@ -22,6 +22,8 @@ description: >
 
 # VBA — the Excel Object Model
 
+**Routes to:** `vba-addin-building`, `vba-data-access`, `vba-development`, `vba-distribution`, `vba-review`, `vba-userforms` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 `vba-development` teaches how to write VBA. This skill teaches what to write it *against*:
 the Excel-specific objects that carry the data. Assume its rules are already in force —
 `Option Explicit`, the structured error handler, the performance wrapper, and above all

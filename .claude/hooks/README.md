@@ -116,6 +116,11 @@ source and reports drift. It stays silent when the target isn't installed. Today
 `.github/workflows/epic-autoclose.yml` and `.github/ISSUE_TEMPLATE/{epic,task,bug,feature}.md`
 (`github-issues`), and `.github/pull_request_template.md` (`github-pull-requests`).
 
+The same pass checks a skill's **`**Routes to:**`** line, if it has one. Every declared sibling
+must be installed, so a partial pull is told what else to take. And every installed skill the
+SKILL.md names must be declared, so the line can't drift from the text. Skills without the line
+aren't checked.
+
 ## Status
 
 **Memory lifecycle hooks are wired** (the four fragments above), compiled into

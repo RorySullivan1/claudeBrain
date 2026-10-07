@@ -42,7 +42,7 @@ the shape to expect: **the unreachable copy is also the stale one.** pyHermes re
 copy; whether the factory should keep shipping a brief per stack is a separate call, and
 this rule is what makes it decidable rather than a matter of taste.
 
-**The call was made for this repo on 2026-08-29 (issue #42), by measurement.** Every brief
+**The call was made for this repo on 2026-08-29 (RorySullivan1/claudebrain#42), by measurement.** Every brief
 was scored against its skill family with the same method: the **Python brief measured 99%
 echoed with zero unique lines** (worse than pyHermes' copy) plus one stale contradiction
 of a dated skill correction — removed. The **VBA brief measured 90% echoed**; its single

@@ -21,6 +21,8 @@ description: >
 
 # VBA Data Access — ADO, DAO, and SQL from a macro
 
+**Routes to:** `vba-development`, `vba-distribution`, `vba-excel-object-model`, `vba-review` (sibling skills this one hands work to; pull them with it, or that guidance has nowhere to go)
+
 You move data between VBA and an external store. Three things decide whether the result is
 production code or a liability: **the query is parameterised**, **the connection is
 closed**, and **the round trip is bulk, not per-row**. Everything below serves those.

@@ -67,8 +67,9 @@ Notes). Scale it down for a tiny PR, but keep **Closes** and **Verification**.
 
 **Install it** so humans and Claude write to the same form: copy the template to
 `.github/pull_request_template.md` as a byte-identical copy. `installs.json` declares
-that target, and the `asset_integrity` hook flags drift at commit time. GitHub offers
-the template only once it is on the default branch.
+that target, and the `asset_integrity` hook flags drift at commit time. Without that hook,
+check it by hand: `cmp references/templates/pull_request.md <repo>/.github/pull_request_template.md`.
+GitHub offers the template only once it is on the default branch.
 
 - **Link issues with closing keywords** so merge auto-closes them: `Closes #12`,
   `Fixes #12`, `Resolves #12` (one per issue; `Closes #12, closes #13` for several).
