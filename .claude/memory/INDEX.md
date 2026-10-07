@@ -6,7 +6,7 @@
 - GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates installed at `.github/`; `installs.json` copies drift-checked.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; the factory holds symlinks — edit the canonical copy. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 112 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 133 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` hook+library (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Version flow: `.meta/version` + `/version-set` + `/version-ship`; roadmap in `.meta/roadmap/`.
@@ -42,9 +42,8 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **AI-spend epics** #57 → #62 → #66: #58 settled (`usage-sources.md`); next = #59 `usage.py`. Pending: confirm cost-state
-  includes subagent spend at the next idle (re-run `probe_usage_sources.py`).
-  No `epic` label exists — user's call. epic-autoclose's first real close still unconfirmed.
+- **AI-spend epics** #57 → #62 → #66: #57 BUILT (#59–#61, PR open): `usage.py` + `pricing.json` (= harness costUSD) +
+  `spend_record` hook (factory opted in). Next = #62. Gaps: `SessionEnd` on cloud reclaim; Opus 5/Fable unreconciled. No `epic` label (user's call).
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
@@ -58,14 +57,14 @@
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
+- 2026-10-07 | Epic #57 built: usage.py (#59), pricing + reconcile (#60), spend_record hook (#61); ledger 112→133 | sessions/2026-10-07-1845-epic-57-spend.md
 - 2026-10-07 | #58: usage sources settled by probe; main-log output final, subagent-log output placeholder | sessions/2026-10-07-1803-issue-58-usage-sources.md
 - 2026-10-07 | #70: xlVizer fixes ported probe-first (17/17, 47/47); `**Routes to:**` check; tracker refs qualified | sessions/2026-10-07-1737-issue-70-xlvizer-fixes.md
 - 2026-10-01 | Spend-audit proposal refined + filed as epics #57/#62/#66 (13 issues); usage-log traps verified | sessions/2026-10-01-1458-spend-epics.md
 - 2026-09-23 | PR + issue templates in .github/ (issue ones = the skill's, slot format); installs.json drift check; ledger 101→104 | sessions/2026-09-23-1159-pr-template.md
 - 2026-09-22 | /epic + /issue, issue templates, issue_body.py gate, epic-autoclose (14/14) | sessions/2026-09-22-1850-epic-issue-commands.md
 - 2026-09-15 | WeasyPrint + factsheet skills built, probed live; ledger 91→96 | sessions/2026-09-15-weasyprint-print-skills.md
-- 2026-09-10 | PR #53 merged: Epic #48 shipped, #48–#51 closed; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md
-- 2026-09-10 | Epic #48 built (#49–#51); ledger 86→90 | sessions/2026-09-10-1131-epic-48-build.md
+- 2026-09-10 | Epic #48 built (#49–#51, ledger 86→90) + shipped in PR #53; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 filed; #47 UsedRange REFUTED | sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
 - 2026-09-03 | WCAG 2.2 AA contrast bar (#44, PR #46) | sessions/2026-09-03-wcag-aa-contrast-bar.md
 - 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |

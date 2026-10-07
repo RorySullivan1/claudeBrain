@@ -1,0 +1,1 @@
+../../example-project/.claude/hooks/spend_record.py

@@ -85,6 +85,7 @@ so a plain `ls` pays one fast Python startup, not three. To add a git guard, giv
 | `pre-tool-use-read-guard.json` | `PreToolUse` (Read) | `pre_read_guard.py` | Stops an accidental whole-file slurp of a very large file. |
 | `post-tool-use-bash-filter.json` | `PostToolUse` (Bash) | `post_bash_filter.py` | Keeps verbose command output out of the main context. |
 | `post-tool-use-prose-budget.json` | `PostToolUse` (Edit/Write/MultiEdit) | `prose_budget.py` | Reports commentary over the per-scope budget in the `coding-standards` skill. |
+| `stop-spend-record.json` | `Stop`, `SubagentStop`, `SessionEnd` | `spend_record.py` | Upserts one line per session and per subagent run into `.claude/spend/log.jsonl` (tokens by model, commands, background, a labelled USD estimate; no prompt text). Opt-in by the presence of `.claude/spend/`; measures with `token-optimizer`'s `usage.py` and is silent without it. |
 
 `prose_budget.py` is also a **library**, and that is the point of its shape: `scan_source()` and `scan_tree()` return `Finding`s, so a project's CI gate measures with the same code the edit-time note uses. An advisory hook cannot be a gate — it must never block — and a second measurer written for the gate is how the two come to disagree about what the rule is.
 
@@ -127,6 +128,19 @@ watched fail is not a check. `probe_parallel_state.py` (+ `PROBES.md`) is the co
 behind the single-cursor decision: it reproduces what happens when two units of work are in
 flight, and its 2026-09-10 run **refuted** two of the three claims that motivated it. Run it
 before changing `roadmap_guard.py`, `.meta/version`'s shape, or `memory/INDEX.md`'s sections.
+
+`probe_spend_record.py` runs `spend_record.py` the way the harness does (payload on stdin,
+`CLAUDE_PROJECT_DIR` set) against fixture logs. It covers silence without `.claude/spend/` and
+without the skill, exactly one line per key across `Stop`/`SubagentStop`/`SessionEnd`, a
+malformed log, failing inputs, and a crash mid-write. Its first run caught a total failure that
+the fail-safe was hiding: a dataclass module loaded by file path must be in `sys.modules` before
+it runs, or the hook exits 0 having done nothing. **A silent fail-safe hook needs a probe that
+asserts it did its job, not just that it stayed quiet.**
+
+**Why `Stop` and not just `SessionEnd`:** a cloud container is reclaimed after inactivity, and
+whether `SessionEnd` fires then is untested. `Stop` fires every turn, so the record is at most
+one turn stale. The last turn's update lands after the final commit, so the next session's
+commit carries it, or it's lost with the container.
 
 `CATALOG.md` is per-tree and **not** symlinked (its content differs per tree, like
 `settings.json`); regenerate it in each tree with `python .claude/hooks/catalog.py` or `/reindex`.
