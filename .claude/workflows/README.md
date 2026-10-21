@@ -28,6 +28,11 @@ symlinked operational ones.)
   asserts facts about an external system: extract the claims, tier each by what would
   settle it, ground them against docs or a local probe, and label what stayed unverified.
   Engine: the `claim-grounding` skill, which owns the shape/performance/truth split.
+- `optimize-spend` — **(built, operational/symlinked)** prove a spend change before keeping
+  it. Audit, then stop for approval. Benchmark a baseline with its noise floor, apply the
+  change, and benchmark again. Keep the change only if the saving beats the floor and every
+  task check holds; otherwise revert it byte for byte. Record the outcome under the lever's
+  Measured field.
 - `author-skill` — scaffold → draft `SKILL.md` → audit against conventions → place
   the finished bundle into `example-project/.claude/skills/` (or a downstream repo).
 - `harvest-context` — turn a stack brief into a context doc, validate, file it.
@@ -40,6 +45,6 @@ stop conditions.
 
 ## Status
 
-**`author-asset`, `init-project`, `ship-version`, `verify-claims` and `establish-verification`
-built** (the last three are operational, symlinked from example-project). `author-skill` and
+**`author-asset`, `init-project`, `ship-version`, `verify-claims`, `establish-verification` and
+`optimize-spend` built** (the last four are operational, symlinked from example-project). `author-skill` and
 `harvest-context` remain planned.

@@ -9,7 +9,7 @@ description: >
   for VSTO/C# add-in code or VBA.
 tools: Read, Grep, Glob, Edit, Write, Bash
 permissionMode: acceptEdits
-model: sonnet
+model: haiku
 ---
 
 You are a senior Python engineer working in this repository's Python tooling layer

@@ -32,7 +32,7 @@ COMMAND = HERE.parents[2] / "commands" / "spend-audit.md"
 OPUS, SONNET = "claude-opus-5-5", "claude-sonnet-5-5"
 SID = "aaaaaaaa-0000-0000-0000-000000000001"
 T0 = dt.datetime(2026, 10, 1, 9, 0, tzinfo=dt.timezone.utc)
-FIELDS = ("Signal", "Mechanism", "Source", "Direction", "Trade-off", "Apply")
+FIELDS = ("Signal", "Mechanism", "Source", "Direction", "Trade-off", "Apply", "Measured")
 
 
 def ts(seconds: float) -> str:
@@ -141,6 +141,11 @@ def catalog_sections() -> dict:
     return out
 
 
+def unmeasured(text: str) -> str:
+    """The catalog with every Measured field reset, so a fixture plants exactly the outcomes it names."""
+    return re.sub(r"^- \*\*Measured:\*\*.*\n(?:  - `.*\n)*", "- **Measured:** none yet.\n", text, flags=re.M)
+
+
 def report_profile(base: dict, **patch) -> dict:
     r = copy.deepcopy(base)
     for k, v in patch.items():
@@ -228,7 +233,7 @@ def selftest() -> int:
         # the catalog and the rules agree, and every lever is fully specified
         sections = catalog_sections()
         checks["catalog levers == audit.py rules, in the same order"] = list(sections) == list(audit.RULES)
-        checks["every lever names its signal, mechanism, source, direction, trade-off and apply"] = all(
+        checks["every lever names its signal, mechanism, source, direction, trade-off, apply and measured"] = all(
             all(v.strip() for v in s.values()) for s in sections.values())
         checks["every signal names a usage.py report field"] = all(
             re.search(r"`(cache_by_session|by_model|by_subagent_type|top_tool_results|top_rebuilds)", s["Signal"])
@@ -249,6 +254,45 @@ def selftest() -> int:
             body = COMMAND.read_text(encoding="utf-8")
             checks["/spend-audit maps every argument form to a filter"] = all(
                 k in body for k in ("--session", "--command", "--last", "all"))
+
+        # measured outcomes (#69): the catalog's Measured lines outrank the estimate
+        worker = next(f for f in a_sub["findings"] if f["lever"] == "model-per-agent")
+        checks["a custom agent's finding carries its target and a machine edit; a built-in's has none"] = (
+            worker["target"] == "worker"
+            and worker["edit"] == {"file": ".claude/agents/worker.md", "key": "model", "value": "sonnet"}
+            and next(f for f in builtin["findings"] if f["lever"] == "model-per-agent")["edit"] is None)
+        base = unmeasured(CATALOG.read_text(encoding="utf-8"))
+        marker = "### `model-per-agent`"
+        head = base[base.index(marker):]
+        measured_at = base.index(marker) + head.index("- **Measured:** none yet.")
+
+        def with_outcome(line: str) -> Path:
+            path = tmp / f"levers-{abs(hash(line))}.md"
+            path.write_text(base[:measured_at] + "- **Measured:** 1 optimize-spend run, newest last.\n" + line
+                            + base[measured_at + len("- **Measured:** none yet."):], encoding="utf-8")
+            return path
+
+        kept = with_outcome("  - `2026-10-21` `worker` model → sonnet: saving $0.0300 a run (25.0%), "
+                            "noise floor $0.0040; quality held; **kept**")
+        rejected = with_outcome("  - `2026-10-21` `worker` model → sonnet: saving $0.0010 a run (1.0%), "
+                                "noise floor $0.0040; quality held; **rejected**: saving within the noise floor")
+        saved = audit.CATALOG
+        audit.CATALOG = kept
+        a_kept = audit.audit(sub, prices)
+        audit.CATALOG = rejected
+        a_rej = audit.audit(sub, prices)
+        audit.OUTCOME, saved_re = re.compile(r"(?!)"), audit.OUTCOME
+        a_blind = audit.audit(sub, prices)
+        audit.OUTCOME, audit.CATALOG = saved_re, saved
+        kf = next((f for f in a_kept["findings"] if f["lever"] == "model-per-agent"), {})
+        checks["a kept outcome re-prices the finding at the measured cut and labels it measured"] = (
+            kf.get("basis") == "measured" and kf.get("saving_usd") == 10.0 and "(measured)" in audit.render(a_kept))
+        checks["a rejected outcome drops the finding to a check that names the run"] = (
+            "model-per-agent" not in levers_of(a_rej)
+            and any("rejected" in c and "2026-10-21" in c for c in check_texts(a_rej, "model-per-agent")))
+        checks["a target with no recorded outcome stays an estimate"] = worker["basis"] == "estimate"
+        checks["[break] an outcome parser that matches nothing brings the rejected finding back"] = (
+            "model-per-agent" in levers_of(a_blind))
 
         # breaks: disable one mechanism and the matching check must go red
         saved = usage.REBUILD_MIN_TOKENS

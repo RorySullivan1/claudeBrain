@@ -1,0 +1,1 @@
+../../example-project/.claude/workflows/optimize-spend.md

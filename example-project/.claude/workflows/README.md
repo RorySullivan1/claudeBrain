@@ -34,6 +34,10 @@ command is one shot, a workflow is a whole pipeline.
   must, prove each candidate check can fail, and write `../context/verification-surface.md`.
 - `control-grounding` — ground an unknown control/property/enum token before it is
   authored, then propagate the grounding to every catalogue surface.
+- `optimize-spend` — prove a spend change before keeping it. Audit, then stop for approval.
+  Benchmark a baseline with its noise floor, apply the change, and benchmark again. Keep the
+  change only if the saving beats the floor and every check holds; otherwise revert it. Record
+  the outcome in the levers catalog.
 
 To add one, create a `<name>.md` describing the sequence (see Format above); the
 auto-generated `../CATALOG.md` is the always-current inventory.

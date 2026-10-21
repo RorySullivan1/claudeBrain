@@ -1,0 +1,52 @@
+{
+  "about": "Benchmark tasks for benchmark.py (#67). Each runs read-only in a throwaway copy of the project, with the project's CLAUDE.md, skills, agents and hooks loaded. `check` is the quality guard: every `all` pattern must match the answer, no `none` pattern may, and every named agent must have run. `samples` hold a good answer and a deliberately broken one, so selfcheck can prove the check can fail. `targets` name the lever:target pairs a task exercises, which is how optimize.py picks the tasks that can measure a change.",
+  "tasks": [
+    {
+      "id": "lever-ids",
+      "prompt": "List every lever id in .claude/skills/token-optimizer/references/spend-levers.md (the ids in its ### headings), in the order they appear, one per line, and nothing else. Do not edit any file.",
+      "tools": ["Read", "Grep", "Glob"],
+      "run_cap": 0.25,
+      "targets": ["main"],
+      "check": {
+        "all": ["\\bidle-rebuild\\b", "\\bcache-ttl-main\\b", "\\bcache-ttl-subagent\\b", "\\bmid-session-switch\\b",
+                "\\balways-loaded-edits\\b", "\\blong-context\\b", "\\bstanding-context\\b", "\\btool-output-size\\b",
+                "\\bbash-filter\\b", "\\bread-guard\\b", "\\bmodel-per-agent\\b", "\\beffort-level\\b",
+                "\\bsubagent-fanout\\b"]
+      },
+      "samples": {
+        "pass": "idle-rebuild\ncache-ttl-main\ncache-ttl-subagent\nmid-session-switch\nalways-loaded-edits\nlong-context\nstanding-context\ntool-output-size\nbash-filter\nread-guard\nmodel-per-agent\neffort-level\nsubagent-fanout",
+        "fail": "idle-rebuild\ncache-ttl-main\ncache-ttl-subagent\nmid-session-switch\nalways-loaded-edits\nlong-context\nstanding-context\ntool-output-size\nbash-filter\nmodel-per-agent\neffort-level\nsubagent-fanout"
+      }
+    },
+    {
+      "id": "hook-cap",
+      "prompt": "Which hook script in .claude/hooks caps the output of Bash commands, and at how many characters? Answer in one line. Do not edit any file.",
+      "tools": ["Read", "Grep", "Glob"],
+      "run_cap": 0.25,
+      "targets": ["main"],
+      "check": {
+        "all": ["post_bash_filter", "12[,_ ]?000"],
+        "none": ["pre_read_guard"]
+      },
+      "samples": {
+        "pass": "post_bash_filter.py caps Bash output at 12,000 characters (MAX_CHARS).",
+        "fail": "pre_read_guard.py caps it at 60,000 bytes."
+      }
+    },
+    {
+      "id": "agent-python-developer",
+      "prompt": "Delegate this to the python-developer agent and do not answer it yourself. Ask it to read .claude/skills/token-optimizer/scripts/usage.py and report the value of REBUILD_MIN_TOKENS and the two report keys that cache_profile() returns. Nothing may be edited. Reply with the agent's answer.",
+      "tools": ["Agent", "Read", "Grep", "Glob"],
+      "run_cap": 0.75,
+      "targets": ["model-per-agent:python-developer"],
+      "check": {
+        "all": ["20[,_ ]?000", "cache_by_session", "top_rebuilds"],
+        "agents": ["python-developer"]
+      },
+      "samples": {
+        "pass": "REBUILD_MIN_TOKENS is 20_000, and cache_profile() returns cache_by_session and top_rebuilds.",
+        "fail": "REBUILD_MIN_TOKENS is 10_000, and cache_profile() returns by_model and by_session."
+      }
+    }
+  ]
+}
