@@ -6,13 +6,14 @@
 - GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates in `.github/`; `installs.json` copies drift-checked.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; factory holds symlinks. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`+`verify-claims` gate an ASSET's claims (ledger 148, all families); `establish-verification` + `context/verification-surface.md` gate a PROJECT's work.
+- Verification, two altitudes: `claim-grounding`+`verify-claims` gate an ASSET's claims (ledger 154, all families); `establish-verification` + `context/verification-surface.md` gate a PROJECT's work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Versions: `.meta/version` + `/version-set`/`/version-ship`; roadmap `.meta/roadmap/`.
 - Durable lesson: recurring defect = **verification steps that cannot verify** (inverted rules, plan-mode auditors, early-bound probes, fail-safes hiding failure). Check the check.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-10-21] **A spend change is kept only past its noise floor with checks held** (#66) — sessions/2026-10-21-0400-epic-66-optimize-spend.md
 - [2026-10-21] **Spend review: a script ranks, a Haiku agent relays** (#62) — sessions/2026-10-21-0300-epic-62-spend-review.md
 - [2026-10-07] **Factory records its spend** (#61): `.claude/spend/log.jsonl`, upserted per `Stop` — sessions/2026-10-07-1845-epic-57-spend.md
 - [2026-09-15] **Print-to-PDF pair built** (`weasyprint-print-html` + `factsheet-template`): engine
@@ -44,8 +45,8 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **AI-spend epics** #57 → #62 → #66: #57 merged; #62 BUILT (#63–#65, PR open): levers catalog +
-  `audit.py` + agent + command. Next = #66. Gaps: `SessionEnd` on reclaim; Opus 5/Fable unreconciled.
+- **AI-spend epics** #57 → #62 → #66: #57, #62 merged; #66 BUILT (#67–#69, PR open): benchmark +
+  `optimize.py` + workflow. Gaps: `SessionEnd` on reclaim; Opus 5/Fable unreconciled.
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
@@ -57,10 +58,10 @@
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
+- 2026-10-21 | Epic #66 built; real run kept python-developer on Haiku (-82%); ledger 148→154 | sessions/2026-10-21-0400-epic-66-optimize-spend.md
 - 2026-10-21 | Epic #62 built: levers (#63), audit + agent (#64), command (#65); ledger 133→148 | sessions/2026-10-21-0300-epic-62-spend-review.md
-- 2026-10-07 | Epic #57 built: usage.py (#59), pricing + reconcile (#60), spend_record hook (#61); ledger 112→133 | sessions/2026-10-07-1845-epic-57-spend.md
-- 2026-10-07 | #58: usage sources settled by probe; main-log output final, subagent-log output placeholder | sessions/2026-10-07-1803-issue-58-usage-sources.md
-- 2026-10-07 | #70: xlVizer fixes ported probe-first (17/17, 47/47); `**Routes to:**` check; tracker refs qualified | sessions/2026-10-07-1737-issue-70-xlvizer-fixes.md
+- 2026-10-07 | Epic #57 built (usage.py, pricing, spend_record; ledger 112→133); #58 sources; #70 xlVizer |
+  sessions/2026-10-07-1845-epic-57-spend.md, -1803-issue-58-usage-sources.md, -1737-issue-70-xlvizer-fixes.md
 - 2026-10-01 | Spend-audit proposal refined + filed as epics #57/#62/#66 (13 issues); usage-log traps verified | sessions/2026-10-01-1458-spend-epics.md
 - 2026-09-23 | PR + issue templates in .github/ (issue ones = the skill's, slot format); installs.json drift check; ledger 101→104 | sessions/2026-09-23-1159-pr-template.md
 - 2026-09-22 | /epic + /issue, issue templates, issue_body.py gate, epic-autoclose (14/14) | sessions/2026-09-22-1850-epic-issue-commands.md
