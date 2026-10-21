@@ -27,5 +27,8 @@ stateless, instant, one invocation. Invoked as `/<name>`.
   templated sub-issues; offers the `epic-autoclose` Actions workflow. Standard: `github-issues`.
 - `/issue` — file one templated issue (task/bug/feature), optionally `--parent #N` under an
   epic, with a ready-to-paste `Closes #n` line.
+- `/spend-audit [session [ID] | command <name> | last N | all]` — review what sessions spent
+  through the `spend-auditor` agent and get a ranked list of changes that would cut it.
+  Proposes only, and offers to file accepted findings with `/issue`.
 
 Drop a `<name>.md` here to add another.

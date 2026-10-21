@@ -81,6 +81,7 @@
 - prose-auditor — Comment-and-docstring auditor — reviews code prose against the agreed scope discipline … -> agents/prose-auditor.md
 - python-developer — Senior Python engineer for this repo's general tooling layer (`tools/`). Use proactively when … -> agents/python-developer.md
 - software-architect — Objective software-architecture brain — designs how a project is structured to serve its objective, … -> agents/software-architect.md
+- spend-auditor — Reviews what Claude Code sessions actually spent and returns a short, ranked list of the changes … -> agents/spend-auditor.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
 - vba-developer — Senior VBA engineer for this repo's Office automation layer — Excel/Word/Outlook/ PowerPoint … -> agents/vba-developer.md
 - vsto-developer — Senior C#/.NET VSTO engineer for this repo's Excel add-in (`src/AddIn/`). Use proactively when … -> agents/vsto-developer.md
@@ -92,6 +93,7 @@
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
 - roadmap-set — Author or update the development map in .meta/roadmap/ — decompose the project objective into … -> commands/roadmap-set.md
 - roadmap-status — Show where the project is on its development map — the cursor version, what's shipped, and what's … -> commands/roadmap-status.md
+- spend-audit — Review what Claude Code sessions spent and get a ranked list of changes that would cut it — … -> commands/spend-audit.md
 - version-set — Define or update the current version in .meta/version — a semver label plus the goals/objectives of … -> commands/version-set.md
 - version-ship — Name and ship the PR from .meta/version — branch, commit, push, and open the PR with a title/body … -> commands/version-ship.md
 
