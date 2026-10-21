@@ -80,6 +80,31 @@ session and per subagent run to `.claude/spend/log.jsonl`, so the history outliv
 Re-check the rules after a Claude Code upgrade: `probes/probe_usage_sources.py` against your
 logs, and `probes/probe_usage.py --selftest` / `--real` for the parser and the prices.
 
+## Reviewing spend: which change would cut it
+
+Measuring says where the tokens went; `scripts/audit.py` says what to change. It matches the
+`usage.py` profile against `references/spend-levers.md`, a catalog of 13 levers. Each lever
+gives the report field it reads, the mechanism and its doc source, the trade-off, and where to
+apply it. The audit then ranks the material findings by estimated saving. Run it through
+`/spend-audit` or the `spend-auditor` agent, so the profile stays out of the main context:
+
+```bash
+python .claude/skills/token-optimizer/scripts/audit.py --session current
+python .claude/skills/token-optimizer/scripts/audit.py --last 50 --json
+```
+
+What the levers turned up on this factory's own logs, for a sense of scale:
+- **Long sessions** carry their whole context on every call: hundreds of thousands of tokens
+  re-read per request.
+- **A break past the cache TTL** rewrites the whole context at the write rate on the next
+  turn. `/compact` before stepping away, or `/clear` when the next task is unrelated.
+- **Editing `CLAUDE.md` mid-session costs nothing** (the docs say so, and the logs agree). It
+  also doesn't apply until `/clear`, `/compact` or a restart.
+
+Savings are estimates at API list price, and an assumption behind one is stated in its
+finding. Below 3% of the profile's spend (and $0.50) the audit reports "no material finding"
+rather than inventing one. It proposes and never applies.
+
 ## Search economy: narrow semantically, confirm exactly
 
 Search is where context quietly bleeds — a broad grep returns a large candidate set, and

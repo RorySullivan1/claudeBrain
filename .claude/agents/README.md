@@ -24,8 +24,12 @@ layer holds a **symlink**; edit them in `example-project/`, never replace the sy
 - `token-manager` — a context-economy worker: does verbose/high-volume work (test runs, log
   processing, large-file analysis, fetches) in its own isolated context and returns only a
   capped summary. The delegation target of the `token-optimizer` skill.
+- `spend-auditor` — runs the `token-optimizer` spend audit on the factory's own logs and
+  returns a capped, ranked list of changes that would cut spend, each tied to measured numbers
+  (#64). Read-only, on Haiku. The agent `/spend-audit` dispatches.
 
 ## Status
 
 **No authoring agents defined yet** (the `draft-skill` / `asset-auditor` ideas above are still
-stubs). One operational agent is wired: `token-manager` (symlinked from example-project).
+stubs). Two operational agents are wired: `token-manager` and `spend-auditor` (symlinked
+from example-project).

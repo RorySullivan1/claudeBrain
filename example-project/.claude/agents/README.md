@@ -46,5 +46,10 @@ session. Good for noisy, error-prone, or narrowly-scoped jobs.
 - `token-manager` — a context-economy worker: runs verbose/high-volume tasks (test suites,
   log processing, large-file analysis, fetches) in isolation and returns only a capped
   summary. The delegation target of the `token-optimizer` skill.
+- `spend-auditor` — reviews measured spend: runs `token-optimizer/scripts/audit.py`, which
+  matches the `usage.py` profile against the spend-levers catalog, and returns at most 30
+  lines of ranked findings, each with its evidence numbers, the change, an estimated saving
+  and a confidence. Read-only (no Edit or Write), and on Haiku, since the script does the
+  analysis and a spend audit run on the most expensive model is its own finding.
 
 Add more with a `<name>.md` + frontmatter.

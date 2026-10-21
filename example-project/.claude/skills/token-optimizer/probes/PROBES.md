@@ -70,3 +70,39 @@ cross-process window (no fixture had a second process). The checks were tightene
 **Real run, 2026-10-07:** 12 window/model rows, 0 failures. The table equals the harness
 `costUSD` in every row (max difference 3e-14). The log never exceeds the harness. Each gap is
 named: background, plus subagent output in the one window that ran a subagent.
+
+## `probe_audit.py`: the spend audit and its catalog (RorySullivan1/claudebrain#63, #64)
+
+```
+python3 probe_audit.py --selftest              # 34 checks on planted profiles
+python3 probe_audit.py --real [--logs DIR]     # audit this project's own logs
+```
+
+**Self-test, 34/34.** The fixtures plant each signal a rule claims to see:
+- three rebuilds after two-hour gaps on a 1-hour TTL;
+- a rebuild after a Sonnet-to-Opus switch;
+- an Edit to `CLAUDE.md` with no rebuild after it;
+- a 40,000-character Bash result in the main context;
+- report-level profiles for the TTL, model, effort and fan-out rules.
+
+The **control** is a clean session that must report "No material finding." The cap holds at
+40 lines and 5 findings even with eight material findings. The catalog's lever ids must equal
+`audit.py`'s rules, in order, and every lever must carry all six fields with a source. Five
+**breaks** each turned a check red:
+- blind rebuild detection;
+- a TTL that never expires;
+- no materiality floor, which makes the control report findings;
+- a rule removed from `audit.py`;
+- an always-loaded list that misses `CLAUDE.md`.
+
+**First real run, 2026-10-21**, on the cloud-session logs (24 sessions, 5,499 calls). It found:
+- 50 rebuilds: 45 after an idle gap past the 1-hour TTL, 0 after a model switch, 5 other;
+- 0 mid-session edits to `CLAUDE.md` or memory;
+- two material findings, long context and idle rebuilds, which overlap;
+- that the 1-hour TTL earns its premium.
+
+**Not covered:**
+- Whether a 20,000-token compaction summary is typical. It's the stated assumption behind the
+  `idle-rebuild` estimate.
+- Any saving measured after a change. That is the optimize-spend epic (#66).
+
