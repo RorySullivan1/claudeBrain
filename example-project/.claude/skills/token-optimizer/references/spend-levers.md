@@ -12,6 +12,13 @@ the finding. On a subscription the limit is plan usage, not dollars, but the tok
 is the same. A finding is **material** when its estimate is at least 3% of the profile's
 estimated spend and at least $0.50. Below that, the audit says "no material finding".
 
+Each lever's **Measured** field is written by the `optimize-spend` workflow (#66), never by hand.
+One line per run records the change, the saving per benchmark run against its noise floor,
+whether every task's check held, and whether the change was kept or rejected. A rejected change
+stays recorded, because a lever that failed is evidence too. Where a lever has a measured
+outcome for a finding's target, `audit.py` ranks the finding by the measured cut instead of the
+estimate, and turns a rejected one into a check that names the run.
+
 Three facts most levers rest on:
 - **Claude Code re-sends the whole context on every request**, and the cache serves the
   unchanged prefix at the cache-read rate. So every token kept in context is paid for again on
@@ -31,6 +38,7 @@ Three facts most levers rest on:
 - **Direction:** down. Each break costs a summary-sized write instead of a context-sized one.
 - **Trade-off:** compaction drops detail from the conversation, and `/clear` drops all of it. The estimate assumes a 20,000-token summary.
 - **Apply:** run `/compact` at a natural break before stepping away, or `/clear` when the next task is unrelated. In a terminal session leave `idleCompaction` on (the default). A `/goal` check-in, a scheduled task or a cross-session message resumes an idle session with its whole context too; `CLAUDE_CODE_GOAL_CHECKIN_MINUTES=0` stops goal check-ins.
+- **Measured:** none yet.
 
 ### `cache-ttl-main`
 - **Signal:** `by_model[]` main-scope `cache_write_1h` and `cache_write_5m`, against `cache_by_session[].pauses_between_ttls.tokens`: the context carried across every gap of 5 to 60 minutes, which survives a 1-hour TTL and expires under a 5-minute one.
@@ -39,6 +47,7 @@ Three facts most levers rest on:
 - **Direction:** either way. The rule prices the 1-hour premium on every main write against the rebuilds a 5-minute TTL would add at the measured pauses, and recommends the cheaper TTL, or reports that the current one earns its cost.
 - **Trade-off:** 5 minutes makes every pause past five minutes a full rebuild. 1 hour charges more for every write, which bursts of work that never pause waste.
 - **Apply:** the `promptCacheTtl` setting or `CLAUDE_CODE_PROMPT_CACHE_TTL`, `5m` or `1h` (Claude Code v2.1.242+). `FORCE_PROMPT_CACHING_5M=1` overrides both buckets.
+- **Measured:** none yet.
 
 ### `cache-ttl-subagent`
 - **Signal:** `by_model[]` subagent-scope `cache_write_1h`.
@@ -47,6 +56,7 @@ Three facts most levers rest on:
 - **Direction:** down, by the 1-hour premium on subagent writes.
 - **Trade-off:** a long-running subagent that pauses more than five minutes between its own calls would rebuild. Most runs are minutes long.
 - **Apply:** remove `ENABLE_PROMPT_CACHING_1H`, and set `subagentPromptCacheTtl` or `CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL` to `5m`, or drop an agent's `experimental` `cacheTtl`.
+- **Measured:** none yet.
 
 ### `mid-session-switch`
 - **Signal:** `cache_by_session[].rebuilds.model_switch`, with `top_rebuilds[]` where `cause` is `model_switch`.
@@ -55,6 +65,7 @@ Three facts most levers rest on:
 - **Direction:** down, by the rebuild writes.
 - **Trade-off:** none in cost. Pick the model and effort at the start of the session, or switch at a `/clear`.
 - **Apply:** set the model and effort before the first prompt; avoid `opusplan` toggling in a long session; check skill and command `model:` frontmatter.
+- **Measured:** none yet.
 
 ### `always-loaded-edits`
 - **Signal:** `cache_by_session[].always_loaded_edits` and `.rebuilds_after_edit`: an Edit or Write to `CLAUDE.md`, `CLAUDE.local.md`, `MEMORY.md` or the session-memory `INDEX.md`, and whether a rebuild followed before the next call.
@@ -63,6 +74,7 @@ Three facts most levers rest on:
 - **Direction:** none. The rule reports a contradiction when a rebuild follows an edit, and otherwise confirms the docs.
 - **Trade-off:** the edit doesn't reach the running session, so a rule change made mid-session isn't in force until the next `/clear` or `/compact`.
 - **Apply:** nothing to change for cost. To make an edit take effect, `/compact` or start a new session.
+- **Measured:** none yet.
 
 ## Context carried per call
 
@@ -73,6 +85,7 @@ Three facts most levers rest on:
 - **Direction:** down. The estimate prices the context above 150,000 tokens per call at the cache-read rate.
 - **Trade-off:** clearing or compacting loses conversation detail, and `/compact` on a large context is itself a large request. The 150,000 target is an assumption.
 - **Apply:** `/clear` between unrelated tasks (`/rename` first, `/resume` to return); `/compact` with instructions at natural breaks; one session per task.
+- **Measured:** none yet.
 
 ### `standing-context`
 - **Signal:** `cache_by_session[].prefix_tokens`: the smallest input side of any main call in the session, which no call can go below. Its median across sessions is the standing prefix: system prompt, tool definitions, `CLAUDE.md`, memory and the skill listing.
@@ -81,6 +94,7 @@ Three facts most levers rest on:
 - **Direction:** down. The estimate prices trimming 10% of the median prefix over every main call, at the cache-read rate.
 - **Trade-off:** most of the prefix is Claude Code's own system prompt and tools, which no project can trim. The 10% is an assumption, and only `CLAUDE.md`, memory, skills and MCP servers are yours to cut.
 - **Apply:** trim `CLAUDE.md` and the memory INDEX; move workflow detail into skills; prune unused skills (or set `disable-model-invocation: true`); disable unused MCP servers in `/mcp`. Measure files with `tokens.py estimate`.
+- **Measured:** none yet.
 
 ### `tool-output-size`
 - **Signal:** `top_tool_results[]` with `context` `main` and `chars` over 20,000, and the session's `main_calls`.
@@ -89,6 +103,7 @@ Three facts most levers rest on:
 - **Direction:** down. The estimate assumes a result is re-read on half the session's later main calls.
 - **Trade-off:** a delegated read returns a summary, so a detail the summary drops costs a second look.
 - **Apply:** send bulk reads, test runs and fetches to the `token-manager` agent or Explore; page large files with `offset`/`limit`; narrow MCP queries.
+- **Measured:** none yet.
 
 ### `bash-filter`
 - **Signal:** `top_tool_results[]` with `tool` `Bash`, `context` `main` and `chars` over 12,400: the shipped `post_bash_filter` hook caps output at 12,000 characters plus its elision marker.
@@ -97,6 +112,7 @@ Three facts most levers rest on:
 - **Direction:** down, by the oversize part re-read on later calls.
 - **Trade-off:** the elided middle is gone from context. Rerun with a narrower command to see it.
 - **Apply:** wire `post-tool-use-bash-filter.json` into `settings.json` through `build-hooks.py`.
+- **Measured:** none yet.
 
 ### `read-guard`
 - **Signal:** `top_tool_results[]` with `tool` `Read`, `context` `main` and `chars` over 60,000: the shipped `pre_read_guard` hook's threshold.
@@ -105,6 +121,7 @@ Three facts most levers rest on:
 - **Direction:** down, by the oversize part re-read on later calls.
 - **Trade-off:** a capped read is incomplete. The hook says so, and the model can page the rest.
 - **Apply:** wire `pre-tool-use-read-guard.json` through `build-hooks.py`; read a slice with `offset`/`limit`.
+- **Measured:** none yet.
 
 ## Models and output
 
@@ -115,6 +132,8 @@ Three facts most levers rest on:
 - **Direction:** down, by the price difference on the same tokens. Subagent output is the last call's only, so the estimate understates it.
 - **Trade-off:** a cheaper model may do the job worse. Confidence is low until one run on the cheaper model is compared.
 - **Apply:** set `model:` in `.claude/agents/<name>.md`; for a built-in agent, which has no file, pass `model` when dispatching it or set `CLAUDE_CODE_SUBAGENT_MODEL` as the default.
+- **Measured:** 1 optimize-spend run, newest last.
+  - `2026-10-21` `python-developer` model → haiku: saving $0.0448 a run (82.4%), noise floor $0.0415; quality held; **kept**
 
 ### `effort-level`
 - **Signal:** main-scope output tokens (`by_model[].tokens.output`, which includes thinking) priced as a share of the main conversation's estimated spend.
@@ -123,6 +142,7 @@ Three facts most levers rest on:
 - **Direction:** down. The rule fires when output is at least 30% of main spend, and the estimate assumes a 25% cut in output.
 - **Trade-off:** less reasoning on hard tasks. On most models a mid-session change also rebuilds the cache; Opus 5.5, Sonnet 5.5, Haiku 5.5 and Fable 5.1 keep it.
 - **Apply:** pick the effort level at the start of a session for the kind of work, rather than leaving it high by default; give a mechanical skill or subagent a lower `effort` in its frontmatter.
+- **Measured:** none yet.
 
 ### `subagent-fanout`
 - **Signal:** the subagent scope's share of estimated log spend (`by_model[]` rows with `scope` `subagent`), and `by_subagent_type[].runs` and `.tokens.cache_write`.
@@ -131,3 +151,4 @@ Three facts most levers rest on:
 - **Direction:** down. The rule fires when subagents carry at least 40% of log spend, and the estimate assumes half the runs could be merged or done inline, saving their context build.
 - **Trade-off:** isolation is why the subagents exist. Fewer runs means more of their output lands in the main context, which `long-context` then charges for.
 - **Apply:** cap fan-out and tell each worker what to return; merge small sibling tasks into one run; keep trivial tasks inline.
+- **Measured:** none yet.

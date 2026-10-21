@@ -105,6 +105,41 @@ Savings are estimates at API list price, and an assumption behind one is stated 
 finding. Below 3% of the profile's spend (and $0.50) the audit reports "no material finding"
 rather than inventing one. It proposes and never applies.
 
+## Proving a saving: the optimize-spend loop
+
+An audit finding is a hypothesis. Spend varies from run to run, so one before-and-after pair
+can show a "saving" that is only noise. The `optimize-spend` workflow
+(`../../workflows/optimize-spend.md`) turns a finding into a measured outcome:
+
+1. `scripts/optimize.py plan` picks the top finding that has a machine edit and a benchmark
+   task that exercises it.
+2. Get the user's approval.
+3. `scripts/benchmark.py run` runs a baseline at least twice per task. The spread of those runs
+   is the **noise floor**.
+4. Apply the edit, then run the same tasks again as the candidate.
+5. `benchmark.py decide` keeps the change only if the saving beats the floor and every task's
+   own check still passes. Cheaper and worse is not a saving.
+6. `optimize.py` keeps or reverts the file (byte for byte), then records the outcome under the
+   lever's **Measured** field. `audit.py` ranks by that from then on.
+
+```bash
+python .claude/skills/token-optimizer/scripts/benchmark.py probe       # can claude -p run here?
+python .claude/skills/token-optimizer/scripts/benchmark.py selfcheck   # each task's check can fail
+```
+
+Each benchmark run is set up the same way:
+
+- **A throwaway copy of the project, loaded normally:** CLAUDE.md, skills, agents and hooks.
+  `--bare` would skip the very assets a lever lives in.
+- **Read-only:** Edit and Write are denied.
+- **No session log** (`--no-session-persistence`), and the parent's session id is scrubbed.
+- **Spend is capped** twice: the CLI's `--max-budget-usd` on each run, and a total that the
+  runner won't start a run past.
+
+A run's cost is the CLI's `total_cost_usd`, reconciled against `pricing.json` through
+`usage.py`. The first real run kept `python-developer` on Haiku: it cut the benchmark task by 82%
+against a noise floor that was 76% of the baseline mean, and every check held.
+
 ## Search economy: narrow semantically, confirm exactly
 
 Search is where context quietly bleeds — a broad grep returns a large candidate set, and

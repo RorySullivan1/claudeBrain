@@ -14,11 +14,16 @@ Usage:
 Every dollar is an estimate at API list price, labelled as such: token counts are measured, the
 arithmetic is the catalog's, and an assumption a rule makes is stated in its finding. A finding
 is material at MATERIAL_SHARE of the profile's estimated spend and at least MATERIAL_MIN_USD.
+
+Where the catalog's Measured field holds an optimize-spend outcome for a finding's lever and
+target (#69), the measurement wins over the estimate: a kept change re-prices the finding at the
+measured cut, and a rejected one drops it to a check that names the run.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import statistics
 import sys
 from pathlib import Path
@@ -44,6 +49,10 @@ EFFORT_CUT = 0.25
 FANOUT_SHARE_HIGH = 0.40
 FAMILY_STEPS = (("opus", "sonnet"), ("sonnet", "haiku"))
 SOURCE = "references/spend-levers.md"
+CATALOG = Path(__file__).resolve().parent.parent / SOURCE
+OUTCOME = re.compile(r"^  - `(?P<date>\d{4}-\d{2}-\d{2})` `(?P<target>[^`]+)` (?P<change>.+?): "
+                     r"saving \$(?P<saving>-?[\d.]+) a run \((?P<share>-?[\d.]+)%\), noise floor \$(?P<floor>[\d.]+); "
+                     r"quality (?P<quality>held|failed); \*\*(?P<verdict>kept|rejected)\*\*(?:: (?P<reason>.+))?$")
 
 RULES: dict = {}
 
@@ -85,9 +94,11 @@ class Profile:
         return r.get("cache_write_1h" if ttl == "1h" else "cache_write_5m", 0.0)
 
 
-def finding(lever, title, evidence, change, saving, confidence, assumption=None) -> dict:
+def finding(lever, title, evidence, change, saving, confidence, assumption=None, **extra) -> dict:
+    """`extra` carries what optimize.py needs: the `target`, a machine `edit`, the `base_usd` it acts on."""
     return {"lever": lever, "title": title, "evidence": evidence, "change": change,
-            "saving_usd": round(saving, 2), "confidence": confidence, "assumption": assumption}
+            "saving_usd": round(saving, 2), "confidence": confidence, "assumption": assumption,
+            "basis": "estimate", **extra}
 
 
 def check(lever, text) -> dict:
@@ -311,11 +322,14 @@ def model_per_agent(p: Profile) -> list:
             continue
         repriced = usage.price(p.rate_of(target), dict(a["tokens"], cache_write_5m=a["tokens"]["cache_write"]))
         saving = a["usd"] - repriced
+        edit = None if a["key"] in BUILT_IN_AGENTS else {
+            "file": f".claude/agents/{a['key']}.md", "key": "model", "value": target.split("-")[1]}
         out.append(finding("model-per-agent", f"{a['key']} runs on {model}",
                            [f"{a['key']}: {a['runs']} run(s), {usd(a['usd'])} on {model}; the same tokens on "
                             f"{target}: {usd(repriced)}"],
                            model_change(a["key"], target), saving, "low",
-                           "the same tokens on the cheaper model; quality not measured"))
+                           "the same tokens on the cheaper model; quality not measured",
+                           target=a["key"], edit=edit, base_usd=a["usd"]))
     return out or [check("model-per-agent", "no subagent type has a cheaper model of its family to try")]
 
 
@@ -352,12 +366,49 @@ def subagent_fanout(p: Profile) -> list:
                     build / 2, "low", "half the runs merged, saving their context build")]
 
 
+# --------------------------------------------------------------------------- measured outcomes
+def measured_outcomes(path: Path | None = None) -> dict:
+    """(lever, target) -> the newest optimize-spend outcome recorded under the catalog's Measured fields."""
+    path = path or CATALOG
+    if not path.is_file():
+        return {}
+    out, lever = {}, None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        head = re.match(r"^### `([a-z0-9-]+)`", line)
+        if head:
+            lever = head.group(1)
+            continue
+        m = OUTCOME.match(line)
+        if m and lever:
+            out[(lever, m["target"])] = m.groupdict()  # newest last, so the latest run wins
+    return out
+
+
+def apply_measured(f: dict, outcomes: dict) -> dict:
+    m = outcomes.get((f["lever"], f.get("target")))
+    if not m:
+        return f
+    if m["verdict"] == "rejected":
+        return check(f["lever"], f"{f['target']}: measured {m['date']}, rejected ({m['reason'] or 'no saving'}); "
+                                 f"the ~{usd(f['saving_usd'])} estimate is not proposed again")
+    share = float(m["share"]) / 100
+    if f.get("base_usd"):
+        f["saving_usd"] = round(share * f["base_usd"], 2)
+    f.update(confidence="measured", basis="measured",
+             assumption=f"the {share:.0%} cut measured on the benchmark on {m['date']} "
+                        f"(noise floor ${float(m['floor']):.4f} a run)")
+    return f
+
+
 # --------------------------------------------------------------------------- the audit
 def audit(report: dict, prices: dict) -> dict:
     p = Profile(report, prices)
+    outcomes = measured_outcomes()
     material, minor, checks = [], [], []
     for lever, fn in RULES.items():
         for item in fn(p):
+            if "check" not in item:
+                item = apply_measured(item, outcomes)
             if "check" in item:
                 checks.append(item)
             elif item["saving_usd"] >= p.threshold:
@@ -401,7 +452,8 @@ def render(a: dict) -> str:
     if not a["findings"]:
         lines.append("No material finding.")
     for i, f in enumerate(a["findings"], 1):
-        lines.append(f"{i}. [{f['lever']}] {f['title']}: save ~{usd(f['saving_usd'])} ({f['confidence']} confidence)")
+        basis = "measured" if f.get("basis") == "measured" else f"{f['confidence']} confidence"
+        lines.append(f"{i}. [{f['lever']}] {f['title']}: save ~{usd(f['saving_usd'])} ({basis})")
         lines += [f"   - {e}" for e in f["evidence"]]
         lines.append(f"   change: {f['change']}")
         if f["assumption"]:
