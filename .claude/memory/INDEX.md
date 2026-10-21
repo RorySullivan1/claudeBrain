@@ -6,13 +6,14 @@
 - GitHub: `/epic`+`/issue` → issue templates (epics SEPARATE from roadmap); PR + issue templates in `.github/`; `installs.json` copies drift-checked.
 - Single-sourcing: operational assets canonical in `example-project/.claude/`; factory holds symlinks. `settings.json` + per-layer READMEs stay per-tree.
 - Hooks: `*.json` fragments compiled by `build-hooks.py` (drift-guarded); `git_guards.py` dispatcher; `catalog.py` → CATALOG.md; `asset_integrity.py` shape checks. Probes: `hooks/probes/`.
-- Verification, two altitudes: `claim-grounding`/`verify-claims` gate an ASSET's claims (ledger 133 rows); `establish-verification` + `context/verification-surface.md` gate a PROJECT's own work.
+- Verification, two altitudes: `claim-grounding`+`verify-claims` gate an ASSET's claims (ledger 148, all families); `establish-verification` + `context/verification-surface.md` gate a PROJECT's work.
 - Adoption: `init-project` — brief → `.claude/` by SELECTION (never copy-then-strip) → families from CATALOG → establish-verification → roadmap + ONE cursor (settled, not accidental).
 - Prose (#39): coding-standards scope table; `prose_budget.py` (opt-in, advisory); memory BUDGETS via `memory.py check`; skill-wins rule.
 - Memory: this INDEX (budgeted) + append-only `sessions/*.md`. Versions: `.meta/version` + `/version-set`/`/version-ship`; roadmap `.meta/roadmap/`.
 - Durable lesson: recurring defect = **verification steps that cannot verify** (inverted rules, plan-mode auditors, early-bound probes, fail-safes hiding failure). Check the check.
 
 ## Decisions        (append-only; supersede, never delete)
+- [2026-10-21] **Spend review: a script ranks, a Haiku agent relays** (#62) — sessions/2026-10-21-0300-epic-62-spend-review.md
 - [2026-10-07] **Factory records its spend** (#61): `.claude/spend/log.jsonl`, upserted per `Stop` — sessions/2026-10-07-1845-epic-57-spend.md
 - [2026-09-15] **Print-to-PDF pair built** (`weasyprint-print-html` + `factsheet-template`): engine
   skill + branded layer, split by change cadence. Renderer SWAPPABLE — `render_worker.py` is the only
@@ -43,21 +44,20 @@
   sessions/ARCHIVE-2026.md
 
 ## Threads          (open items; remove when closed)
-- **AI-spend epics** #57 → #62 → #66: #57 BUILT (#59–#61, PR open): `usage.py` + `pricing.json` (= harness costUSD) +
-  `spend_record` hook. Next = #62. Gaps: `SessionEnd` on reclaim; Opus 5/Fable unreconciled. No `epic` label (user's call).
+- **AI-spend epics** #57 → #62 → #66: #57 merged; #62 BUILT (#63–#65, PR open): levers catalog +
+  `audit.py` + agent + command. Next = #66. Gaps: `SessionEnd` on reclaim; Opus 5/Fable unreconciled.
 - **Print pair: page images never seen** — poppler absent, so `snapshot.py`'s rasterise + live
   `pdffonts` are the one untested surface; run on the first real factsheet. Pending from the user:
   brand fonts (slot empty), approved compliance copy (placeholders), internal-repo copy.
-- **#70 merged (PR #71)**; xlVizer can now drop its local patches and re-copy.
 - **Epic #48 SHIPPED** (PR #53; #48–#51 closed). Two follow-ups deliberately not built: the
   verification-surface check as a `SessionStart`/`Stop` hook (decide after a real adoption proves the
   doc's shape), and `/worktree-start` — now unblocked, but its first step must be "refuse if another
   cursor is in flight".
 - **#52 open** — run the Outlook probe kit; human-gated (needs classic Outlook). Kit parse-verified; row 78 stands.
-- verify-claims has covered every family (~390 claims); the ledger is the record.
 - Possible future agent sibling: an orchestrator/coordinator.
 
 ## Log              (append-only pointers)
+- 2026-10-21 | Epic #62 built: levers (#63), audit + agent (#64), command (#65); ledger 133→148 | sessions/2026-10-21-0300-epic-62-spend-review.md
 - 2026-10-07 | Epic #57 built: usage.py (#59), pricing + reconcile (#60), spend_record hook (#61); ledger 112→133 | sessions/2026-10-07-1845-epic-57-spend.md
 - 2026-10-07 | #58: usage sources settled by probe; main-log output final, subagent-log output placeholder | sessions/2026-10-07-1803-issue-58-usage-sources.md
 - 2026-10-07 | #70: xlVizer fixes ported probe-first (17/17, 47/47); `**Routes to:**` check; tracker refs qualified | sessions/2026-10-07-1737-issue-70-xlvizer-fixes.md
@@ -68,8 +68,7 @@
 - 2026-09-10 | Epic #48 built (#49–#51, ledger 86→90) + shipped in PR #53; #52 stays open (human-gated) | sessions/2026-09-10-1131-epic-48-build.md
 - 2026-09-10 | Epic #48 filed; #47 UsedRange REFUTED | sessions/2026-09-10-epic-48-doctrine-vs-enforcement.md
 - 2026-09-03 | WCAG 2.2 AA contrast bar (#44, PR #46) | sessions/2026-09-03-wcag-aa-contrast-bar.md
-- 2026-08-29 | PR #39 reviewed+merged; issues #40–#44 filed; then #40 fixes (IndexError, catch widening, run-slug keys, attribute qualnames) + #41 INDEX compaction |
-  sessions/2026-08-29-pr39-review-merge-issues.md
+- 2026-08-29 | PR #39 merged; #40–#44 filed; #40 fixes + #41 INDEX compaction | sessions/2026-08-29-pr39-review-merge-issues.md
 - 2026-08-20 | Outlook HTML skill + designer agent; ledger 78→83 | sessions/2026-08-20-outlook-html-asset-pair.md
-- 2026-08-05 → 08-15 | taskmaster assimilation + re-review; xlflow → verification layer (PR #31) | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
+- 2026-08-05 → 08-15 | taskmaster assimilation; xlflow → verification layer (PR #31) | sessions/2026-08-15-0100-xlflow-verification-layer-and-review.md
 - ≤2026-06-21 | June build-out (memory adoption, hooks/catalog systems, token economy, agent family, presentation pipeline, quant layer) + pre-June history | sessions/ARCHIVE-2026.md

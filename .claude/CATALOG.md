@@ -25,6 +25,7 @@
 - workflow-authoring — Expert guidance for authoring Claude Code workflows — the multi-step orchestration recipes that … -> skills/workflow-authoring/SKILL.md
 
 ## Agents (agents/*.md)
+- spend-auditor — Reviews what Claude Code sessions actually spent and returns a short, ranked list of the changes … -> agents/spend-auditor.md
 - token-manager — Delegate verbose or high-volume operations here so the bulk stays out of the main conversation and … -> agents/token-manager.md
 
 ## Commands (commands/*.md)
@@ -37,6 +38,7 @@
 - epic — Plan a body of work WITHOUT writing code and file it on the git remote as an epic with ordered, … -> commands/epic.md
 - issue — File one templated GitHub issue (task, bug, or feature) on the git remote, optionally as a … -> commands/issue.md
 - reindex — Regenerate .claude/CATALOG.md — the on-demand inventory of this project's skills, agents, commands, … -> commands/reindex.md
+- spend-audit — Review what Claude Code sessions spent and get a ranked list of changes that would cut it — … -> commands/spend-audit.md
 - version-set — Define or update the current version in .meta/version — a semver label plus the goals/objectives of … -> commands/version-set.md
 - version-ship — Name and ship the PR from .meta/version — branch, commit, push, and open the PR with a title/body … -> commands/version-ship.md
 

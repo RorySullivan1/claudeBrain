@@ -1,0 +1,1 @@
+../../example-project/.claude/agents/spend-auditor.md

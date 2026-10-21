@@ -33,6 +33,9 @@ consumers lift are **symlinked** from `example-project/.claude/commands/` (edit 
   sub-issues, or one templated issue. They drive the `github-issues` skill (also symlinked,
   for its templates, `issue_body.py` gate, and `epic-autoclose` workflow).
   **(built, operational/symlinked)**
+- `/spend-audit [session [ID] | command <name> | last N | all]` — a ranked review of what
+  sessions spent and which lever would cut it, through the `spend-auditor` agent (#65).
+  **(built, operational/symlinked)**
 
 ## Format
 
