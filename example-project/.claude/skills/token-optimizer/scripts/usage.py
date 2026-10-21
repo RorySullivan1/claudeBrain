@@ -47,7 +47,8 @@ HARNESS_KEYS = {"input": "inputTokens", "cache_write": "cacheCreationInputTokens
                 "cache_read": "cacheReadInputTokens", "output": "outputTokens"}
 KNOWN_TYPES = frozenset({
     "assistant", "user", "system", "attachment", "cost-state", "last-prompt", "atis-latch",
-    "mode", "custom-title", "queue-operation", "summary", "file-history-snapshot"})
+    "mode", "custom-title", "queue-operation", "summary", "file-history-snapshot",
+    "agent-name", "ai-title"})  # session-name metadata, no usage (seen 2026-10-21)
 KNOWN_USAGE_KEYS = frozenset({
     "input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens", "output_tokens",
     "cache_creation", "output_tokens_details", "server_tool_use", "service_tier",
@@ -55,6 +56,13 @@ KNOWN_USAGE_KEYS = frozenset({
 NOT_A_PROMPT = ("<local-command-stdout>", "<local-command-stderr>", "<local-command-caveat>")
 COMMAND_RE = re.compile(r"<command-name>\s*/?([^<\s]+)\s*</command-name>")
 PRICING = Path(__file__).resolve().parent.parent / "references" / "pricing.json"
+# A main call after a session's first that writes at least this much and reads less than it
+# writes rebuilt its cache: the prefix it should have read had expired or changed (#62).
+REBUILD_MIN_TOKENS = 20_000
+TTL_SECONDS = {"5m": 300, "1h": 3600}
+EDIT_TOOLS = frozenset({"Edit", "Write", "MultiEdit", "NotebookEdit"})
+# Files Claude Code loads into the project-context layer at session start.
+ALWAYS_LOADED = ("CLAUDE.md", "CLAUDE.local.md", "MEMORY.md", "/.claude/memory/INDEX.md")
 PRICE_LABEL = "estimate (API list price)"
 
 
@@ -138,6 +146,7 @@ class Corpus:
     cost_states: dict = field(default_factory=dict)  # session -> latest record
     unknown: collections.Counter = field(default_factory=collections.Counter)
     usage_lines: int = 0
+    edits: list = field(default_factory=list)  # (session, ts, path) of always-loaded files
     naive: dict = field(default_factory=zero)
     synthetic: int = 0
 
@@ -289,6 +298,9 @@ def read_main(corpus: Corpus, path: Path, tool_seg: dict, tool_win: dict, tool_n
                     tool_name[b["id"]] = b.get("name") or "?"
                     tool_seg.setdefault(b["id"], seg)
                     win_tools.append(b["id"])
+                    path_in = str((b.get("input") or {}).get("file_path") or "")
+                    if b.get("name") in EDIT_TOOLS and path_in.replace("\\", "/").endswith(ALWAYS_LOADED):
+                        corpus.edits.append((sid, str(d.get("timestamp") or ""), path_in))
             if mid not in seen:
                 seen.add(mid)
                 win_mids.append(mid)
@@ -506,7 +518,9 @@ def build_report(corpus: Corpus, segs: list, top: int = 5, prices: dict | None =
     model_rows = []
     for (model, scope), cs in sorted(by_model.items(), key=lambda kv: -sum(tokens(kv[1]).values())):
         t = tokens(cs)
-        row = {"model": model, "scope": scope, "calls": len(cs), "tokens": t, **usd(cs)}
+        row = {"model": model, "scope": scope, "calls": len(cs), "tokens": t, **usd(cs),
+               "cache_write_5m": sum(c.tokens.get("cache_write_5m", 0) for c in cs),
+               "cache_write_1h": sum(c.tokens.get("cache_write_1h", 0) for c in cs)}
         if scope == "subagent":
             part = sum(a.last_output or 0 for a in agents if any(corpus.calls[m].model == cs[0].model for m in a.calls))
             t["output"] = part
@@ -543,8 +557,10 @@ def build_report(corpus: Corpus, segs: list, top: int = 5, prices: dict | None =
     agent_rows: dict = {}
     for a in agents:
         row = agent_rows.setdefault(a.agent_type, {"key": a.agent_type, "runs": 0, "calls": 0,
-                                                   "tokens": zero(), "usd": 0.0 if prices else None})
+                                                   "tokens": zero(), "usd": 0.0 if prices else None,
+                                                   "models": []})
         cs = [corpus.calls[m] for m in a.calls]
+        row["models"] = sorted(set(row["models"]) | {model_key(c.model) for c in cs})
         row["runs"] += 1
         row["calls"] += len(cs)
         add(row["tokens"], tokens(cs))
@@ -575,6 +591,7 @@ def build_report(corpus: Corpus, segs: list, top: int = 5, prices: dict | None =
         "unknown_shapes": dict(corpus.unknown),
         "synthetic_messages": corpus.synthetic,
     }
+    report.update(cache_profile(corpus, calls, top))
     if filtered:
         report["background"] = None
     else:
@@ -593,6 +610,58 @@ def build_report(corpus: Corpus, segs: list, top: int = 5, prices: dict | None =
         report["total_usd"] = report["log_usd"] + sum(
             (r.get("usd") or 0) for r in (report["background"] or {}).values())
     return report
+
+
+def cache_profile(corpus: Corpus, calls: list, top: int = 5) -> dict:
+    """Per session, how the main conversation used its cache: the signals the spend-levers
+    catalog (`../references/spend-levers.md`, #62) reads. Main-scope calls only."""
+    by_session: dict = collections.defaultdict(list)
+    for c in calls:
+        if c.agent is None:
+            by_session[c.session].append(c)
+    sessions, rebuilds = [], []
+    for sid, cs in sorted(by_session.items()):
+        cs.sort(key=lambda c: c.ts)
+        side = [c.tokens["input"] + c.tokens["cache_write"] + c.tokens["cache_read"] for c in cs]
+        w1 = sum(c.tokens.get("cache_write_1h", 0) for c in cs)
+        ttl = "1h" if w1 >= sum(c.tokens.get("cache_write_5m", 0) for c in cs) else "5m"
+        edits = sorted(e[1] for e in corpus.edits if e[0] == sid)
+        row = {"session": sid[:8], "main_calls": len(cs), "main_ttl": ttl,
+               "context_per_call": sum(side) // len(cs), "prefix_tokens": min(side),
+               "rebuilds": {"count": 0, "tokens": 0, "idle": 0, "idle_tokens": 0,
+                            "model_switch": 0, "other": 0},
+               "pauses_between_ttls": {"count": 0, "tokens": 0},
+               "always_loaded_edits": len(edits), "rebuilds_after_edit": 0}
+        for prev, c in zip(cs, cs[1:]):
+            t0, t1 = parse_ts(prev.ts), parse_ts(c.ts)
+            idle = (t1 - t0).total_seconds() if t0 and t1 else 0.0
+            ctx = c.tokens["input"] + c.tokens["cache_write"] + c.tokens["cache_read"]
+            if TTL_SECONDS["5m"] <= idle < TTL_SECONDS["1h"]:
+                row["pauses_between_ttls"]["count"] += 1
+                row["pauses_between_ttls"]["tokens"] += ctx
+            wr, rd = c.tokens["cache_write"], c.tokens["cache_read"]
+            if wr < REBUILD_MIN_TOKENS or rd >= wr:
+                continue
+            if model_key(c.model) != model_key(prev.model):
+                cause = "model_switch"
+            elif idle >= TTL_SECONDS[ttl]:
+                cause = "idle"
+            else:
+                cause = "other"
+            after_edit = any(prev.ts <= e <= c.ts for e in edits)
+            r = row["rebuilds"]
+            r["count"] += 1
+            r["tokens"] += wr
+            r[cause] += 1
+            if cause == "idle":
+                r["idle_tokens"] += wr
+            row["rebuilds_after_edit"] += after_edit
+            rebuilds.append({"session": sid[:8], "ts": c.ts, "model": model_key(c.model), "cache_write": wr,
+                             "cache_read": rd, "idle_seconds": round(idle), "cause": cause,
+                             "after_always_loaded_edit": after_edit})
+        sessions.append(row)
+    rebuilds.sort(key=lambda r: -r["cache_write"])
+    return {"cache_by_session": sessions, "top_rebuilds": rebuilds[:top]}
 
 
 def reconcile(corpus: Corpus, sessions: set | None = None, prices: dict | None = None) -> dict:
