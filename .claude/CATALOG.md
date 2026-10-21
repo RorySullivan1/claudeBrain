@@ -46,5 +46,6 @@
 - author-asset — author-asset -> workflows/author-asset.md
 - establish-verification — establish-verification -> workflows/establish-verification.md
 - init-project — init-project -> workflows/init-project.md
+- optimize-spend — optimize-spend -> workflows/optimize-spend.md
 - ship-version — ship-version -> workflows/ship-version.md
 - verify-claims — verify-claims -> workflows/verify-claims.md
